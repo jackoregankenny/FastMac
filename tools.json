@@ -1,0 +1,263 @@
+{
+  "languages": {
+    "name": "Programming Languages",
+    "tools": {
+      "python": {
+        "name": "Python",
+        "description": "Modern Python 3 installation",
+        "brew_package": "python",
+        "check_command": "python3 --version",
+        "post_install": ["pip3 install --upgrade pip"]
+      },
+      "node": {
+        "name": "Node.js",
+        "description": "JavaScript runtime and npm package manager",
+        "brew_package": "node",
+        "check_command": "node --version",
+        "post_install": ["npm install -g npm"]
+      },
+      "go": {
+        "name": "Go",
+        "description": "Google's Go programming language",
+        "brew_package": "go",
+        "check_command": "go version"
+      },
+      "rust": {
+        "name": "Rust",
+        "description": "Systems programming language",
+        "type": "custom",
+        "install_command": "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y",
+        "check_command": "rustc --version"
+      },
+      "java": {
+        "name": "Java",
+        "description": "Java Development Kit",
+        "brew_package": "openjdk",
+        "check_command": "java --version"
+      },
+      "ruby": {
+        "name": "Ruby",
+        "description": "Dynamic programming language",
+        "brew_package": "ruby",
+        "check_command": "ruby --version"
+      },
+      "php": {
+        "name": "PHP",
+        "description": "Popular scripting language for web development",
+        "brew_package": "php",
+        "check_command": "php --version"
+      },
+      "kotlin": {
+        "name": "Kotlin",
+        "description": "Modern programming language targeting JVM",
+        "brew_package": "kotlin",
+        "check_command": "kotlin -version"
+      }
+    }
+  },
+  "shell": {
+    "name": "Shell Tools",
+    "tools": {
+      "zsh": {
+        "name": "Zsh",
+        "description": "Modern shell with better features than bash",
+        "brew_package": "zsh",
+        "check_command": "zsh --version"
+      },
+      "oh-my-zsh": {
+        "name": "Oh My Zsh",
+        "description": "Framework for managing Zsh configuration",
+        "requires": ["zsh"],
+        "type": "custom",
+        "install_command": "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\"",
+        "check_command": "[ -d \"${HOME}/.oh-my-zsh\" ]"
+      },
+      "starship": {
+        "name": "Starship",
+        "description": "Cross-shell prompt with git status and more",
+        "brew_package": "starship",
+        "check_command": "starship --version",
+        "post_install": ["echo 'eval \"$(starship init zsh)\"' >> ~/.zshrc"]
+      },
+      "fish": {
+        "name": "Fish",
+        "description": "User-friendly interactive shell",
+        "brew_package": "fish",
+        "check_command": "fish --version"
+      },
+      "fzf": {
+        "name": "fzf",
+        "description": "Command-line fuzzy finder",
+        "brew_package": "fzf",
+        "check_command": "fzf --version",
+        "post_install": ["$(brew --prefix)/opt/fzf/install"]
+      },
+      "tmux": {
+        "name": "tmux",
+        "description": "Terminal multiplexer",
+        "brew_package": "tmux",
+        "check_command": "tmux -V"
+      },
+      "exa": {
+        "name": "Exa",
+        "description": "Modern replacement for 'ls' command",
+        "brew_package": "exa",
+        "check_command": "exa --version"
+      }
+    }
+  },
+  "editors": {
+    "name": "Code Editors",
+    "tools": {
+      "neovim": {
+        "name": "Neovim",
+        "description": "Hyperextensible Vim-based text editor",
+        "brew_package": "neovim",
+        "check_command": "nvim --version"
+      },
+      "lazyvim": {
+        "name": "LazyVim",
+        "description": "Modern Neovim configuration with sensible defaults",
+        "requires": ["neovim"],
+        "type": "custom",
+        "check_command": "[ -d \"${HOME}/.config/nvim\" ]",
+        "pre_install": [
+          "[ -d \"${HOME}/.config/nvim\" ] && mv ~/.config/nvim ~/.config/nvim.bak || true",
+          "[ -d \"${HOME}/.local/share/nvim\" ] && mv ~/.local/share/nvim ~/.local/share/nvim.bak || true"
+        ],
+        "install_command": "git clone https://github.com/LazyVim/starter ~/.config/nvim"
+      },
+      "vscode": {
+        "name": "VS Code",
+        "description": "Modern code editor with extensive plugin support",
+        "brew_package": "visual-studio-code",
+        "check_command": "code --version",
+        "cask": true
+      },
+      "emacs": {
+        "name": "Emacs",
+        "description": "Extensible, customizable text editor",
+        "brew_package": "emacs",
+        "check_command": "emacs --version"
+      },
+      "jetbrains-toolbox": {
+        "name": "JetBrains Toolbox",
+        "description": "Install and manage JetBrains IDEs",
+        "brew_package": "jetbrains-toolbox",
+        "check_command": "test -d /Applications/JetBrains Toolbox.app",
+        "cask": true
+      },
+      "sublime-text": {
+        "name": "Sublime Text",
+        "description": "Lightweight, high-performance text editor",
+        "brew_package": "sublime-text",
+        "check_command": "test -d /Applications/Sublime Text.app",
+        "cask": true
+      }
+    }
+  },
+  "dev_tools": {
+    "name": "Development Tools",
+    "tools": {
+      "git": {
+        "name": "Git",
+        "description": "Version control system",
+        "brew_package": "git",
+        "check_command": "git --version",
+        "post_install": ["git config --global init.defaultBranch main"]
+      },
+      "docker": {
+        "name": "Docker",
+        "description": "Container runtime and tools",
+        "brew_package": "docker",
+        "cask": true,
+        "check_command": "docker --version"
+      },
+      "iterm2": {
+        "name": "iTerm2",
+        "description": "Modern terminal emulator",
+        "brew_package": "iterm2",
+        "cask": true,
+        "check_command": "test -d /Applications/iTerm.app"
+      },
+      "nginx": {
+        "name": "Nginx",
+        "description": "High-performance web server",
+        "brew_package": "nginx",
+        "check_command": "nginx -v"
+      },
+      "postman": {
+        "name": "Postman",
+        "description": "API testing and development tool",
+        "brew_package": "postman",
+        "cask": true,
+        "check_command": "test -d /Applications/Postman.app"
+      },
+      "terraform": {
+        "name": "Terraform",
+        "description": "Infrastructure as Code (IaC) tool",
+        "brew_package": "terraform",
+        "check_command": "terraform --version"
+      },
+      "kubectl": {
+        "name": "kubectl",
+        "description": "Kubernetes command-line tool",
+        "brew_package": "kubectl",
+        "check_command": "kubectl version --client"
+      },
+      "ansible": {
+        "name": "Ansible",
+        "description": "IT automation tool",
+        "brew_package": "ansible",
+        "check_command": "ansible --version"
+      }
+    }
+  },
+  "productivity": {
+    "name": "Productivity Tools",
+    "tools": {
+      "alfred": {
+        "name": "Alfred",
+        "description": "Productivity application for quick actions",
+        "brew_package": "alfred",
+        "cask": true,
+        "check_command": "test -d /Applications/Alfred.app"
+      },
+      "rectangle": {
+        "name": "Rectangle",
+        "description": "Window management app",
+        "brew_package": "rectangle",
+        "cask": true,
+        "check_command": "test -d /Applications/Rectangle.app"
+      },
+      "notion": {
+        "name": "Notion",
+        "description": "Note-taking and collaboration software",
+        "brew_package": "notion",
+        "cask": true,
+        "check_command": "test -d /Applications/Notion.app"
+      },
+      "obsidian": {
+        "name": "Obsidian",
+        "description": "Knowledge base app",
+        "brew_package": "obsidian",
+        "cask": true,
+        "check_command": "test -d /Applications/Obsidian.app"
+      },
+      "todoist": {
+        "name": "Todoist",
+        "description": "Task management and to-do list app",
+        "brew_package": "todoist",
+        "cask": true,
+        "check_command": "test -d /Applications/Todoist.app"
+      },
+      "evernote": {
+        "name": "Evernote",
+        "description": "Note-taking and organization app",
+        "brew_package": "evernote",
+        "cask": true,
+        "check_command": "test -d /Applications/Evernote.app"
+      }
+    }
+  }
+}

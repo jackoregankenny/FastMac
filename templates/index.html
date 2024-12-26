@@ -1,0 +1,316 @@
+{% extends "base.html" %} {% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <!-- Minimal Header -->
+    <header class="py-8">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                    macOS Setup Builder
+                </h1>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    Select your tools, get an installer
+                </p>
+            </div>
+            <button
+                id="help-button"
+                class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            >
+                <span class="flex items-center">
+                    <svg
+                        class="w-5 h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                    </svg>
+                    Help
+                </span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Simple Search -->
+    <div
+        class="sticky top-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur z-10 py-3"
+    >
+        <input
+            type="search"
+            id="tool-search"
+            placeholder="Find tools..."
+            class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-800 border-0 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 dark:text-gray-300"
+        />
+    </div>
+
+    <!-- Main Content -->
+    <main class="py-6 pb-24">
+        <form id="setup-form">
+            {% for category_id, category in categories.items() %}
+            <div class="mb-8">
+                <h2
+                    class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3"
+                >
+                    {{ category.name }}
+                </h2>
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2"
+                >
+                    {% for tool_id, tool in category.tools.items() %}
+                    <label
+                        class="tool-item flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer group"
+                    >
+                        <input
+                            type="checkbox"
+                            id="{{ tool_id }}"
+                            name="{{ tool_id }}"
+                            class="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
+                        />
+                        <span class="ml-3 flex-1">
+                            <span
+                                class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 tool-name"
+                                >{{ tool.name }}</span
+                            >
+                            {% if tool.get('requires') %}
+                            <span class="ml-2 text-xs text-gray-500"
+                                >requires: {{ tool.requires|join(', ') }}</span
+                            >
+                            {% endif %}
+                        </span>
+                        {% if tool.get('cask', False) %}
+                        <span
+                            class="ml-3 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200"
+                        >
+                            GUI
+                        </span>
+                        {% endif %}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Fixed Bottom Button -->
+            <div
+                class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4"
+            >
+                <div
+                    class="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center"
+                >
+                    <span
+                        id="selected-count"
+                        class="text-sm text-gray-500 dark:text-gray-400"
+                        >No tools selected</span
+                    >
+                    <button
+                        type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled
+                    >
+                        Generate Script
+                    </button>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <!-- Help Modal -->
+    <dialog id="help-modal" class="fixed inset-0 z-50 bg-black/50">
+        <div class="min-h-screen px-4 flex items-center justify-center">
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg relative"
+            >
+                <h3
+                    class="text-lg font-medium text-gray-900 dark:text-white mb-4"
+                >
+                    About macOS Setup Builder
+                </h3>
+                <button
+                    id="close-help"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-500"
+                >
+                    <svg
+                        class="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                </button>
+                <div class="prose dark:prose-invert max-w-none">
+                    <p>
+                        A simple tool to help you set up your macOS development
+                        environment. Choose the tools you need and get a single
+                        script to install everything.
+                    </p>
+                    <div class="mt-4 space-y-2">
+                        <h4
+                            class="text-sm font-medium text-gray-900 dark:text-white"
+                        >
+                            Features:
+                        </h4>
+                        <ul
+                            class="list-disc pl-5 text-sm text-gray-600 dark:text-gray-300"
+                        >
+                            <li>Automatic Homebrew installation</li>
+                            <li>Smart dependency management</li>
+                            <li>Support for GUI and CLI tools</li>
+                            <li>Custom configurations</li>
+                        </ul>
+                    </div>
+                    <div
+                        class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+                    >
+                        <p class="text-sm text-blue-800 dark:text-blue-200">
+                            🔒 All installation happens locally on your machine.
+                            No data is collected or stored.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Help Modal -->
+    <dialog id="help-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container">
+            <div
+                class="modal-content bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg relative shadow-xl"
+            >
+                <button
+                    id="close-help"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-500"
+                >
+                    <svg
+                        class="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                </button>
+
+                <div class="mt-2">
+                    <h3
+                        class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+                    >
+                        About macOS Setup Builder
+                    </h3>
+
+                    <div class="space-y-4 text-sm">
+                        <div class="space-y-2">
+                            <p class="text-gray-600 dark:text-gray-300">
+                                This tool helps you set up your macOS
+                                development environment by:
+                            </p>
+                            <ul
+                                class="list-disc pl-5 text-gray-600 dark:text-gray-300 space-y-1"
+                            >
+                                <li>
+                                    Installing Homebrew (macOS package manager)
+                                </li>
+                                <li>
+                                    Installing your selected development tools
+                                </li>
+                                <li>Configuring basic settings</li>
+                            </ul>
+                        </div>
+
+                        <div
+                            class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4"
+                        >
+                            <p
+                                class="text-blue-900 dark:text-blue-100 font-medium"
+                            >
+                                How to use:
+                            </p>
+                            <ol
+                                class="mt-2 list-decimal pl-5 text-blue-800 dark:text-blue-200 space-y-1"
+                            >
+                                <li>Select the tools you want to install</li>
+                                <li>
+                                    Click "Generate Script" to download the
+                                    installer
+                                </li>
+                                <li>Run the installer in Terminal</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Instructions Modal -->
+    <dialog id="instructions-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container">
+            <div
+                class="modal-content bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg relative shadow-xl"
+            >
+                <button
+                    id="close-modal"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-500"
+                >
+                    <svg
+                        class="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                </button>
+
+                <div class="mt-2">
+                    <h3
+                        class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+                    >
+                        Run Your Installer
+                    </h3>
+
+                    <div class="space-y-4 text-sm">
+                        <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
+                            <p class="text-gray-700 dark:text-gray-300 mb-2">
+                                1. Open Terminal and run:
+                            </p>
+                            <pre
+                                class="bg-gray-900 text-gray-100 p-3 rounded"
+                            ><code>cd Downloads
+chmod +x install.sh
+./install.sh</code></pre>
+                        </div>
+
+                        <div
+                            class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-blue-900 dark:text-blue-100"
+                        >
+                            <p class="font-medium mb-1">What happens next:</p>
+                            <ul class="space-y-1 text-sm">
+                                <li>• Installs or updates Homebrew</li>
+                                <li>• Installs selected tools</li>
+                                <li>• Shows progress</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+</div>
+{% endblock %}
