@@ -120,6 +120,13 @@
         "description": "Fast, feature-rich, GPU based terminal emulator",
         "brew_package": "kitty",
         "check_command": "kitty --version"
+      },
+      "Ghostty": {
+        "name": "Ghostty",
+        "description": "Terminal emulator that uses platform-native UI and GPU acceleration",
+        "brew_package": "ghostty",
+        "cask": true,
+        "check_command": "test -d '/Applications/ghostty.app'"
       }
     }
   },
@@ -131,6 +138,20 @@
         "description": "Popular code editor with extensive plugin support",
         "brew_package": "visual-studio-code",
         "check_command": "code --version",
+        "cask": true
+      },
+      "cursor": {
+        "name": "Cursor",
+        "description": "Write, edit, and chat about your code with AI",
+        "brew_package": "cursor",
+        "check_command": "cursor --version",
+        "cask": true
+      },
+      "zed": {
+        "name": "Zed",
+        "description": "Multiplayer code editor",
+        "brew_package": "zed",
+        "check_command": "zed --version",
         "cask": true
       },
       "sublime": {
@@ -353,6 +374,13 @@
         "cask": true,
         "check_command": "test -d '/Applications/Slack.app'"
       },
+      "superhuman": {
+        "name": "Superhuman",
+        "description": "The worlds fastest Email client",
+        "brew_package": "superhuman",
+        "cask": true,
+        "check_command": "test -d '/Applications/Superhuman.app'"
+      }
       "discord": {
         "name": "Discord",
         "description": "Voice and text chat platform",

@@ -80,6 +80,11 @@
                                 >requires: {{ tool.requires|join(', ') }}</span
                             >
                             {% endif %}
+                            {% if tool.get('description') %}
+                            <p class="mt-1 text-xs text-gray-600 dark:text-gray-400">
+                                {{ tool.description }}
+                            </p>
+                            {% endif %}
                         </span>
                         {% if tool.get('cask', False) %}
                         <span
