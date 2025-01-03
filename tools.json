@@ -380,7 +380,7 @@
         "brew_package": "superhuman",
         "cask": true,
         "check_command": "test -d '/Applications/Superhuman.app'"
-      }
+      },
       "discord": {
         "name": "Discord",
         "description": "Voice and text chat platform",
