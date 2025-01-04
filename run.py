@@ -9,6 +9,7 @@ from functools import wraps
 import time
 from admin import admin_bp  # Import the admin blueprint
 import secrets
+import base64
 
 
 app = Flask(__name__)
@@ -23,36 +24,23 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def initialize_firebase():
-    """Initialize Firebase with retry mechanism and return Firestore client"""
+    """Initialize Firebase with base64 encoded credentials"""
     max_retries = 3
     retry_delay = 2  # seconds
     
     for attempt in range(max_retries):
         try:
-            # Ensure proper private key handling
-            private_key = os.getenv("FIREBASE_PRIVATE_KEY")
+            # Decode the base64 encoded credentials
+            credentials_json = base64.b64decode(os.getenv("FIREBASE_CREDENTIALS_BASE64")).decode('utf-8')
             
-            # Method 1: Ensure newline characters are properly escaped
-            private_key = private_key.replace('\\n', '\n')
+            # Parse the decoded JSON
+            cred_dict = json.loads(credentials_json)
             
-            # Method 2: Strip any additional quotes or whitespace
-            private_key = private_key.strip('"').strip("'")
-            
-            cred = credentials.Certificate({
-                "type": "service_account",
-                "project_id": "fastmac-98ba2",
-                "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
-                "private_key": private_key,  # Use the cleaned private key
-                "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
-                "client_id": os.getenv("FIREBASE_CLIENT_ID"),
-                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                "token_uri": "https://oauth2.googleapis.com/token",
-                "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL")
-            })
+            # Initialize Firebase with the decoded credentials
+            cred = credentials.Certificate(cred_dict)
             
             firebase_admin.initialize_app(cred, {
-                'projectId': 'fastmac-98ba2',
+                'projectId': cred_dict['project_id'],
             })
             
             return firestore.client()
