@@ -12,10 +12,7 @@ from admin import admin_bp
 import secrets
 import base64
 
-app = Flask(__name__, 
-    static_url_path='/static',
-    static_folder='static'
-)
+app =flask(__name__,template_folder="templates",static_folder='static')
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
 app.config['SESSION_TYPE'] = 'filesystem'
 app.register_blueprint(admin_bp)
