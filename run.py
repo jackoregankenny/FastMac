@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, current_app
+from flask import Flask, render_template, request, jsonify, current_app, json
 import firebase_admin
 from firebase_admin import credentials, firestore
 from dotenv import load_dotenv
@@ -31,24 +31,31 @@ def initialize_firebase():
         try:
             # Check if Firebase is already initialized
             if not firebase_admin._apps:
-                # Path to the service account JSON file
-                service_account_path = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON_PATH", "fastmac-98ba2-firebase-adminsdk-juxlu-360697204b.json")
+                # Fetch Firebase credentials from environment variable
+                service_account_data = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON")
                 
-                # Initialize Firebase with credentials from the JSON file
-                cred = credentials.Certificate(service_account_path)
+                if not service_account_data:
+                    raise ValueError("Firebase service account JSON not found in environment variable.")
                 
-                # Initialize the app with the credentials
-                firebase_admin.initialize_app(cred)
+                # Parse the JSON string and load as credentials
+                service_account_json = json.loads(service_account_data)
+                
+                # Initialize Firebase with the service account credentials
+                cred = credentials.Certificate(service_account_json)
+                firebase_admin.initialize_app(cred, {
+                    'projectId': service_account_json["project_id"]
+                })
             
             # Always return a new Firestore client
             return firestore.client()
 
         except Exception as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
+            print(f"Attempt {attempt + 1} failed: {str(e)}")
             if attempt < max_retries - 1:
+                print(f"Retrying in {retry_delay} seconds...")
                 time.sleep(retry_delay)
             else:
-                raise
+                raise  # Re-raise the exception if all retries fail
 
 def handle_errors(f):
     """Decorator to handle errors consistently across routes"""
