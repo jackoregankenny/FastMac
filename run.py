@@ -34,30 +34,32 @@ def initialize_firebase():
                 # Initialize Firebase with credentials
                 cred = credentials.Certificate({
                     "type": "service_account",
-                    "project_id": "fastmac-98ba2",
-                    "private_key_id": "360697204be7706c78d27eceab851e2ba7a2c2aa",
+                    "project_id": os.getenv("FIREBASE_PROJECT_ID"),
+                    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
                     "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace('\\n', '\n'),
-                    "client_email": "firebase-adminsdk-juxlu@fastmac-98ba2.iam.gserviceaccount.com",
-                    "client_id": "103264581740603081194",
+                    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+                    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
                     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                     "token_uri": "https://oauth2.googleapis.com/token",
                     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-juxlu%40fastmac-98ba2.iam.gserviceaccount.com"
+                    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL")
                 })
-
+                
                 firebase_admin.initialize_app(cred, {
-                    'projectId': 'fastmac-98ba2',
+                    'projectId': os.getenv("FIREBASE_PROJECT_ID"),
                 })
-
+            
             # Always return a new Firestore client
             return firestore.client()
-
+            
         except Exception as e:
             if attempt == max_retries - 1:
                 logger.error(f"Failed to initialize Firebase after {max_retries} attempts: {str(e)}")
                 raise
             logger.warning(f"Firebase initialization attempt {attempt + 1} failed, retrying...")
             time.sleep(retry_delay)
+            logger.info(f"Raw FIREBASE_PRIVATE_KEY: {os.getenv('FIREBASE_PRIVATE_KEY')[:50]}... (truncated)")
+
 
 def handle_errors(f):
     """Decorator to handle errors consistently across routes"""
