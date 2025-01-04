@@ -10,7 +10,7 @@ import time
 from admin import admin_bp  # Import the admin blueprint
 import secrets
 
-# After creating the Flask app
+
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -26,7 +26,7 @@ def initialize_firebase():
     """Initialize Firebase with retry mechanism and return Firestore client"""
     max_retries = 3
     retry_delay = 2  # seconds
-    
+
     for attempt in range(max_retries):
         try:
             # Check if Firebase is already initialized
@@ -35,23 +35,23 @@ def initialize_firebase():
                 cred = credentials.Certificate({
                     "type": "service_account",
                     "project_id": "fastmac-98ba2",
-                    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
+                    "private_key_id": "360697204be7706c78d27eceab851e2ba7a2c2aa",
                     "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace('\\n', '\n'),
-                    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
-                    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
+                    "client_email": "firebase-adminsdk-juxlu@fastmac-98ba2.iam.gserviceaccount.com",
+                    "client_id": "103264581740603081194",
                     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                     "token_uri": "https://oauth2.googleapis.com/token",
                     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL")
+                    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-juxlu%40fastmac-98ba2.iam.gserviceaccount.com"
                 })
-                
+
                 firebase_admin.initialize_app(cred, {
                     'projectId': 'fastmac-98ba2',
                 })
-            
+
             # Always return a new Firestore client
             return firestore.client()
-            
+
         except Exception as e:
             if attempt == max_retries - 1:
                 logger.error(f"Failed to initialize Firebase after {max_retries} attempts: {str(e)}")
