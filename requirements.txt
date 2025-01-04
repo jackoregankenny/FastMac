@@ -1,1 +1,5 @@
 flask
+firebase-admin
+python-dotenv
+flask-session
+werkzeug

@@ -28,6 +28,16 @@
             rel="stylesheet"
             href="{{ url_for('static', filename='css/styles.css') }}"
         />
+
+        <!-- Add Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+    <!-- After your existing scripts -->
+    <script src="{{ url_for('static', filename='js/category-panel.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/tool-modal.js') }}" defer></script>
+    <!-- Your Firebase configuration script -->
+    <script src="{{ url_for('static', filename='js/firebase-config.js') }}"></script>
     </head>
     <body class="bg-gray-50 min-h-screen dark:bg-gray-900 transition-colors">
         {% block content %}{% endblock %}

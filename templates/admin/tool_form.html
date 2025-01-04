@@ -1,0 +1,199 @@
+
+{# templates/admin/tool_form.html #}
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-2xl font-bold text-gray-900 mb-8">
+            {% if tool %}Edit Tool{% else %}New Tool{% endif %}
+        </h1>
+
+        <form method="POST" class="space-y-6">
+            <div class="space-y-4">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" name="name" id="name" required
+                        value="{{ tool.name if tool else '' }}"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea name="description" id="description" rows="3"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">{{ tool.description if tool else '' }}</textarea>
+                </div>
+
+                <div>
+                    <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                    <select name="category" id="category" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="">Select a category</option>
+                        {% for id, category in categories.items() %}
+                        <option value="{{ id }}" {% if tool and tool.category == id %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label for="brew_package" class="block text-sm font-medium text-gray-700">Brew Package Name</label>
+                    <input type="text" name="brew_package" id="brew_package"
+                        value="{{ tool.brew_package if tool else '' }}"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="check_command" class="block text-sm font-medium text-gray-700">Check Command</label>
+                    <input type="text" name="check_command" id="check_command"
+                        value="{{ tool.check_command if tool else '' }}"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+                    <select name="type" id="type"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="standard" {% if tool and tool.type == 'standard' %}selected{% endif %}>Standard</option>
+                        <option value="custom" {% if tool and tool.type == 'custom' %}selected{% endif %}>Custom</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center">
+                    <input type="checkbox" name="cask" id="cask"
+                        {% if tool and tool.cask %}checked{% endif %}
+                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="cask" class="ml-2 block text-sm text-gray-700">
+                        Is GUI Application (Cask)
+                    </label>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Dependencies</label>
+                    <div id="requires-container">
+                        {% if tool and tool.requires %}
+                            {% for req in tool.requires %}
+                            <div class="flex space-x-2 mt-2">
+                                <input type="text" name="requires" value="{{ req }}"
+                                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <button type="button" onclick="this.parentElement.remove()"
+                                    class="inline-flex items-center p-1.5 border border-transparent rounded-md text-red-600 hover:bg-red-50">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <button type="button" onclick="addRequirement()"
+                        class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        Add Requirement
+                    </button>
+                </div>
+
+                <div>
+                    <label for="install_command" class="block text-sm font-medium text-gray-700">Install Command (Custom only)</label>
+                    <input type="text" name="install_command" id="install_command"
+                        value="{{ tool.install_command if tool else '' }}"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Pre-install Commands</label>
+                    <div id="pre-install-container">
+                        {% if tool and tool.pre_install %}
+                            {% for cmd in tool.pre_install %}
+                            <div class="flex space-x-2 mt-2">
+                                <input type="text" name="pre_install" value="{{ cmd }}"
+                                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <button type="button" onclick="this.parentElement.remove()"
+                                    class="inline-flex items-center p-1.5 border border-transparent rounded-md text-red-600 hover:bg-red-50">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <button type="button" onclick="addPreInstall()"
+                        class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        Add Pre-install Command
+                    </button>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Post-install Commands</label>
+                    <div id="post-install-container">
+                        {% if tool and tool.post_install %}
+                            {% for cmd in tool.post_install %}
+                            <div class="flex space-x-2 mt-2">
+                                <input type="text" name="post_install" value="{{ cmd }}"
+                                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <button type="button" onclick="this.parentElement.remove()"
+                                    class="inline-flex items-center p-1.5 border border-transparent rounded-md text-red-600 hover:bg-red-50">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <button type="button" onclick="addPostInstall()"
+                        class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        Add Post-install Command
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-3">
+                <a href="{{ url_for('admin.dashboard') }}"
+                    class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                    Cancel
+                </a>
+                <button type="submit"
+                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                    {% if tool %}Update{% else %}Create{% endif %} Tool
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function createInputGroup(name) {
+    const div = document.createElement('div');
+    div.className = 'flex space-x-2 mt-2';
+    
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = name;
+    input.className = 'block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm';
+    
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'inline-flex items-center p-1.5 border border-transparent rounded-md text-red-600 hover:bg-red-50';
+    button.innerHTML = '<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
+    button.onclick = function() { div.remove(); };
+    
+    div.appendChild(input);
+    div.appendChild(button);
+    return div;
+}
+
+function addRequirement() {
+    document.getElementById('requires-container').appendChild(createInputGroup('requires'));
+}
+
+function addPreInstall() {
+    document.getElementById('pre-install-container').appendChild(createInputGroup('pre_install'));
+}
+
+function addPostInstall() {
+    document.getElementById('post-install-container').appendChild(createInputGroup('post_install'));
+}
+</script>
+{% endblock %}

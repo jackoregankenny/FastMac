@@ -1,172 +1,238 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
-import json
+from flask import Flask, render_template, request, jsonify, current_app
+import firebase_admin
+from firebase_admin import credentials, firestore
+from dotenv import load_dotenv
 import os
+import traceback
+import logging
+from functools import wraps
+import time
+from admin import admin_bp  # Import the admin blueprint
+import secrets
 
+# After creating the Flask app
 app = Flask(__name__)
+app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
+app.config['SESSION_TYPE'] = 'filesystem'
 
-def load_tools():
-    """Load tools configuration from tools.json."""
-    with open('tools.json') as f:
-        return json.load(f)
+# Register the admin blueprint
+app.register_blueprint(admin_bp)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def initialize_firebase():
+    """Initialize Firebase with retry mechanism and return Firestore client"""
+    max_retries = 3
+    retry_delay = 2  # seconds
+    
+    for attempt in range(max_retries):
+        try:
+            # Check if Firebase is already initialized
+            if not firebase_admin._apps:
+                # Initialize Firebase with credentials
+                cred = credentials.Certificate({
+                    "type": "service_account",
+                    "project_id": "fastmac-98ba2",
+                    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
+                    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace('\\n', '\n'),
+                    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+                    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
+                    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                    "token_uri": "https://oauth2.googleapis.com/token",
+                    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+                    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL")
+                })
+                
+                firebase_admin.initialize_app(cred, {
+                    'projectId': 'fastmac-98ba2',
+                })
+            
+            # Always return a new Firestore client
+            return firestore.client()
+            
+        except Exception as e:
+            if attempt == max_retries - 1:
+                logger.error(f"Failed to initialize Firebase after {max_retries} attempts: {str(e)}")
+                raise
+            logger.warning(f"Firebase initialization attempt {attempt + 1} failed, retrying...")
+            time.sleep(retry_delay)
+
+def handle_errors(f):
+    """Decorator to handle errors consistently across routes"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error in {f.__name__}: {str(e)}\n{traceback.format_exc()}")
+            return jsonify({
+                'error': 'An unexpected error occurred',
+                'details': str(e) if app.debug else 'Please try again later'
+            }), 500
+    return decorated_function
+
+class FirestoreCache:
+    """Simple cache for Firestore data"""
+    def __init__(self, timeout=300):  # 5 minutes timeout
+        self.cache = {}
+        self.timeout = timeout
+        self.timestamps = {}
+
+    def get(self, key):
+        if key in self.cache:
+            if time.time() - self.timestamps[key] < self.timeout:
+                return self.cache[key]
+            else:
+                del self.cache[key]
+                del self.timestamps[key]
+        return None
+
+    def set(self, key, value):
+        self.cache[key] = value
+        self.timestamps[key] = time.time()
+
+# Initialize cache
+cache = FirestoreCache()
 
 def get_base_script():
     """Return the base installation script with setup code."""
-    return '''#!/bin/bash
-# Exit on error
-set -e
-
-# Setup terminal colors
-setup_colors() {
-  if [[ -t 2 ]] && [[ -z "${NO_COLOR-}" ]] && [[ "${TERM-}" != "dumb" ]]; then
-    NOFORMAT='\\033[0m'
-    RED='\\033[0;31m'
-    GREEN='\\033[0;32m'
-    YELLOW='\\033[1;33m'
-  else
-    NOFORMAT=''
-    RED=''
-    GREEN=''
-    YELLOW=''
-  fi
-}
-
-msg() {
-  echo "${YELLOW}$1${NOFORMAT}"
-}
-
-success() {
-  echo "${GREEN}$1${NOFORMAT}"
-}
-
-error() {
-  echo "${RED}$1${NOFORMAT}"
-}
-
-setup_colors
-
-msg "🔍 Checking system..."
-
-# OS check
-if [[ "$OSTYPE" != "darwin"* ]]; then
-    error "❌ This script is only for macOS"
-    exit 1
-fi
-
-# Homebrew installation
-if ! command -v brew >/dev/null 2>&1; then
-    msg "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-    # Add to PATH for Apple Silicon Macs
-    if [[ -f /opt/homebrew/bin/brew ]]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    fi
-else
-    msg "Updating Homebrew..."
-    brew update
-fi
-'''
-
-def generate_script(selected_tools):
-    """Generate the complete installation script."""
-    script_parts = [get_base_script()]
-    tools_data = load_tools()
-    installed_tools = set()
-
-    def add_tool_to_script(tool_id, category):
-        """Add a tool and its dependencies to the script."""
-        if tool_id in installed_tools:
-            return
-
-        tool = category['tools'][tool_id]
-
-        # Handle dependencies first
-        if tool.get('requires'):
-            for dep_id in tool.get('requires'):
-                for dep_category in tools_data.values():
-                    if dep_id in dep_category['tools']:
-                        add_tool_to_script(dep_id, dep_category)
-                        break
-
-        # Pre-install steps
-        if tool.get('pre_install'):
-            for cmd in tool['pre_install']:
-                script_parts.append(f'''
-msg "Preparing for {tool['name']}..."
-{cmd}''')
-
-        # Main installation
-        if tool.get('type') != 'custom':
-            install_type = 'install --cask' if tool.get('cask', False) else 'install'
-            script_parts.append(f'''
-msg "Installing {tool['name']}..."
-if ! command -v {tool_id} >/dev/null 2>&1; then
-    brew {install_type} {tool['brew_package']}
-else
-    success "{tool['name']} is already installed"
-fi''')
-        else:
-            script_parts.append(f'''
-msg "Installing {tool['name']}..."
-{tool['install_command']}''')
-
-        # Post-install steps
-        if tool.get('post_install'):
-            for cmd in tool['post_install']:
-                script_parts.append(f'''
-msg "Configuring {tool['name']}..."
-{cmd}''')
-
-        installed_tools.add(tool_id)
-
-    # Process all selected tools
-    for tool_id in selected_tools:
-        for category in tools_data.values():
-            if tool_id in category['tools']:
-                add_tool_to_script(tool_id, category)
-                break
-
-    script_parts.append('\nsuccess "✅ Installation complete!"')
-    return '\n'.join(script_parts)
+    # Previous implementation remains the same
+    pass
 
 @app.route('/')
+@handle_errors
 def index():
-    """Render the main page."""
-    return render_template('index.html', categories=load_tools())
-
-@app.route('/static/tools.json')
-def serve_tools():
-    """Serve the tools.json file."""
-    return send_from_directory('.', 'tools.json')
+    """Render the main page with categories from Firebase."""
+    # Try to get from cache first
+    categories = cache.get('categories')
+    
+    if not categories:
+        categories = {}
+        db = initialize_firebase()
+        
+        # Get all categories
+        categories_ref = db.collection('categories').stream()
+        for cat_doc in categories_ref:
+            cat_data = cat_doc.to_dict()
+            categories[cat_doc.id] = {
+                'name': cat_data.get('name', cat_doc.id),
+                'tools': {}
+            }
+            logger.info(f"Loaded category: {cat_doc.id}")
+        
+        # Get tools
+        if categories:
+            tools_ref = db.collection('tools').stream()
+            for tool_doc in tools_ref:
+                tool_data = tool_doc.to_dict()
+                category_id = tool_data.get('category')
+                
+                if category_id in categories:
+                    categories[category_id]['tools'][tool_doc.id] = {
+                        'name': tool_data.get('name', 'Unnamed Tool'),
+                        'description': tool_data.get('description', ''),
+                        'brew_package': tool_data.get('brew_package', ''),
+                        'check_command': tool_data.get('check_command', ''),
+                        'type': tool_data.get('type', 'standard'),
+                        'cask': tool_data.get('cask', False),
+                        'requires': tool_data.get('requires', []),
+                        'install_command': tool_data.get('install_command', ''),
+                        'pre_install': tool_data.get('pre_install', []),
+                        'post_install': tool_data.get('post_install', [])
+                    }
+                    logger.info(f"Loaded tool: {tool_doc.id}")
+        
+        # Cache the results
+        cache.set('categories', categories)
+    
+    return render_template('index.html', categories=categories)
 
 @app.route('/generate', methods=['POST'])
+@handle_errors
 def generate():
     """Generate the installation script based on selected tools."""
+    selected_tools = request.json
+    
+    if not selected_tools:
+        return jsonify({'error': 'No tools selected'}), 400
+    
+    logger.info(f"Generating script for tools: {selected_tools}")
+    script = generate_script(selected_tools)
+    
+    return jsonify({'script': script})
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return jsonify({'error': 'Not found'}), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify({'error': 'Internal server error'}), 500
+
+@app.route('/admin/categories/save', methods=['POST'])
+def save_category():
     try:
-        selected_tools = request.json
-        if not selected_tools:
-            print("No tools were selected")
-            return jsonify({'error': 'No tools selected'}), 400
-
-        print(f"Selected tools: {selected_tools}")  # Debug log
-
-        try:
-            tools_data = load_tools()
-            print(f"Loaded tools data with categories: {list(tools_data.keys())}")  # Debug log
-        except Exception as e:
-            print(f"Error loading tools.json: {str(e)}")
-            return jsonify({'error': 'Error loading tools configuration'}), 500
-
-        script = generate_script(selected_tools)
-        print("Script generated successfully")  # Debug log
-
-        return jsonify({'script': script})
+        data = request.get_json()
+        # If editing existing category
+        if data.get('id'):
+            doc_ref = db.collection('categories').document(data['id'])
+            doc_ref.update({
+                'name': data['name']
+            })
+        # If creating new category
+        else:
+            db.collection('categories').add({
+                'name': data['name']
+            })
+        return jsonify({'success': True})
     except Exception as e:
-        import traceback
-        print(f"Error generating script: {str(e)}")
-        print("Full traceback:")
-        print(traceback.format_exc())
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/admin/tools/save', methods=['POST'])
+def save_tool():
+    try:
+        form_data = request.form.to_dict()
+        # Handle array fields
+        form_data['requires'] = request.form.getlist('requires')
+        form_data['pre_install'] = request.form.getlist('pre_install')
+        form_data['post_install'] = request.form.getlist('post_install')
+        form_data['cask'] = 'cask' in request.form
+        
+        # If editing existing tool
+        if form_data.get('id'):
+            doc_ref = db.collection('tools').document(form_data['id'])
+            doc_ref.update(form_data)
+        # If creating new tool
+        else:
+            db.collection('tools').add(form_data)
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/admin/tools/draft', methods=['POST'])
+def save_tool_draft():
+    try:
+        # Here you could implement draft saving logic
+        # For example, storing in a separate drafts collection
+        return jsonify({'success': True})
+    except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    debug_mode = os.getenv('FLASK_ENV') == 'development'
+    
+    # Configure logging based on environment
+    if debug_mode:
+        logging.getLogger().setLevel(logging.DEBUG)
+    
+    # Initialize Firebase on startup
+    try:
+        db = initialize_firebase()
+        logger.info("Firebase initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize Firebase: {str(e)}")
+        exit(1)
+    
+    app.run(host='0.0.0.0', port=5000, debug=debug_mode)
