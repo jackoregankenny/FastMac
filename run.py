@@ -298,19 +298,3 @@ def generate():
         logger.error(f"Error generating script: {str(e)}\n{traceback.format_exc()}")
         return jsonify({'error': 'Failed to generate script'}), 500
 
-if __name__ == '__main__':
-    debug_mode = os.getenv('FLASK_ENV') == 'development'
-    
-    if debug_mode:
-        logging.getLogger().setLevel(logging.DEBUG)
-    
-    # Initialize Firebase
-    try:
-        db = initialize_firebase()
-        logger.info("Firebase initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize Firebase: {str(e)}")
-        # Continue without Firebase, will use JSON file as fallback
-        db = None
-    
-    app.run(host='0.0.0.0', port=5000, debug=debug_mode)
