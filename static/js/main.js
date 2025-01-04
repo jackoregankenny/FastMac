@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
   // Get elements with null checks
   const setupForm = document.getElementById("setup-form");

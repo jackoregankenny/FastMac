@@ -1,6 +1,3 @@
-// static/js/firebase-config.js
-
-// Initialize Firebase with your config
 const firebaseConfig = {
     apiKey: "AIzaSyAwMnc6B_9IUn57XRm8BN696rknOeHe88w",
     authDomain: "fastmac-98ba2.firebaseapp.com",
