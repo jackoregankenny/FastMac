@@ -36,6 +36,12 @@ class ToolModal {
         
         // Set up autosave
         this.setupAutosave();
+
+        // Add category select reference
+        this.categorySelect = document.getElementById('tool-category');
+
+        // Load categories when modal is initialized
+        this.loadCategories();
     }
 
     bindEvents() {
@@ -63,7 +69,37 @@ class ToolModal {
         // Form changes trigger autosave
         this.form.addEventListener('input', () => this.triggerAutosave());
     }
-
+        async loadCategories() {
+            try {
+                const response = await fetch('/api/categories');
+                if (!response.ok) throw new Error('Failed to load categories');
+                
+                const data = await response.json();
+                
+                // Clear existing options
+                this.categorySelect.innerHTML = `
+                    <option value="">Select a category</option>
+                `;
+                
+                // Add new options
+                data.categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    this.categorySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                // Add error state to select
+                this.categorySelect.classList.add('border-red-500');
+                
+                // Add error message below select
+                const errorMessage = document.createElement('p');
+                errorMessage.className = 'mt-1 text-sm text-red-600';
+                errorMessage.textContent = 'Failed to load categories. Please try again.';
+                this.categorySelect.parentNode.appendChild(errorMessage);
+            }
+        }
     setupAutosave() {
         // Debounced autosave function
         this.triggerAutosave = () => {
@@ -85,6 +121,8 @@ class ToolModal {
             this.autosaveIndicator.classList.remove('show');
         }, duration);
     }
+    
+    
 
     async saveDraft() {
         try {
@@ -105,7 +143,7 @@ class ToolModal {
         }
     }
 
-    open(tool = null) {
+    async open(tool = null) {
         // Show modal with animation
         this.modal.style.display = 'block';
         requestAnimationFrame(() => {
@@ -113,6 +151,9 @@ class ToolModal {
             this.content.classList.remove('opacity-0', 'scale-95');
             this.content.classList.add('opacity-100', 'scale-100');
         });
+        
+        // Ensure categories are loaded
+        await this.loadCategories();
         
         // Reset or populate form
         if (tool) {
@@ -132,6 +173,7 @@ class ToolModal {
             this.form.querySelector('input:not([type="hidden"])').focus();
         }, 300);
     }
+}
 
     close() {
         // Animate out
@@ -330,6 +372,72 @@ class ToolModal {
 
 // Initialize the tool modal
 const toolModal = new ToolModal();
+
+function deleteTool(toolId) {
+    if (!confirm('Are you sure you want to delete this tool?')) {
+        return;
+    }
+
+    // Show loading state
+    const button = event.target.closest('button');
+    const originalText = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = `
+        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Deleting...
+    `;
+
+    fetch(`/admin/tools/${toolId}/delete`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to delete tool');
+        return response.json();
+    })
+    .then(() => {
+        // Remove the tool card with animation
+        const toolCard = button.closest('.tool-card');
+        toolCard.style.opacity = '0';
+        toolCard.style.transform = 'translateX(-20px)';
+        
+        setTimeout(() => {
+            toolCard.remove();
+            
+            // Update tool counts
+            const toolCountElements = document.querySelectorAll('.tool-count');
+            toolCountElements.forEach(el => {
+                const count = parseInt(el.textContent) - 1;
+                el.textContent = count;
+                
+                // Hide empty categories if needed
+                if (count === 0) {
+                    el.closest('[data-category]')?.classList.add('hidden');
+                }
+            });
+        }, 300);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        button.disabled = false;
+        button.innerHTML = originalText;
+        alert('Failed to delete tool. Please try again.');
+    });
+}
+
+// Add this to fix the "Saving..." indicator issue
+document.addEventListener('DOMContentLoaded', () => {
+    // Remove any lingering "Saving..." indicators
+    const savingIndicators = document.querySelectorAll('.saving-indicator');
+    savingIndicators.forEach(indicator => {
+        indicator.remove();
+    });
+});
 
 // Add click handler to "Add Tool" button in the dashboard
 document.querySelector('[data-action="add-tool"]').addEventListener('click', () => {
