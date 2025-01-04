@@ -12,8 +12,12 @@ from admin import admin_bp
 import secrets
 import base64
 
-app =Flask(__name__,template_folder="templates",
-static_folder='static')
+app = Flask(__name__,
+    template_folder="templates",
+    static_folder='static',
+    static_url_path='/static'  # Add this line
+)
+
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
 app.config['SESSION_TYPE'] = 'filesystem'
 app.register_blueprint(admin_bp)
@@ -213,6 +217,13 @@ msg "Configuring {tool['name']}..."
 @handle_errors
 def index():
     try:
+        static_folder = app.static_folder
+        static_url = app.static_url_path
+        logger.info(f"Static folder: {static_folder}")
+        logger.info(f"Static URL path: {static_url}")
+        logger.info(f"Static folder exists: {os.path.exists(static_folder)}")
+        if os.path.exists(static_folder):
+            logger.info(f"Static folder contents: {os.listdir(static_folder)}")
         categories = {}
         tools_by_category = {}
         
@@ -269,9 +280,6 @@ def index():
         return render_template('index.html', categories={}, tools_by_category={})
     
     
-@app.route('/static/<path:path>')
-def send_static(path):
-    return send_from_directory('static', path)
 
 @app.route('/generate', methods=['POST'])
 @handle_errors
