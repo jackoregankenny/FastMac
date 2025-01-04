@@ -1,26 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Initialize Firebase with configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyAwMnc6B_9IUn57XRm8BN696rknOeHe88w",
-    authDomain: "fastmac-98ba2.firebaseapp.com",
-    databaseURL: "https://fastmac-98ba2-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "fastmac-98ba2",
-    storageBucket: "fastmac-98ba2.firebasestorage.app",
-    messagingSenderId: "129477015226",
-    appId: "1:129477015226:web:721d174e3780a563953483"
-  };
-
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
+  // Get elements with null checks
   const setupForm = document.getElementById("setup-form");
   const toolSearch = document.getElementById("tool-search");
   const selectedCount = document.getElementById("selected-count");
-  const submitButton = setupForm.querySelector('button[type="submit"]');
+  const submitButton = setupForm?.querySelector('button[type="submit"]');
   const helpButton = document.getElementById("help-button");
   const helpModal = document.getElementById("help-modal");
   const closeHelp = document.getElementById("close-help");
+
+  if (!setupForm || !submitButton) {
+    console.error("Required form elements not found");
+    return;
+  }
 
   // Track selection states
   const manualSelections = new Set(); // Tools directly selected by user
@@ -32,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadToolsData() {
     try {
       // First, fetch all categories
-      const categoriesSnapshot = await db.collection('categories').get();
+      const categoriesSnapshot = await window.db.collection('categories').get();
       const categories = {};
       
       // Create the basic category structure
@@ -44,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       // Then fetch all tools
-      const toolsSnapshot = await db.collection('tools').get();
+      const toolsSnapshot = await window.db.collection('tools').get();
       
       // Organize tools into their categories
       toolsSnapshot.forEach(doc => {
@@ -59,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
             check_command: toolData.check_command,
             type: toolData.type,
             cask: toolData.cask,
-            requires: toolData.requires,
+            requires: toolData.requires || [],
             install_command: toolData.install_command,
             pre_install: toolData.pre_install,
             post_install: toolData.post_install
@@ -75,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Function to render the tools UI
+  // Original renderToolsUI function remains the same
   function renderToolsUI(categories) {
     const container = document.getElementById("tools-container");
     if (!container) return;
@@ -97,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   <span class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 tool-name">
                     ${tool.name}
                   </span>
-                  ${tool.requires ? `
+                  ${tool.requires && tool.requires.length > 0 ? `
                     <span class="ml-2 text-xs text-gray-500">
                       requires: ${tool.requires.join(', ')}
                     </span>
@@ -117,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSelectedState();
   }
 
-  // The rest of the functions remain largely the same
+  // Keep all your existing functions
   function getDependencies(toolId) {
     for (const category of Object.values(toolsData)) {
       const tool = category.tools[toolId];
@@ -140,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return dependents;
   }
 
-  // Handle tool selection - remains the same
+  // Keep handleCheckboxChange the same
   function handleCheckboxChange(checkbox, isDirectSelection = true) {
     const toolId = checkbox.id;
 
@@ -192,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSelectedState();
   }
 
-  // Search functionality - remains the same
+  // Keep other utility functions
   function filterTools(searchTerm) {
     const tools = document.querySelectorAll(".tool-item");
     const normalizedTerm = searchTerm.toLowerCase().trim();
@@ -212,6 +203,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateSelectedState() {
+    if (!selectedCount || !submitButton) return;
+    
     const checkedBoxes = setupForm.querySelectorAll('input[type="checkbox"]:checked');
     const count = checkedBoxes.length;
     selectedCount.textContent = count === 0 ? "No tools selected" : 
@@ -219,7 +212,6 @@ document.addEventListener("DOMContentLoaded", () => {
     submitButton.disabled = count === 0;
   }
 
-  // Helper function to show errors
   function showError(message) {
     const container = document.getElementById("tools-container");
     if (container) {
@@ -231,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Event Listeners
+  // Event Listeners with null checks
   toolSearch?.addEventListener("input", (e) => filterTools(e.target.value));
 
   setupForm?.addEventListener("change", (e) => {
@@ -240,11 +232,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  helpButton?.addEventListener("click", () => helpModal?.showModal());
-  closeHelp?.addEventListener("click", () => helpModal?.close());
+  if (helpButton && helpModal && closeHelp) {
+    helpButton.addEventListener("click", () => helpModal.showModal());
+    closeHelp.addEventListener("click", () => helpModal.close());
+  }
 
-  // Script generation and download
-  setupForm?.addEventListener("submit", async (e) => {
+  setupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
       const selectedTools = Array.from(new FormData(e.target).keys());
@@ -260,6 +253,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
 
       const blob = new Blob([data.script], { type: "text/plain" });
       const url = window.URL.createObjectURL(blob);
@@ -271,21 +267,22 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
 
-      document.getElementById("success-state")?.classList.remove("hidden");
-      document.getElementById("generate-button")?.classList.add("hidden");
+      const successState = document.getElementById("success-state");
+      const generateButton = document.getElementById("generate-button");
+      
+      if (successState) successState.classList.remove("hidden");
+      if (generateButton) generateButton.classList.add("hidden");
     } catch (error) {
       console.error("Error:", error);
       showError("Failed to generate installation script. Please try again.");
     }
   });
 
-  // Handle success state close
-  document.getElementById("close-success")?.addEventListener("click", () => {
-    document.getElementById("success-state")?.classList.add("hidden");
-    document.getElementById("generate-button")?.classList.remove("hidden");
-  });
-
   // Initialize
-  loadToolsData();
-  updateSelectedState();
+  if (!window.firebaseInitFailed) {
+    loadToolsData();
+    updateSelectedState();
+  } else {
+    showError("Failed to initialize Firebase. Please refresh the page.");
+  }
 });
