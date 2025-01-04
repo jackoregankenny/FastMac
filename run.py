@@ -12,7 +12,7 @@ from admin import admin_bp
 import secrets
 import base64
 
-Copyapp = Flask(__name__,
+app = Flask(__name__,
     template_folder="templates",
     static_folder='static'  # Keep it simple, don't specify static_url_path
 )
