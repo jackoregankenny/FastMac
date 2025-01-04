@@ -157,11 +157,21 @@ def edit_tool(tool_id):
 @admin_bp.route('/tool/delete/<tool_id>', methods=['POST'])
 @login_required
 def delete_tool(tool_id):
-    db = firestore.client()
-    db.collection('tools').document(tool_id).delete()
-    flash('Tool deleted successfully', 'success')
-    return redirect(url_for('admin.dashboard'))
-
+    try:
+        # Get the tool first to check if it exists
+        tool_ref = db.collection('tools').document(tool_id)
+        tool = tool_ref.get()
+        
+        if not tool.exists:
+            return jsonify({'error': 'Tool not found'}), 404
+            
+        # Delete the tool
+        tool_ref.delete()
+        return jsonify({'success': True})
+    except Exception as e:
+        print(f"Error deleting tool: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+    
 @admin_bp.route('/category/new', methods=['GET', 'POST'])
 @login_required
 def new_category():

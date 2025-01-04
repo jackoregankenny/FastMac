@@ -104,50 +104,72 @@ def get_base_script():
 @app.route('/')
 @handle_errors
 def index():
-    """Render the main page with categories from Firebase."""
-    # Try to get from cache first
-    categories = cache.get('categories')
-    
-    if not categories:
+    try:
         categories = {}
-        db = initialize_firebase()
+        tools_by_category = {}
         
-        # Get all categories
+        # First, get all categories and create the basic structure
         categories_ref = db.collection('categories').stream()
         for cat_doc in categories_ref:
             cat_data = cat_doc.to_dict()
             categories[cat_doc.id] = {
-                'name': cat_data.get('name', cat_doc.id),
+                'id': cat_doc.id,  # Add ID to make it accessible in templates
+                'name': cat_data.get('name', 'Unnamed Category'),
                 'tools': {}
             }
-            logger.info(f"Loaded category: {cat_doc.id}")
+            tools_by_category[cat_doc.id] = 0  # Initialize counter
+
+        # Then get all tools and organize them
+        tools_ref = db.collection('tools').stream()
+        for tool_doc in tools_ref:
+            tool_data = tool_doc.to_dict()
+            category_id = tool_data.get('category')
+            
+            # Only process tools that have a valid category
+            if category_id and category_id in categories:
+                tools_by_category[category_id] += 1
+                categories[category_id]['tools'][tool_doc.id] = {
+                    'id': tool_doc.id,
+                    'name': tool_data.get('name', 'Unnamed Tool'),
+                    'description': tool_data.get('description', ''),
+                    'brew_package': tool_data.get('brew_package', ''),
+                    'check_command': tool_data.get('check_command', ''),
+                    'type': tool_data.get('type', 'standard'),
+                    'cask': tool_data.get('cask', False),
+                    'requires': tool_data.get('requires', []),
+                    'install_command': tool_data.get('install_command', ''),
+                    'pre_install': tool_data.get('pre_install', []),
+                    'post_install': tool_data.get('post_install', [])
+                }
+
+        # Remove any empty categories (optional)
+        categories = {k: v for k, v in categories.items() if tools_by_category[k] > 0}
         
-        # Get tools
-        if categories:
-            tools_ref = db.collection('tools').stream()
-            for tool_doc in tools_ref:
-                tool_data = tool_doc.to_dict()
-                category_id = tool_data.get('category')
-                
-                if category_id in categories:
-                    categories[category_id]['tools'][tool_doc.id] = {
-                        'name': tool_data.get('name', 'Unnamed Tool'),
-                        'description': tool_data.get('description', ''),
-                        'brew_package': tool_data.get('brew_package', ''),
-                        'check_command': tool_data.get('check_command', ''),
-                        'type': tool_data.get('type', 'standard'),
-                        'cask': tool_data.get('cask', False),
-                        'requires': tool_data.get('requires', []),
-                        'install_command': tool_data.get('install_command', ''),
-                        'pre_install': tool_data.get('pre_install', []),
-                        'post_install': tool_data.get('post_install', [])
-                    }
-                    logger.info(f"Loaded tool: {tool_doc.id}")
-        
-        # Cache the results
-        cache.set('categories', categories)
-    
-    return render_template('index.html', categories=categories)
+        print(f"Loaded {len(categories)} categories with tools")
+        return render_template('index.html', 
+                             categories=categories,
+                             tools_by_category=tools_by_category)
+                             
+    except Exception as e:
+        print(f"Error loading categories: {str(e)}")
+        print(traceback.format_exc())
+        return render_template('index.html', categories={}, tools_by_category={})
+
+
+@app.route('/api/categories')
+def get_categories():
+    try:
+        categories = []
+        categories_ref = db.collection('categories').stream()
+        for cat_doc in categories_ref:
+            cat_data = cat_doc.to_dict()
+            categories.append({
+                'id': cat_doc.id,
+                'name': cat_data.get('name', 'Unnamed Category')
+            })
+        return jsonify({'categories': categories})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/generate', methods=['POST'])
 @handle_errors
