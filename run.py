@@ -31,33 +31,24 @@ def initialize_firebase():
         try:
             # Check if Firebase is already initialized
             if not firebase_admin._apps:
-                # Initialize Firebase with credentials
-                cred = credentials.Certificate({
-                    "type": "service_account",
-                    "project_id": "fastmac-98ba2",
-                    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
-                    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace('\\n', '\n'),
-                    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
-                    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
-                    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                    "token_uri": "https://oauth2.googleapis.com/token",
-                    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL")
-                })
+                # Path to the service account JSON file
+                service_account_path = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON_PATH", "fastmac-98ba2-firebase-adminsdk-juxlu-360697204b.json")
                 
-                firebase_admin.initialize_app(cred, {
-                    'projectId': 'fastmac-98ba2',
-                })
+                # Initialize Firebase with credentials from the JSON file
+                cred = credentials.Certificate(service_account_path)
+                
+                # Initialize the app with the credentials
+                firebase_admin.initialize_app(cred)
             
             # Always return a new Firestore client
             return firestore.client()
-            
+
         except Exception as e:
-            if attempt == max_retries - 1:
-                logger.error(f"Failed to initialize Firebase after {max_retries} attempts: {str(e)}")
+            print(f"Attempt {attempt + 1} failed: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(retry_delay)
+            else:
                 raise
-            logger.warning(f"Firebase initialization attempt {attempt + 1} failed, retrying...")
-            time.sleep(retry_delay)
 
 def handle_errors(f):
     """Decorator to handle errors consistently across routes"""
