@@ -267,6 +267,11 @@ def index():
     except Exception as e:
         logger.error(f"Error loading categories: {str(e)}\n{traceback.format_exc()}")
         return render_template('index.html', categories={}, tools_by_category={})
+    
+    
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('static', path)
 
 @app.route('/generate', methods=['POST'])
 @handle_errors
