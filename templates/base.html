@@ -4,12 +4,6 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{% block title %}macOS Setup Builder{% endblock %}</title>
-        
-        <!-- Styles -->
-        <link href="https://cdn.jsdelivr.net/npm/@heroicons/v1/outline/heroicons.css" rel="stylesheet" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
-        
-        <!-- Tailwind -->
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config = {
@@ -26,11 +20,12 @@
                 },
             };
         </script>
+        <link href="https://cdn.jsdelivr.net/npm/@heroicons/v1/outline/heroicons.css" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
     </head>
     <body class="bg-gray-50 min-h-screen dark:bg-gray-900 transition-colors">
         {% block content %}{% endblock %}
-
-        <!-- Scripts -->
+        
         <!-- Firebase SDK -->
         <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>

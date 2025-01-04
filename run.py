@@ -12,10 +12,9 @@ from admin import admin_bp
 import secrets
 import base64
 
-app = Flask(__name__,
+Copyapp = Flask(__name__,
     template_folder="templates",
-    static_folder='static',
-    static_url_path='/static'  # Add this line
+    static_folder='static'  # Keep it simple, don't specify static_url_path
 )
 
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
