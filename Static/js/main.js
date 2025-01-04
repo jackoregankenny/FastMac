@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const helpButton = document.getElementById("help-button");
   const helpModal = document.getElementById("help-modal");
   const closeHelp = document.getElementById("close-help");
+  const helpContent = document.getElementById("help-content");
+  const instructionsContent = document.getElementById("instructions-content");
+  const successState = document.getElementById("success-state");
 
   if (!setupForm || !submitButton) {
     console.error("Required form elements not found");
@@ -19,14 +22,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let toolsData = {};
 
+  // Modal Control Functions
+  function showHelpContent() {
+    if (helpContent && instructionsContent) {
+      helpContent.classList.remove('hidden');
+      instructionsContent.classList.add('hidden');
+    }
+    helpModal?.showModal();
+  }
+
+  function showInstructionsContent() {
+    if (helpContent && instructionsContent) {
+      helpContent.classList.add('hidden');
+      instructionsContent.classList.remove('hidden');
+    }
+    helpModal?.showModal();
+  }
+
+  function closeModal() {
+    helpModal?.close();
+    // Reset to help content when closing
+    setTimeout(() => {
+      if (helpContent && instructionsContent) {
+        helpContent.classList.remove('hidden');
+        instructionsContent.classList.add('hidden');
+      }
+    }, 300);
+  }
+
   // Load tools data from Firebase
   async function loadToolsData() {
     try {
-      // First, fetch all categories
+      console.log("Starting to load tools data...");
       const categoriesSnapshot = await window.db.collection('categories').get();
       const categories = {};
       
-      // Create the basic category structure
       categoriesSnapshot.forEach(doc => {
         categories[doc.id] = {
           name: doc.data().name,
@@ -34,12 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
         };
       });
 
-      // Then fetch all tools
       const toolsSnapshot = await window.db.collection('tools').get();
       
-      // Organize tools into their categories
       toolsSnapshot.forEach(doc => {
         const toolData = doc.data();
+        console.log(`Loading tool: ${doc.id}`, toolData);
         const categoryId = toolData.category;
         
         if (categories[categoryId]) {
@@ -58,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
+      console.log("Final toolsData:", categories);
       toolsData = categories;
       renderToolsUI(categories);
     } catch (error) {
@@ -66,7 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Original renderToolsUI function remains the same
   function renderToolsUI(categories) {
     const container = document.getElementById("tools-container");
     if (!container) return;
@@ -83,6 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <input type="checkbox" 
                        id="${toolId}" 
                        name="${toolId}" 
+                       data-requires="${(tool.requires || []).join(',')}"
                        class="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500">
                 <span class="ml-3 flex-1">
                   <span class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 tool-name">
@@ -92,6 +122,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span class="ml-2 text-xs text-gray-500">
                       requires: ${tool.requires.join(', ')}
                     </span>
+                  ` : ''}
+                  ${tool.description ? `
+                    <p class="mt-1 text-xs text-gray-600 dark:text-gray-400">
+                      ${tool.description}
+                    </p>
                   ` : ''}
                 </span>
                 ${tool.cask ? `
@@ -108,82 +143,76 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSelectedState();
   }
 
-  // Keep all your existing functions
   function getDependencies(toolId) {
+    let dependencies = [];
     for (const category of Object.values(toolsData)) {
-      const tool = category.tools[toolId];
-      if (tool?.requires) {
-        return tool.requires;
+      if (toolId in category.tools) {
+        dependencies = category.tools[toolId].requires || [];
+        console.log(`Dependencies for ${toolId}:`, dependencies);
+        break;
       }
     }
-    return [];
+    return dependencies;
   }
 
-  function getDependents(toolId) {
-    const dependents = [];
-    for (const category of Object.values(toolsData)) {
-      for (const [id, tool] of Object.entries(category.tools)) {
-        if (tool.requires?.includes(toolId)) {
-          dependents.push(id);
-        }
-      }
-    }
-    return dependents;
-  }
-
-  // Keep handleCheckboxChange the same
   function handleCheckboxChange(checkbox, isDirectSelection = true) {
     const toolId = checkbox.id;
+    const isChecked = checkbox.checked;
+    console.log(`Handling checkbox change for ${toolId}, checked: ${isChecked}, direct: ${isDirectSelection}`);
 
-    if (checkbox.checked) {
+    if (isChecked) {
       if (isDirectSelection) {
         manualSelections.add(toolId);
+        console.log(`Added ${toolId} to manual selections`);
       }
 
-      getDependencies(toolId).forEach((depId) => {
+      const dependencies = checkbox.dataset.requires ? checkbox.dataset.requires.split(',').filter(Boolean) : [];
+      console.log(`Tool ${toolId} requires:`, dependencies);
+
+      dependencies.forEach(depId => {
         const depCheckbox = document.getElementById(depId);
+        console.log(`Looking for dependency checkbox ${depId}:`, depCheckbox);
+        
         if (depCheckbox) {
-          depCheckbox.checked = true;
           if (!dependencySelections.has(depId)) {
             dependencySelections.set(depId, new Set());
           }
           dependencySelections.get(depId).add(toolId);
-          handleCheckboxChange(depCheckbox, false);
+          
+          if (!depCheckbox.checked) {
+            depCheckbox.checked = true;
+            handleCheckboxChange(depCheckbox, false);
+          }
+        } else {
+          console.warn(`Dependency ${depId} checkbox not found`);
         }
       });
     } else {
       if (isDirectSelection) {
         manualSelections.delete(toolId);
-        const dependencies = getDependencies(toolId);
-        dependencies.forEach((depId) => {
+        console.log(`Removed ${toolId} from manual selections`);
+        
+        const dependencies = checkbox.dataset.requires ? checkbox.dataset.requires.split(',').filter(Boolean) : [];
+        
+        dependencies.forEach(depId => {
           const depCheckbox = document.getElementById(depId);
           if (depCheckbox) {
             dependencySelections.get(depId)?.delete(toolId);
-            if (
-              !manualSelections.has(depId) &&
-              (!dependencySelections.has(depId) ||
-                dependencySelections.get(depId).size === 0)
-            ) {
+            
+            if (!manualSelections.has(depId) && 
+                (!dependencySelections.has(depId) || dependencySelections.get(depId).size === 0)) {
               depCheckbox.checked = false;
               handleCheckboxChange(depCheckbox, false);
             }
           }
         });
       }
-
-      getDependents(toolId).forEach((depId) => {
-        const depCheckbox = document.getElementById(depId);
-        if (depCheckbox?.checked) {
-          depCheckbox.checked = false;
-          manualSelections.delete(depId);
-          handleCheckboxChange(depCheckbox, false);
-        }
-      });
     }
+
     updateSelectedState();
+    logSelectionState();
   }
 
-  // Keep other utility functions
   function filterTools(searchTerm) {
     const tools = document.querySelectorAll(".tool-item");
     const normalizedTerm = searchTerm.toLowerCase().trim();
@@ -223,7 +252,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Event Listeners with null checks
+  function logSelectionState() {
+    console.log('Current Selection State:');
+    console.log('Manual Selections:', Array.from(manualSelections));
+    console.log('Dependency Selections:', Object.fromEntries(
+      Array.from(dependencySelections.entries()).map(([key, value]) => [
+        key,
+        Array.from(value)
+      ])
+    ));
+  }
+
+  // Event Listeners
   toolSearch?.addEventListener("input", (e) => filterTools(e.target.value));
 
   setupForm?.addEventListener("change", (e) => {
@@ -232,56 +272,71 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  if (helpButton && helpModal && closeHelp) {
-    helpButton.addEventListener("click", () => helpModal.showModal());
-    closeHelp.addEventListener("click", () => helpModal.close());
-  }
+  // Modal event listeners
+  helpButton?.addEventListener("click", showHelpContent);
+  closeHelp?.addEventListener("click", closeModal);
 
+  // Close modal on backdrop click
+  helpModal?.addEventListener("click", (e) => {
+    const modalContent = helpModal.querySelector(".modal-content");
+    if (e.target === helpModal || !modalContent.contains(e.target)) {
+      closeModal();
+    }
+  });
+
+  // Script generation and download
   setupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
-      const selectedTools = Array.from(new FormData(e.target).keys());
-      if (selectedTools.length === 0) {
-        alert("Please select at least one tool");
-        return;
-      }
+        const selectedTools = Array.from(new FormData(e.target).keys());
+        if (selectedTools.length === 0) {
+            alert("Please select at least one tool");
+            return;
+        }
 
-      const response = await fetch("/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedTools),
-      });
+        const response = await fetch("/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(selectedTools),
+        });
 
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
+        const data = await response.json();
+        if (data.error) {
+            throw new Error(data.error);
+        }
 
-      const blob = new Blob([data.script], { type: "text/plain" });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "install.sh";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+        const blob = new Blob([data.script], { type: "text/plain" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "install.sh";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
 
-      const successState = document.getElementById("success-state");
-      const generateButton = document.getElementById("generate-button");
-      
-      if (successState) successState.classList.remove("hidden");
-      if (generateButton) generateButton.classList.add("hidden");
+        // Show success state
+        if (successState) successState.classList.remove("hidden");
+        const generateButton = document.getElementById("generate-button");
+        if (generateButton) generateButton.classList.add("hidden");
+
+        // Show help with instructions
+        helpModal?.showModal();
     } catch (error) {
-      console.error("Error:", error);
-      showError("Failed to generate installation script. Please try again.");
+        console.error("Error:", error);
+        showError("Failed to generate installation script. Please try again.");
     }
+});
+
+  // Handle success state close
+  document.getElementById("close-success")?.addEventListener("click", () => {
+    successState?.classList.add("hidden");
+    document.getElementById("generate-button")?.classList.remove("hidden");
   });
 
   // Initialize
   if (!window.firebaseInitFailed) {
     loadToolsData();
-    updateSelectedState();
   } else {
     showError("Failed to initialize Firebase. Please refresh the page.");
   }
