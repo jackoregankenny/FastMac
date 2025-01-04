@@ -24,38 +24,28 @@ logger = logging.getLogger(__name__)
 
 def initialize_firebase():
     """Initialize Firebase with retry mechanism and return Firestore client"""
-    max_retries = 3
-    retry_delay = 2  # seconds
-    
-    for attempt in range(max_retries):
-        try:
-            # Check if Firebase is already initialized
-            if not firebase_admin._apps:
-                # Fetch Firebase credentials from environment variable
-                service_account_data = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON")
-                
-                if not service_account_data:
-                    raise ValueError("Firebase service account JSON not found in environment variable.")
-                
-                # Parse the JSON string and load as credentials
-                service_account_json = json.loads(service_account_data)
-                
-                # Initialize Firebase with the service account credentials
-                cred = credentials.Certificate(service_account_json)
-                firebase_admin.initialize_app(cred, {
-                    'projectId': service_account_json["project_id"]
-                })
-            
-            # Always return a new Firestore client
-            return firestore.client()
+    try:
+        # Retrieve Firebase credentials JSON from environment
+        service_account_data = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON")
+        if not service_account_data:
+            raise ValueError("FIREBASE_SERVICE_ACCOUNT_JSON is not set in the environment")
 
-        except Exception as e:
-            print(f"Attempt {attempt + 1} failed: {str(e)}")
-            if attempt < max_retries - 1:
-                print(f"Retrying in {retry_delay} seconds...")
-                time.sleep(retry_delay)
-            else:
-                raise  # Re-raise the exception if all retries fail
+        # Parse JSON string into a dictionary
+        service_account_json = json.loads(service_account_data)
+
+        # Initialize Firebase if not already initialized
+        if not firebase_admin._apps:
+            cred = credentials.Certificate(service_account_json)
+            firebase_admin.initialize_app(cred, {
+                'projectId': 'fastmac-98ba2',
+            })
+
+        # Return Firestore client
+        return firestore.client()
+
+    except Exception as e:
+        print(f"Failed to initialize Firebase: {e}")
+        raise
 
 def handle_errors(f):
     """Decorator to handle errors consistently across routes"""
