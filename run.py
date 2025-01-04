@@ -24,28 +24,40 @@ logger = logging.getLogger(__name__)
 
 def initialize_firebase():
     """Initialize Firebase with retry mechanism and return Firestore client"""
-    try:
-        # Retrieve Firebase credentials JSON from environment
-        service_account_data = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON")
-        if not service_account_data:
-            raise ValueError("FIREBASE_SERVICE_ACCOUNT_JSON is not set in the environment")
-
-        # Parse JSON string into a dictionary
-        service_account_json = json.loads(service_account_data)
-
-        # Initialize Firebase if not already initialized
-        if not firebase_admin._apps:
-            cred = credentials.Certificate(service_account_json)
-            firebase_admin.initialize_app(cred, {
-                'projectId': 'fastmac-98ba2',
-            })
-
-        # Return Firestore client
-        return firestore.client()
-
-    except Exception as e:
-        print(f"Failed to initialize Firebase: {e}")
-        raise
+    max_retries = 3
+    retry_delay = 2  # seconds
+    
+    for attempt in range(max_retries):
+        try:
+            # Check if Firebase is already initialized
+            if not firebase_admin._apps:
+                # Initialize Firebase with credentials
+                cred = credentials.Certificate({
+                    "type": "service_account",
+                    "project_id": "fastmac-98ba2",
+                    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
+                    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace('\\n', '\n'),
+                    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+                    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
+                    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                    "token_uri": "https://oauth2.googleapis.com/token",
+                    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+                    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL")
+                })
+                
+                firebase_admin.initialize_app(cred, {
+                    'projectId': 'fastmac-98ba2',
+                })
+            
+            # Always return a new Firestore client
+            return firestore.client()
+            
+        except Exception as e:
+            if attempt == max_retries - 1:
+                logger.error(f"Failed to initialize Firebase after {max_retries} attempts: {str(e)}")
+                raise
+            logger.warning(f"Firebase initialization attempt {attempt + 1} failed, retrying...")
+            time.sleep(retry_delay)
 
 def handle_errors(f):
     """Decorator to handle errors consistently across routes"""
