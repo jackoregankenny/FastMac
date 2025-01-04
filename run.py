@@ -26,7 +26,7 @@ def initialize_firebase():
     """Initialize Firebase with retry mechanism and return Firestore client"""
     max_retries = 3
     retry_delay = 2  # seconds
-
+    
     for attempt in range(max_retries):
         try:
             # Check if Firebase is already initialized
@@ -34,7 +34,7 @@ def initialize_firebase():
                 # Initialize Firebase with credentials
                 cred = credentials.Certificate({
                     "type": "service_account",
-                    "project_id": os.getenv("FIREBASE_PROJECT_ID"),
+                    "project_id": "fastmac-98ba2",
                     "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
                     "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace('\\n', '\n'),
                     "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
@@ -46,7 +46,7 @@ def initialize_firebase():
                 })
                 
                 firebase_admin.initialize_app(cred, {
-                    'projectId': os.getenv("FIREBASE_PROJECT_ID"),
+                    'projectId': 'fastmac-98ba2',
                 })
             
             # Always return a new Firestore client
@@ -58,8 +58,6 @@ def initialize_firebase():
                 raise
             logger.warning(f"Firebase initialization attempt {attempt + 1} failed, retrying...")
             time.sleep(retry_delay)
-            logger.info(f"Raw FIREBASE_PRIVATE_KEY: {os.getenv('FIREBASE_PRIVATE_KEY')[:50]}... (truncated)")
-
 
 def handle_errors(f):
     """Decorator to handle errors consistently across routes"""
