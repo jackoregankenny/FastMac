@@ -1,11 +1,14 @@
-/* Modern CSS for FastMac */
+/* Custom CSS for FastMac - Custom palette inspired */
 
-/* Base transitions and animations */
+/* Base styles */
 * {
-    transition-property: background-color, border-color, color, fill, stroke,
-        opacity, box-shadow, transform, filter;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 200ms;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom scrollbar */
@@ -15,269 +18,126 @@
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(156, 163, 175, 0.5);
+    background: rgba(132, 165, 157, 0.1);
     border-radius: 4px;
 }
 
+::-webkit-scrollbar-thumb {
+    background: rgba(132, 165, 157, 0.3);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(156, 163, 175, 0.8);
+    background: rgba(132, 165, 157, 0.5);
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+    background: rgba(132, 165, 157, 0.2);
 }
 
 .dark ::-webkit-scrollbar-thumb {
-    background: rgba(75, 85, 99, 0.5);
+    background: rgba(132, 165, 157, 0.4);
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-    background: rgba(75, 85, 99, 0.8);
+    background: rgba(132, 165, 157, 0.6);
 }
 
-/* Tool item animations */
+/* Tool item hover effects */
 .tool-item {
+    position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: translateZ(0);
 }
 
 .tool-item:hover {
-    transform: translateY(-2px) translateZ(0);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
 }
 
-.dark .tool-item:hover {
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+.tool-item:active {
+    transform: translateY(0);
 }
 
-/* Checkbox animations */
-.tool-item input[type="checkbox"]:checked + div .w-5 {
-    background-color: rgb(37 99 235);
-    border-color: rgb(37 99 235);
+/* Selection state styling - Custom palette inspired */
+.tool-item[data-selected="true"],
+.tool-item input[type="checkbox"]:checked {
+    border-color: #f28482 !important;
+    background-color: rgba(242, 132, 130, 0.05) !important;
+    box-shadow: 0 10px 25px -5px rgba(242, 132, 130, 0.1), 0 10px 10px -5px rgba(242, 132, 130, 0.04);
 }
 
-.tool-item input[type="checkbox"]:checked + div svg {
-    display: block !important;
-    animation: checkmark 0.2s ease-in-out;
+.dark .tool-item[data-selected="true"],
+.dark .tool-item input[type="checkbox"]:checked {
+    background-color: rgba(242, 132, 130, 0.1) !important;
+    border-color: #f28482 !important;
+    box-shadow: 0 10px 25px -5px rgba(242, 132, 130, 0.2), 0 10px 10px -5px rgba(242, 132, 130, 0.1);
 }
 
-@keyframes checkmark {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+/* Text color for selected items */
+.tool-item[data-selected="true"] h3,
+.tool-item input[type="checkbox"]:checked ~ div h3 {
+    color: #84a59d !important;
 }
 
-/* Search input animations */
-#tool-search {
+.dark .tool-item[data-selected="true"] h3,
+.dark .tool-item input[type="checkbox"]:checked ~ div h3 {
+    color: #f7ede2 !important;
+}
+
+.tool-item[data-selected="true"] p,
+.tool-item input[type="checkbox"]:checked ~ div p {
+    color: #84a59d !important;
+}
+
+.dark .tool-item[data-selected="true"] p,
+.dark .tool-item input[type="checkbox"]:checked ~ div p {
+    color: #f5cac3 !important;
+}
+
+/* Checkbox animation */
+.tool-item .w-6.h-6 {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-#tool-search:focus {
-    transform: scale(1.02);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+/* Checkbox selected state - using data-selected attribute */
+.tool-item[data-selected="true"] .w-6.h-6 {
+    border-color: #f28482 !important;
+    background-color: #f28482 !important;
 }
 
-/* Modal animations */
-@keyframes modalFade {
-    from {
-        opacity: 0;
-        transform: translate3d(0, -20px, 0) scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1);
-    }
+.tool-item[data-selected="true"] .w-6.h-6 .absolute {
+    transform: scale(1) !important;
 }
 
-@keyframes modalBackdrop {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+.tool-item[data-selected="true"] .w-6.h-6 svg {
+    transform: scale(1) !important;
 }
 
-dialog[open] {
-    animation: modalFade 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Alternative checkbox selection using :checked pseudo-class for fallback */
+.tool-item input[type="checkbox"]:checked ~ div .w-6.h-6 {
+    border-color: #f28482 !important;
+    background-color: #f28482 !important;
 }
 
-dialog[open]::backdrop {
-    animation: modalBackdrop 0.3s ease-out;
+.tool-item input[type="checkbox"]:checked ~ div .w-6.h-6 .absolute {
+    transform: scale(1) !important;
 }
 
-/* Hide modal by default */
-dialog:not([open]) {
+.tool-item input[type="checkbox"]:checked ~ div .w-6.h-6 svg {
+    transform: scale(1) !important;
+}
+
+/* Focus states for accessibility */
+.tool-item:focus-within {
+    outline: 2px solid #f28482;
+    outline-offset: 2px;
+}
+
+/* Search functionality */
+.tool-item.hidden {
     display: none;
 }
-
-/* Modal styling */
-.modal {
-    position: fixed;
-    inset: 0;
-    background: transparent;
-    border: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    overflow-y: auto;
-}
-
-.modal[open] {
-    opacity: 1;
-}
-
-.modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background-color: rgb(0 0 0 / 0.4);
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
-}
-
-.modal[open] .modal-backdrop {
-    opacity: 1;
-}
-
-.modal-container {
-    position: relative;
-    width: 100%;
-    padding: 1rem;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    transform: translateY(20px) scale(0.95);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.modal[open] .modal-content {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-}
-
-/* Command block styling */
-pre {
-    position: relative;
-    overflow-x: auto;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        monospace;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    border-radius: 0.5rem;
-}
-
-pre code {
-    display: block;
-    padding: 1rem;
-    white-space: pre;
-}
-
-/* Line clamp utility */
-.line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-/* Disable selection styles */
-input[type="checkbox"] {
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* Smooth scroll behavior */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Loading animation */
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.animate-spin {
-    animation: spin 1s linear infinite;
-}
-
-/* Bounce animation */
-@keyframes bounceGentle {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-5px);
-    }
-}
-
-.animate-bounce-gentle {
-    animation: bounceGentle 2s ease-in-out infinite;
-}
-
-/* Fade in animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-fade-in {
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* Slide up animation */
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-slide-up {
-    animation: slideUp 0.3s ease-out;
-}
-
-/* Stagger animation for tool items */
-.tool-item {
-    animation: fadeIn 0.3s ease-out;
-    animation-fill-mode: both;
-}
-
-.tool-item:nth-child(1) { animation-delay: 0.1s; }
-.tool-item:nth-child(2) { animation-delay: 0.2s; }
-.tool-item:nth-child(3) { animation-delay: 0.3s; }
-.tool-item:nth-child(4) { animation-delay: 0.4s; }
-.tool-item:nth-child(5) { animation-delay: 0.5s; }
-.tool-item:nth-child(6) { animation-delay: 0.6s; }
-.tool-item:nth-child(7) { animation-delay: 0.7s; }
-.tool-item:nth-child(8) { animation-delay: 0.8s; }
 
 /* Category animations */
 .category-content {
@@ -290,6 +150,44 @@ html {
     opacity: 0;
 }
 
+/* Loading animation */
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.loading {
+    background: linear-gradient(90deg, #f7ede2 25%, #f5cac3 50%, #f7ede2 75%);
+    background-size: 200px 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.dark .loading {
+    background: linear-gradient(90deg, #84a59d 25%, #f28482 50%, #84a59d 75%);
+    background-size: 200px 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+/* Modal animations */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+dialog[open] {
+    animation: modalFadeIn 0.3s ease-out;
+}
+
 /* Button hover effects */
 button:not(:disabled):hover {
     transform: translateY(-1px);
@@ -299,49 +197,14 @@ button:not(:disabled):active {
     transform: translateY(0);
 }
 
-/* Focus styles */
-button:focus-visible,
-input:focus-visible {
-    outline: 2px solid rgb(59 130 246);
-    outline-offset: 2px;
-}
-
-/* Dark mode improvements */
-.dark .tool-item {
-    border-color: rgb(55 65 81);
-}
-
-.dark .tool-item:hover {
-    border-color: rgb(59 130 246);
-    background-color: rgb(31 41 55);
-}
-
-/* Responsive improvements */
-@media (max-width: 640px) {
-    .tool-item:hover {
-        transform: none;
-    }
-    
-    .tool-item:active {
-        transform: scale(0.98);
-    }
-}
-
-/* Accessibility improvements */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
 /* High contrast mode support */
 @media (prefers-contrast: high) {
     .tool-item {
         border-width: 2px;
+    }
+    
+    .tool-item[data-selected="true"] {
+        border-width: 3px;
     }
     
     button {
@@ -349,13 +212,286 @@ input:focus-visible {
     }
 }
 
-/* Print styles */
-@media print {
-    .fixed {
-        position: static !important;
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
     
-    dialog {
-        display: none !important;
+    .tool-item:hover {
+        transform: none;
     }
+    
+    button:not(:disabled):hover {
+        transform: none;
+    }
+}
+
+/* Print styles */
+@media print {
+    .tool-item {
+        break-inside: avoid;
+        border: 1px solid #84a59d;
+        margin-bottom: 1rem;
+    }
+    
+    .tool-item[data-selected="true"] {
+        background-color: #f7ede2 !important;
+        border-color: #f28482 !important;
+    }
+}
+
+/* Custom focus ring for better accessibility */
+.focus-ring:focus {
+    outline: 2px solid #f28482;
+    outline-offset: 2px;
+}
+
+/* Smooth transitions for all interactive elements */
+a, button, input, select, textarea {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Selection styling */
+::selection {
+    background-color: rgba(242, 132, 130, 0.2);
+    color: #84a59d;
+}
+
+.dark ::selection {
+    background-color: rgba(242, 132, 130, 0.3);
+    color: #f7ede2;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Glass effect */
+.glass {
+    background: rgba(247, 237, 226, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(247, 237, 226, 0.18);
+}
+
+.dark .glass {
+    background: rgba(132, 165, 157, 0.25);
+    border: 1px solid rgba(247, 237, 226, 0.1);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Tooltip styles */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #84a59d;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 1000;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Form element focus states */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #f28482;
+    ring-offset: 2px;
+}
+
+/* Button variants */
+.btn-primary {
+    background-color: #f28482;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #f6bd60;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #f7ede2;
+    color: #84a59d;
+    border: 1px solid #f5cac3;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.dark .btn-secondary {
+    background-color: #84a59d;
+    color: #f7ede2;
+    border-color: #f28482;
+}
+
+.btn-secondary:hover {
+    background-color: #f5cac3;
+    border-color: #f28482;
+}
+
+.dark .btn-secondary:hover {
+    background-color: #f28482;
+    border-color: #f6bd60;
+}
+
+/* Status indicators */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-success {
+    background-color: #f7ede2;
+    color: #84a59d;
+}
+
+.status-warning {
+    background-color: #f6bd60;
+    color: #84a59d;
+}
+
+.status-error {
+    background-color: #f28482;
+    color: white;
+}
+
+/* Spinner animation */
+.spinner {
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid #f5cac3;
+    border-top: 2px solid #f28482;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Screen reader only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #f28482;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.skip-link:focus {
+    top: 6px;
+}
+
+/* Custom scrollbar for specific elements */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(132, 165, 157, 0.3);
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(132, 165, 157, 0.5);
 }

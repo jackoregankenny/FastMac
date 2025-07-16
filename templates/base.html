@@ -15,36 +15,102 @@
                 extend: {
                     colors: {
                         primary: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            200: '#bfdbfe',
-                            300: '#93c5fd',
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            800: '#1e40af',
-                            900: '#1e3a8a',
+                            50: '#fef7f8',
+                            100: '#fdeef1',
+                            200: '#fbdde3',
+                            300: '#f8c4cf',
+                            400: '#f3a0b3',
+                            500: '#edafb8',
+                            600: '#e08a9a',
+                            700: '#d16b7d',
+                            800: '#b55a6a',
+                            900: '#954c5a',
+                            950: '#5a2d37',
+                        },
+                        cream: {
+                            50: '#fefcfb',
+                            100: '#fdf9f6',
+                            200: '#fbf2ec',
+                            300: '#f7e1d7',
+                            400: '#f0c8b8',
+                            500: '#e8ad94',
+                            600: '#dc8f6f',
+                            700: '#c97352',
+                            800: '#a85f45',
+                            900: '#8a4f3c',
+                            950: '#4a2a1f',
+                        },
+                        sage: {
+                            50: '#f6f8f6',
+                            100: '#edf2ed',
+                            200: '#dce5dc',
+                            300: '#c4d3c4',
+                            400: '#a5bca5',
+                            500: '#8baa8b',
+                            600: '#6b8f6b',
+                            700: '#5a7a5a',
+                            800: '#4b634b',
+                            900: '#3f523f',
+                            950: '#1f2a1f',
+                        },
+                        charcoal: {
+                            50: '#f6f7f7',
+                            100: '#e3e6e6',
+                            200: '#c7cdcd',
+                            300: '#a3acac',
+                            400: '#7a8585',
+                            500: '#5d6767',
+                            600: '#4a5759',
+                            700: '#3e4848',
+                            800: '#353c3c',
+                            900: '#2e3333',
+                            950: '#1a1d1d',
+                        },
+                        accent: {
+                            50: '#fef7f8',
+                            100: '#fdeef1',
+                            200: '#fbdde3',
+                            300: '#f8c4cf',
+                            400: '#f3a0b3',
+                            500: '#edafb8',
+                            600: '#e08a9a',
+                            700: '#d16b7d',
+                            800: '#b55a6a',
+                            900: '#954c5a',
+                            950: '#5a2d37',
                         }
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.5s ease-in-out',
                         'slide-up': 'slideUp 0.3s ease-out',
                         'bounce-gentle': 'bounceGentle 2s infinite',
+                        'pulse-subtle': 'pulseSubtle 2s infinite',
+                        'scale-in': 'scaleIn 0.2s ease-out',
                     },
                     keyframes: {
                         fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         },
                         slideUp: {
-                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
                             '100%': { transform: 'translateY(0)', opacity: '1' },
                         },
                         bounceGentle: {
                             '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-5px)' },
+                            '50%': { transform: 'translateY(-3px)' },
+                        },
+                        pulseSubtle: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.8' },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
                         }
+                    },
+                    backdropBlur: {
+                        xs: '2px',
                     }
                 }
             }
@@ -55,27 +121,30 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 </head>
-<body class="h-full bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+<body class="h-full bg-gradient-to-br from-cream-50 via-sage-50 to-primary-50 dark:from-charcoal-950 dark:via-charcoal-900 dark:to-charcoal-800 transition-colors duration-500">
     <!-- Dark mode toggle -->
     <div class="fixed top-4 right-4 z-50">
-        <button id="dark-mode-toggle" class="p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200">
-            <svg id="sun-icon" class="w-5 h-5 text-yellow-500 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+        <button id="dark-mode-toggle" class="p-3 rounded-xl bg-white/90 dark:bg-charcoal-900/90 backdrop-blur-xl border border-cream-200/50 dark:border-charcoal-700/50 hover:bg-white dark:hover:bg-charcoal-800 hover:shadow-lg transition-all duration-300 group">
+            <svg id="sun-icon" class="w-5 h-5 text-cream-600 hidden dark:block group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
             </svg>
-            <svg id="moon-icon" class="w-5 h-5 text-gray-700 dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+            <svg id="moon-icon" class="w-5 h-5 text-charcoal-600 dark:hidden group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
             </svg>
         </button>
     </div>
 
     <!-- Loading overlay -->
-    <div id="loading-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xl">
-            <div class="flex items-center space-x-3">
-                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
-                <span class="text-gray-700 dark:text-gray-300">Generating your setup script...</span>
+    <div id="loading-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+        <div class="bg-white/95 dark:bg-charcoal-900/95 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-cream-200/50 dark:border-charcoal-700/50">
+            <div class="flex items-center space-x-4">
+                <div class="animate-spin rounded-full h-8 w-8 border-2 border-primary-600 dark:border-primary-400 border-t-transparent"></div>
+                <div>
+                    <div class="text-charcoal-700 dark:text-charcoal-300 font-medium">Generating your setup script...</div>
+                    <div class="text-charcoal-500 dark:text-charcoal-500 text-sm">This may take a few moments</div>
+                </div>
             </div>
         </div>
     </div>

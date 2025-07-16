@@ -1,1070 +1,1347 @@
 {
-  "languages": {
-    "name": "Programming Languages",
-    "tools": {
-      "python": {
-        "name": "Python",
-        "description": "Modern Python 3 installation with pip",
-        "brew_package": "python",
-        "check_command": "python3 --version",
-        "post_install": [
-          "pip3 install --upgrade pip"
-        ]
-      },
-      "node": {
-        "name": "Node.js",
-        "description": "JavaScript runtime and npm package manager",
-        "brew_package": "node",
-        "check_command": "node --version",
-        "post_install": [
-          "npm install -g npm"
-        ]
-      },
-      "go": {
-        "name": "Go",
-        "description": "Google's Go programming language",
-        "brew_package": "go",
-        "check_command": "go version"
-      },
-      "rust": {
-        "name": "Rust",
-        "description": "Systems programming language focused on safety and performance",
-        "type": "custom",
-        "install_command": "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y",
-        "check_command": "rustc --version"
-      },
-      "java": {
-        "name": "Java Development Kit",
-        "description": "OpenJDK for Java development",
-        "brew_package": "openjdk",
-        "check_command": "java --version"
-      },
-      "ruby": {
-        "name": "Ruby",
-        "description": "Dynamic programming language",
-        "brew_package": "ruby",
-        "check_command": "ruby --version",
-        "post_install": [
-          "echo 'export PATH=\"/usr/local/opt/ruby/bin:$PATH\"' >> ~/.zshrc"
-        ]
-      },
-      "elixir": {
-        "name": "Elixir",
-        "description": "Dynamic, functional language for building scalable applications",
-        "brew_package": "elixir",
-        "check_command": "elixir --version"
-      },
-      "kotlin": {
-        "name": "Kotlin",
-        "description": "Modern programming language that makes developers happier",
-        "brew_package": "kotlin",
-        "check_command": "kotlin -version"
-      }
-    }
-  },
-  "shell": {
-    "name": "Shell & Terminal",
-    "tools": {
-      "iterm2": {
-        "name": "iTerm2",
-        "description": "Modern terminal emulator for macOS",
-        "brew_package": "iterm2",
-        "cask": true,
-        "check_command": "test -d /Applications/iTerm.app"
-      },
-      "wezterm": {
-        "name": "WezTerm",
-        "description": "GPU-accelerated terminal emulator",
-        "brew_package": "wezterm",
-        "cask": true,
-        "check_command": "wezterm --version"
-      },
-      "zsh": {
-        "name": "Zsh",
-        "description": "Modern shell with better features than bash",
-        "brew_package": "zsh",
-        "check_command": "zsh --version"
-      },
-      "oh-my-zsh": {
-        "name": "Oh My Zsh",
-        "description": "Framework for managing Zsh configuration",
-        "requires": ["zsh"],
-        "type": "custom",
-        "install_command": "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\"",
-        "check_command": "[ -d \"${HOME}/.oh-my-zsh\" ]"
-      },
-      "starship": {
-        "name": "Starship",
-        "description": "Minimal, blazing-fast, and infinitely customizable prompt",
-        "brew_package": "starship",
-        "check_command": "starship --version",
-        "post_install": [
-          "echo 'eval \"$(starship init zsh)\"' >> ~/.zshrc"
-        ]
-      },
-      "tmux": {
-        "name": "tmux",
-        "description": "Terminal multiplexer for multiple sessions",
-        "brew_package": "tmux",
-        "check_command": "tmux -V"
-      },
-      "alacritty": {
-        "name": "Alacritty",
-        "description": "GPU-accelerated terminal emulator",
-        "brew_package": "alacritty",
-        "cask": true,
-        "check_command": "alacritty --version"
-      },
-      "kitty": {
-        "name": "Kitty",
-        "description": "Fast, feature-rich, GPU based terminal emulator",
-        "brew_package": "kitty",
-        "check_command": "kitty --version"
-      }
-    }
-  },
-  "editors": {
-    "name": "Code Editors",
-    "tools": {
-      "vscode": {
-        "name": "Visual Studio Code",
-        "description": "Popular code editor with extensive plugin support",
-        "brew_package": "visual-studio-code",
-        "check_command": "code --version",
-        "cask": true
-      },
-      "sublime": {
-        "name": "Sublime Text",
-        "description": "Sophisticated text editor for code and prose",
-        "brew_package": "sublime-text",
-        "check_command": "subl --version",
-        "cask": true
-      },
-      "neovim": {
-        "name": "Neovim",
-        "description": "Hyperextensible Vim-based text editor",
-        "brew_package": "neovim",
-        "check_command": "nvim --version"
-      },
-      "lazyvim": {
-        "name": "LazyVim",
-        "description": "Modern Neovim configuration",
-        "requires": ["neovim"],
-        "type": "custom",
-        "check_command": "[ -d \"${HOME}/.config/nvim\" ]",
-        "pre_install": [
-          "[ -d \"${HOME}/.config/nvim\" ] && mv ~/.config/nvim ~/.config/nvim.bak || true",
-          "[ -d \"${HOME}/.local/share/nvim\" ] && mv ~/.local/share/nvim ~/.local/share/nvim.bak || true"
-        ],
-        "install_command": "git clone https://github.com/LazyVim/starter ~/.config/nvim"
-      },
-      "jetbrains-toolbox": {
-        "name": "JetBrains Toolbox",
-        "description": "Manager for JetBrains IDEs",
-        "brew_package": "jetbrains-toolbox",
-        "cask": true,
-        "check_command": "test -d '/Applications/JetBrains Toolbox.app'"
-      },
-      "emacs": {
-        "name": "Emacs",
-        "description": "Extensible text editor",
-        "brew_package": "emacs",
-        "check_command": "emacs --version"
-      }
-    }
-  },
-  "dev_tools": {
-    "name": "Development Tools",
-    "tools": {
-      "git": {
-        "name": "Git",
-        "description": "Version control system with enhanced configuration",
-        "brew_package": "git",
-        "check_command": "git --version",
-        "post_install": [
-          "git config --global init.defaultBranch main",
-          "git config --global pull.rebase false",
-          "git config --global core.editor 'code --wait'"
-        ]
-      },
-      "gh": {
-        "name": "GitHub CLI",
-        "description": "GitHub's official command line tool with authentication",
-        "brew_package": "gh",
-        "check_command": "gh --version",
-        "post_install": [
-          "echo 'Run \"gh auth login\" to authenticate with GitHub'"
-        ]
-      },
-      "docker": {
-        "name": "Docker Desktop",
-        "description": "Container platform with GUI management",
-        "brew_package": "docker",
-        "cask": true,
-        "check_command": "docker --version"
-      },
-      "docker-compose": {
-        "name": "Docker Compose",
-        "description": "Multi-container Docker applications",
-        "brew_package": "docker-compose",
-        "check_command": "docker-compose --version"
-      },
-      "kubernetes-cli": {
-        "name": "Kubernetes CLI",
-        "description": "Command line tool for Kubernetes",
-        "brew_package": "kubernetes-cli",
-        "check_command": "kubectl version --client"
-      },
-      "helm": {
-        "name": "Helm",
-        "description": "Kubernetes package manager",
-        "brew_package": "helm",
-        "check_command": "helm version"
-      },
-      "postman": {
-        "name": "Postman",
-        "description": "API development environment",
-        "brew_package": "postman",
-        "cask": true,
-        "check_command": "test -d '/Applications/Postman.app'"
-      },
-      "ngrok": {
-        "name": "ngrok",
-        "description": "Secure tunnels to localhost",
-        "brew_package": "ngrok",
-        "check_command": "ngrok --version"
-      },
-      "gitkraken": {
-        "name": "GitKraken",
-        "description": "Git GUI client",
-        "brew_package": "gitkraken",
-        "cask": true,
-        "check_command": "test -d '/Applications/GitKraken.app'"
-      }
-    }
-  },
-  "databases": {
-    "name": "Databases",
-    "tools": {
-      "postgresql": {
-        "name": "PostgreSQL",
-        "description": "Advanced open source database",
-        "brew_package": "postgresql@14",
-        "check_command": "postgres --version",
-        "post_install": [
-          "brew services start postgresql@14"
-        ]
-      },
-      "mongodb-compass": {
-        "name": "MongoDB Compass",
-        "description": "GUI for MongoDB",
-        "brew_package": "mongodb-compass",
-        "cask": true,
-        "check_command": "test -d '/Applications/MongoDB Compass.app'"
-      },
-      "dbeaver-community": {
-        "name": "DBeaver",
-        "description": "Universal database tool",
-        "brew_package": "dbeaver-community",
-        "cask": true,
-        "check_command": "test -d '/Applications/DBeaver.app'"
-      },
-      "redis": {
-        "name": "Redis",
-        "description": "In-memory data structure store",
-        "brew_package": "redis",
-        "check_command": "redis-cli --version",
-        "post_install": [
-          "brew services start redis"
-        ]
-      },
-      "mysql": {
-        "name": "MySQL",
-        "description": "Popular open source database",
-        "brew_package": "mysql",
-        "check_command": "mysql --version",
-        "post_install": [
-          "brew services start mysql"
-        ]
-      }
-    }
-  },
-  "productivity": {
-    "name": "Productivity Tools",
-    "tools": {
-      "rectangle": {
-        "name": "Rectangle",
-        "description": "Window management app with keyboard shortcuts",
-        "brew_package": "rectangle",
-        "cask": true,
-        "check_command": "test -d '/Applications/Rectangle.app'"
-      },
-      "magnet": {
-        "name": "Magnet",
-        "description": "Window management with drag and drop",
-        "brew_package": "magnet",
-        "cask": true,
-        "check_command": "test -d '/Applications/Magnet.app'"
-      },
-      "moom": {
-        "name": "Moom",
-        "description": "Advanced window management and organization",
-        "brew_package": "moom",
-        "cask": true,
-        "check_command": "test -d '/Applications/Moom.app'"
-      },
-      "spectacle": {
-        "name": "Spectacle",
-        "description": "Free window management with keyboard shortcuts",
-        "brew_package": "spectacle",
-        "cask": true,
-        "check_command": "test -d '/Applications/Spectacle.app'"
-      },
-      "alfred": {
-        "name": "Alfred",
-        "description": "Spotlight replacement with advanced features and workflows",
-        "brew_package": "alfred",
-        "cask": true,
-        "check_command": "test -d '/Applications/Alfred 5.app'"
-      },
-      "raycast": {
-        "name": "Raycast",
-        "description": "Modern productivity app with extensions",
-        "brew_package": "raycast",
-        "cask": true,
-        "check_command": "test -d '/Applications/Raycast.app'"
-      },
-      "obsidian": {
-        "name": "Obsidian",
-        "description": "Knowledge base and note-taking app with graph view",
-        "brew_package": "obsidian",
-        "cask": true,
-        "check_command": "test -d '/Applications/Obsidian.app'"
-      },
-      "notion": {
-        "name": "Notion",
-        "description": "All-in-one workspace for notes, docs, and collaboration",
-        "brew_package": "notion",
-        "cask": true,
-        "check_command": "test -d '/Applications/Notion.app'"
-      },
-      "bartender": {
-        "name": "Bartender",
-        "description": "Menu bar organization and customization tool",
-        "brew_package": "bartender",
-        "cask": true,
-        "check_command": "test -d '/Applications/Bartender 4.app'"
-      },
-      "bettertouchtool": {
-        "name": "BetterTouchTool",
-        "description": "Advanced tool for customizing input devices and gestures",
-        "brew_package": "bettertouchtool",
-        "cask": true,
-        "check_command": "test -d '/Applications/BetterTouchTool.app'"
-      },
-      "hazel": {
-        "name": "Hazel",
-        "description": "Automated file organization and management",
-        "brew_package": "hazel",
-        "cask": true,
-        "check_command": "test -d '/Applications/Hazel.app'"
-      },
-      "keyboard-maestro": {
-        "name": "Keyboard Maestro",
-        "description": "Powerful automation and macro creation tool",
-        "brew_package": "keyboard-maestro",
-        "cask": true,
-        "check_command": "test -d '/Applications/Keyboard Maestro.app'"
-      },
-      "text-expander": {
-        "name": "TextExpander",
-        "description": "Text expansion and snippet management",
-        "brew_package": "text-expander",
-        "cask": true,
-        "check_command": "test -d '/Applications/TextExpander.app'"
-      },
-      "1password": {
-        "name": "1Password",
-        "description": "Password manager and secure vault",
-        "brew_package": "1password",
-        "cask": true,
-        "check_command": "test -d '/Applications/1Password.app'"
-      },
-      "bitwarden": {
-        "name": "Bitwarden",
-        "description": "Open-source password manager",
-        "brew_package": "bitwarden",
-        "cask": true,
-        "check_command": "test -d '/Applications/Bitwarden.app'"
-      }
-    }
-  },
-  "cloud": {
-    "name": "Cloud Tools",
-    "tools": {
-      "aws-cli": {
-        "name": "AWS CLI",
-        "description": "Command line interface for AWS",
-        "brew_package": "awscli",
-        "check_command": "aws --version"
-      },
-      "google-cloud-sdk": {
-        "name": "Google Cloud SDK",
-        "description": "Tools for Google Cloud Platform",
-        "brew_package": "google-cloud-sdk",
-        "cask": true,
-        "check_command": "gcloud --version"
-      },
-      "azure-cli": {
-        "name": "Azure CLI",
-        "description": "Command line interface for Azure",
-        "brew_package": "azure-cli",
-        "check_command": "az --version"
-      },
-      "terraform": {
-        "name": "Terraform",
-        "description": "Infrastructure as code tool",
-        "brew_package": "terraform",
-        "check_command": "terraform --version"
-      }
-    }
-  },
-  "communication": {
-    "name": "Communication",
-    "tools": {
-      "slack": {
-        "name": "Slack",
-        "description": "Team communication platform",
-        "brew_package": "slack",
-        "cask": true,
-        "check_command": "test -d '/Applications/Slack.app'"
-      },
-      "discord": {
-        "name": "Discord",
-        "description": "Voice and text chat platform",
-        "brew_package": "discord",
-        "cask": true,
-        "check_command": "test -d '/Applications/Discord.app'"
-      },
-      "zoom": {
-        "name": "Zoom",
-        "description": "Video conferencing tool",
-        "brew_package": "zoom",
-        "cask": true,
-        "check_command": "test -d '/Applications/zoom.us.app'"
-      }
-    }
-  },
-  "json_tools": {
-    "name": "JSON Tools",
-    "tools": {
-      "jq": {
-        "name": "jq",
-        "description": "Lightweight command-line JSON processor",
-        "brew_package": "jq",
-        "check_command": "jq --version"
-      },
-      "fx": {
-        "name": "fx",
-        "description": "Terminal JSON viewer",
-        "brew_package": "fx",
-        "check_command": "fx --version"
-      },
-      "jsonui": {
-        "name": "JSON-UI",
-        "description": "Interactive JSON explorer for terminal",
-        "brew_package": "jsonui",
-        "check_command": "jsonui --version"
-      }
-    }
-  },
-  "browsers": {
-    "name": "Web Browsers",
-    "tools": {
-      "google-chrome": {
-        "name": "Google Chrome",
-        "description": "Popular web browser with extensive extension support",
-        "brew_package": "google-chrome",
-        "cask": true,
-        "check_command": "test -d '/Applications/Google Chrome.app'"
-      },
-      "firefox": {
-        "name": "Firefox",
-        "description": "Open-source web browser with privacy features",
-        "brew_package": "firefox",
-        "cask": true,
-        "check_command": "test -d '/Applications/Firefox.app'"
-      },
-      "brave-browser": {
-        "name": "Brave Browser",
-        "description": "Privacy-focused web browser with built-in ad blocking",
-        "brew_package": "brave-browser",
-        "cask": true,
-        "check_command": "test -d '/Applications/Brave Browser.app'"
-      },
-      "arc": {
-        "name": "Arc",
-        "description": "Chromium-based browser with unique workspace features",
-        "brew_package": "arc",
-        "cask": true,
-        "check_command": "test -d '/Applications/Arc.app'"
-      },
-      "safari-technology-preview": {
-        "name": "Safari Technology Preview",
-        "description": "Preview version of Safari with latest web technologies",
-        "brew_package": "safari-technology-preview",
-        "cask": true,
-        "check_command": "test -d '/Applications/Safari Technology Preview.app'"
-      },
-      "opera": {
-        "name": "Opera",
-        "description": "Feature-rich browser with built-in VPN",
-        "brew_package": "opera",
-        "cask": true,
-        "check_command": "test -d '/Applications/Opera.app'"
-      },
-      "microsoft-edge": {
-        "name": "Microsoft Edge",
-        "description": "Microsoft's Chromium-based browser",
-        "brew_package": "microsoft-edge",
-        "cask": true,
-        "check_command": "test -d '/Applications/Microsoft Edge.app'"
-      }
-    }
-  },
-  "media": {
-    "name": "Media Tools",
-    "tools": {
-      "vlc": {
-        "name": "VLC",
-        "description": "Media player with comprehensive codec support",
-        "brew_package": "vlc",
-        "cask": true,
-        "check_command": "test -d '/Applications/VLC.app'"
-      },
-      "spotify": {
-        "name": "Spotify",
-        "description": "Music streaming platform",
-        "brew_package": "spotify",
-        "cask": true,
-        "check_command": "test -d '/Applications/Spotify.app'"
-      },
-      "handbrake": {
-        "name": "HandBrake",
-        "description": "Video transcoder",
-        "brew_package": "handbrake",
-        "cask": true,
-        "check_command": "test -d '/Applications/HandBrake.app'"
-      }
-    }
-  },
-  "macos_tools": {
-    "name": "macOS Specific Tools",
-    "tools": {
-      "homebrew": {
-        "name": "Homebrew",
-        "description": "Package manager for macOS (already included in base script)",
-        "brew_package": "homebrew",
-        "check_command": "brew --version",
-        "post_install": [
-          "echo 'export PATH=\"/opt/homebrew/bin:/opt/homebrew/sbin:$PATH\"' >> ~/.zshrc",
-          "echo 'export PATH=\"/usr/local/bin:/usr/local/sbin:$PATH\"' >> ~/.zshrc"
-        ]
-      },
-      "mas": {
-        "name": "Mac App Store CLI",
-        "description": "Command line interface for Mac App Store",
-        "brew_package": "mas",
-        "check_command": "mas version"
-      },
-      "xcode-select": {
-        "name": "Xcode Command Line Tools",
-        "description": "Essential build tools for macOS development",
-        "type": "custom",
-        "install_command": "xcode-select --install",
-        "check_command": "xcode-select -p"
-      },
-      "coconutbattery": {
-        "name": "coconutBattery",
-        "description": "Battery health monitoring and system information",
-        "brew_package": "coconutbattery",
-        "cask": true,
-        "check_command": "test -d '/Applications/coconutBattery.app'"
-      },
-      "istat-menus": {
-        "name": "iStat Menus",
-        "description": "Advanced system monitoring in menu bar",
-        "brew_package": "istat-menus",
-        "cask": true,
-        "check_command": "test -d '/Applications/iStat Menus.app'"
-      },
-      "cleanmymac": {
-        "name": "CleanMyMac X",
-        "description": "System optimization and cleanup tool",
-        "brew_package": "cleanmymac",
-        "cask": true,
-        "check_command": "test -d '/Applications/CleanMyMac X.app'"
-      },
-      "appcleaner": {
-        "name": "AppCleaner",
-        "description": "Free app uninstaller and cleanup tool",
-        "brew_package": "appcleaner",
-        "cask": true,
-        "check_command": "test -d '/Applications/AppCleaner.app'"
-      },
-      "the-unarchiver": {
-        "name": "The Unarchiver",
-        "description": "Free archive extractor with wide format support",
-        "brew_package": "the-unarchiver",
-        "cask": true,
-        "check_command": "test -d '/Applications/The Unarchiver.app'"
-      },
-      "hiddenbar": {
-        "name": "Hidden Bar",
-        "description": "Hide menu bar items to save space",
-        "brew_package": "hiddenbar",
-        "cask": true,
-        "check_command": "test -d '/Applications/Hidden Bar.app'"
-      },
-      "dozer": {
-        "name": "Dozer",
-        "description": "Hide menu bar items (alternative to Hidden Bar)",
-        "brew_package": "dozer",
-        "cask": true,
-        "check_command": "test -d '/Applications/Dozer.app'"
-      }
-    }
-  },
-  "utilities": {
-    "name": "System Utilities",
-    "tools": {
-      "stats": {
-        "name": "Stats",
-        "description": "System monitor for menu bar",
-        "brew_package": "stats",
-        "cask": true,
-        "check_command": "test -d '/Applications/Stats.app'"
-      },
-      "keka": {
-        "name": "Keka",
-        "description": "File archiver with extensive format support",
-        "brew_package": "keka",
-        "cask": true,
-        "check_command": "test -d '/Applications/Keka.app'"
-      },
-      "cyberduck": {
-        "name": "Cyberduck",
-        "description": "FTP, SFTP, and cloud storage browser",
-        "brew_package": "cyberduck",
-        "cask": true,
-        "check_command": "test -d '/Applications/Cyberduck.app'"
-      },
-      "cleanshot": {
-        "name": "CleanShot X",
-        "description": "Advanced screenshot and screen recording tool",
-        "brew_package": "cleanshot",
-        "cask": true,
-        "check_command": "test -d '/Applications/CleanShot X.app'"
-      },
-      "monosnap": {
-        "name": "Monosnap",
-        "description": "Screenshot and screen recording tool",
-        "brew_package": "monosnap",
-        "cask": true,
-        "check_command": "test -d '/Applications/Monosnap.app'"
-      },
-      "shottr": {
-        "name": "Shottr",
-        "description": "Modern screenshot tool with OCR and annotations",
-        "brew_package": "shottr",
-        "cask": true,
-        "check_command": "test -d '/Applications/Shottr.app'"
-      },
-      "transmission": {
-        "name": "Transmission",
-        "description": "Lightweight BitTorrent client",
-        "brew_package": "transmission",
-        "cask": true,
-        "check_command": "test -d '/Applications/Transmission.app'"
-      },
-      "folx": {
-        "name": "Folx",
-        "description": "Download manager with torrent support",
-        "brew_package": "folx",
-        "cask": true,
-        "check_command": "test -d '/Applications/Folx.app'"
-      },
-      "freesmug-ngrams": {
-        "name": "FreeSMUG NGram Viewer",
-        "description": "Google NGram data visualization tool",
-        "brew_package": "freesmug-ngrams",
-        "cask": true,
-        "check_command": "test -d '/Applications/FreeSMUG NGram Viewer.app'"
-      }
-    }
-  },
-  "writing": {
-    "name": "Writing Tools",
-    "tools": {
-      "typora": {
-        "name": "Typora",
-        "description": "Markdown editor with live preview",
-        "brew_package": "typora",
-        "cask": true,
-        "check_command": "test -d '/Applications/Typora.app'"
-      },
-      "notable": {
-        "name": "Notable",
-        "description": "Markdown-based note-taking app",
-        "brew_package": "notable",
-        "cask": true,
-        "check_command": "test -d '/Applications/Notable.app'"
-      },
-      "mark-text": {
-        "name": "Mark Text",
-        "description": "Simple and elegant markdown editor",
-        "brew_package": "mark-text",
-        "cask": true,
-        "check_command": "test -d '/Applications/Mark Text.app'"
-      },
-      "notion": {
-        "name": "Notion",
-        "description": "All-in-one workspace",
-        "brew_package": "notion",
-        "cask": true,
-        "check_command": "test -d '/Applications/Notion.app'"
-      }
-    }
-  },
-  "gaming": {
-    "name": "Gaming",
-    "tools": {
-      "steam": {
-        "name": "Steam",
-        "description": "Gaming platform",
-        "brew_package": "steam",
-        "cask": true,
-        "check_command": "test -d '/Applications/Steam.app'"
-      },
-      "discord": {
-        "name": "Discord",
-        "description": "Gaming chat platform",
-        "brew_package": "discord",
-        "cask": true,
-        "check_command": "test -d '/Applications/Discord.app'"
-      },
-      "epic-games": {
-        "name": "Epic Games",
-        "description": "Epic Games launcher",
-        "brew_package": "epic-games",
-        "cask": true,
-        "check_command": "test -d '/Applications/Epic Games Launcher.app'"
-      },
-      "gog-galaxy": {
-        "name": "GOG Galaxy",
-        "description": "Gaming platform from GOG",
-        "brew_package": "gog-galaxy",
-        "cask": true,
-        "check_command": "test -d '/Applications/GOG Galaxy.app'"
-      }
-    }
-  },
-  "ai_tools": {
-    "name": "AI & ML Tools",
-    "tools": {
-      "chatgpt": {
-        "name": "ChatGPT",
-        "description": "OpenAI ChatGPT desktop client",
-        "brew_package": "chatgpt",
-        "cask": true,
-        "check_command": "test -d '/Applications/ChatGPT.app'"
-      },
-      "copilot": {
-        "name": "GitHub Copilot CLI",
-        "description": "AI pair programmer CLI",
-        "requires": ["gh"],
-        "type": "custom",
-        "install_command": "gh extension install github/gh-copilot",
-        "check_command": "gh copilot --version"
-      },
-      "ollama": {
-        "name": "Ollama",
-        "description": "Run LLMs locally",
-        "brew_package": "ollama",
-        "check_command": "ollama --version"
-      }
-    }
-  },
-  "design": {
-    "name": "Design Tools",
-    "tools": {
-      "figma": {
-        "name": "Figma",
-        "description": "Collaborative design tool",
-        "brew_package": "figma",
-        "cask": true,
-        "check_command": "test -d '/Applications/Figma.app'"
-      },
-      "sketch": {
-        "name": "Sketch",
-        "description": "Digital design for macOS",
-        "brew_package": "sketch",
-        "cask": true,
-        "check_command": "test -d '/Applications/Sketch.app'"
-      },
-      "blender": {
-        "name": "Blender",
-        "description": "3D creation suite",
-        "brew_package": "blender",
-        "cask": true,
-        "check_command": "test -d '/Applications/Blender.app'"
-      }
-    }
-  },
-  "security": {
-    "name": "Security Tools",
-    "tools": {
-      "1password": {
-        "name": "1Password",
-        "description": "Password manager",
-        "brew_package": "1password",
-        "cask": true,
-        "check_command": "test -d '/Applications/1Password.app'"
-      },
-      "bitwarden": {
-        "name": "Bitwarden",
-        "description": "Open source password manager",
-        "brew_package": "bitwarden",
-        "cask": true,
-        "check_command": "test -d '/Applications/Bitwarden.app'"
-      },
-      "protonvpn": {
-        "name": "ProtonVPN",
-        "description": "Secure VPN service",
-        "brew_package": "protonvpn",
-        "cask": true,
-        "check_command": "test -d '/Applications/ProtonVPN.app'"
-      }
-    }
-  },
-  "extras": {
-    "name": "Extra Tools",
-    "tools": {
-      "calibre": {
-        "name": "Calibre",
-        "description": "E-book manager",
-        "brew_package": "calibre",
-        "cask": true,
-        "check_command": "test -d '/Applications/calibre.app'"
-      },
-      "transmission": {
-        "name": "Transmission",
-        "description": "BitTorrent client",
-        "brew_package": "transmission",
-        "cask": true,
-        "check_command": "test -d '/Applications/Transmission.app'"
-      },
-      "syncthing": {
-        "name": "Syncthing",
-        "description": "Continuous file synchronization",
-        "brew_package": "syncthing",
-        "check_command": "syncthing --version"
-      },
-      "flux": {
-        "name": "f.lux",
-        "description": "Screen color temperature adjuster",
-        "brew_package": "flux",
-        "cask": true,
-        "check_command": "test -d '/Applications/Flux.app'"
-      },
-      "kap": {
-        "name": "Kap",
-        "description": "Screen recorder with GIF support",
-        "brew_package": "kap",
-        "cask": true,
-        "check_command": "test -d '/Applications/Kap.app'"
-      }
-    }
-  },
-  "creative": {
-    "name": "Creative Suite",
-    "tools": {
-      "adobe-creative-cloud": {
-        "name": "Adobe Creative Cloud",
-        "description": "Adobe's creative suite manager",
-        "brew_package": "adobe-creative-cloud",
-        "cask": true,
-        "check_command": "test -d '/Applications/Adobe Creative Cloud.app'"
-      },
-      "affinity-designer": {
-        "name": "Affinity Designer",
-        "description": "Professional vector graphics editor",
-        "brew_package": "affinity-designer",
-        "cask": true,
-        "check_command": "test -d '/Applications/Affinity Designer.app'"
-      },
-      "affinity-photo": {
-        "name": "Affinity Photo",
-        "description": "Professional photo editing software",
-        "brew_package": "affinity-photo",
-        "cask": true,
-        "check_command": "test -d '/Applications/Affinity Photo.app'"
-      },
-      "davinci-resolve": {
-        "name": "DaVinci Resolve",
-        "description": "Professional video editing software",
-        "brew_package": "davinci-resolve",
-        "cask": true,
-        "check_command": "test -d '/Applications/DaVinci Resolve.app'"
-      },
-      "obs": {
-        "name": "OBS Studio",
-        "description": "Streaming and recording software",
-        "brew_package": "obs",
-        "cask": true,
-        "check_command": "test -d '/Applications/OBS.app'"
-      }
-    }
-  },
-  "research": {
-    "name": "Research & Science",
-    "tools": {
-      "zotero": {
-        "name": "Zotero",
-        "description": "Reference management software",
-        "brew_package": "zotero",
-        "cask": true,
-        "check_command": "test -d '/Applications/Zotero.app'"
-      },
-      "mendeley": {
-        "name": "Mendeley",
-        "description": "Research paper management",
-        "brew_package": "mendeley",
-        "cask": true,
-        "check_command": "test -d '/Applications/Mendeley Desktop.app'"
-      },
-      "rstudio": {
-        "name": "RStudio",
-        "description": "IDE for R programming",
-        "brew_package": "rstudio",
-        "cask": true,
-        "check_command": "test -d '/Applications/RStudio.app'"
-      },
-      "julia": {
-        "name": "Julia",
-        "description": "High-performance programming language for technical computing",
-        "brew_package": "julia",
-        "check_command": "julia --version"
-      }
-    }
-  },
-  "science": {
-    "name": "Scientific Tools",
-    "tools": {
-      "jupyter": {
-        "name": "Jupyter",
-        "description": "Interactive computing notebooks",
-        "requires": ["python"],
-        "type": "custom",
-        "install_command": "pip3 install jupyter",
-        "check_command": "jupyter --version"
-      },
-      "matlab": {
-        "name": "MATLAB",
-        "description": "Numerical computing environment",
-        "brew_package": "matlab",
-        "cask": true,
-        "check_command": "test -d '/Applications/MATLAB.app'"
-      },
-      "octave": {
-        "name": "GNU Octave",
-        "description": "Open-source alternative to MATLAB",
-        "brew_package": "octave",
-        "check_command": "octave --version"
-      },
-      "mathematica": {
-        "name": "Mathematica",
-        "description": "Technical computing system",
-        "brew_package": "wolfram-mathematica",
-        "cask": true,
-        "check_command": "test -d '/Applications/Mathematica.app'"
-      }
-    }
-  },
-  "data_science": {
-    "name": "Data Science",
-    "tools": {
-      "anaconda": {
-        "name": "Anaconda",
-        "description": "Python data science platform",
-        "brew_package": "anaconda",
-        "cask": true,
-        "check_command": "test -d '/Applications/Anaconda-Navigator.app'"
-      },
-      "tableau": {
-        "name": "Tableau Public",
-        "description": "Data visualization software",
-        "brew_package": "tableau-public",
-        "cask": true,
-        "check_command": "test -d '/Applications/Tableau Public.app'"
-      },
-      "miniconda": {
-        "name": "Miniconda",
-        "description": "Minimal conda installer",
-        "brew_package": "miniconda",
-        "check_command": "conda --version"
-      }
-    }
-  },
-  "virtualization": {
-    "name": "Virtualization",
-    "tools": {
-      "virtualbox": {
-        "name": "VirtualBox",
-        "description": "Virtualization software",
-        "brew_package": "virtualbox",
-        "cask": true,
-        "check_command": "test -d '/Applications/VirtualBox.app'"
-      },
-      "vagrant": {
-        "name": "Vagrant",
-        "description": "Development environment management",
-        "brew_package": "vagrant",
-        "check_command": "vagrant --version"
-      },
-      "parallels": {
-        "name": "Parallels Desktop",
-        "description": "Desktop virtualization software",
-        "brew_package": "parallels",
-        "cask": true,
-        "check_command": "test -d '/Applications/Parallels Desktop.app'"
-      }
-    }
-  },
-  "office": {
-    "name": "Office Tools",
-    "tools": {
-      "microsoft-office": {
-              "name": "Microsoft Office",
-              "description": "Microsoft Office suite",
-              "brew_package": "microsoft-office",
-              "cask": true,
-              "check_command": "test -d '/Applications/Microsoft Word.app'"
+    "languages": {
+        "name": "Programming Languages",
+        "tools": {
+            "python": {
+                "name": "Python",
+                "description": "Modern Python 3 installation with pip",
+                "brew_package": "python",
+                "check_command": "python3 --version",
+                "post_install": [
+                    "pip3 install --upgrade pip"
+                ]
+            },
+            "node": {
+                "name": "Node.js",
+                "description": "JavaScript runtime and npm package manager",
+                "brew_package": "node",
+                "check_command": "node --version",
+                "post_install": [
+                    "npm install -g npm"
+                ]
+            },
+            "go": {
+                "name": "Go",
+                "description": "Google's Go programming language",
+                "brew_package": "go",
+                "check_command": "go version"
+            },
+            "rust": {
+                "name": "Rust",
+                "description": "Systems programming language focused on safety and performance",
+                "type": "custom",
+                "install_command": "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y",
+                "check_command": "rustc --version"
+            },
+            "java": {
+                "name": "Java Development Kit",
+                "description": "OpenJDK for Java development",
+                "brew_package": "openjdk",
+                "check_command": "java --version"
+            },
+            "ruby": {
+                "name": "Ruby",
+                "description": "Dynamic programming language",
+                "brew_package": "ruby",
+                "check_command": "ruby --version",
+                "post_install": [
+                    "echo 'export PATH=\"/usr/local/opt/ruby/bin:$PATH\"' >> ~/.zshrc"
+                ]
+            },
+            "elixir": {
+                "name": "Elixir",
+                "description": "Dynamic, functional language for building scalable applications",
+                "brew_package": "elixir",
+                "check_command": "elixir --version"
+            },
+            "kotlin": {
+                "name": "Kotlin",
+                "description": "Modern programming language that makes developers happier",
+                "brew_package": "kotlin",
+                "check_command": "kotlin -version"
+            }
+        }
+    },
+    "shell": {
+        "name": "Shell & Terminal",
+        "tools": {
+            "iterm2": {
+                "name": "iTerm2",
+                "description": "Modern terminal emulator for macOS",
+                "brew_package": "iterm2",
+                "cask": true,
+                "check_command": "test -d /Applications/iTerm.app"
+            },
+            "wezterm": {
+                "name": "WezTerm",
+                "description": "GPU-accelerated terminal emulator",
+                "brew_package": "wezterm",
+                "cask": true,
+                "check_command": "wezterm --version"
+            },
+            "zsh": {
+                "name": "Zsh",
+                "description": "Modern shell with better features than bash",
+                "brew_package": "zsh",
+                "check_command": "zsh --version"
+            },
+            "oh-my-zsh": {
+                "name": "Oh My Zsh",
+                "description": "Framework for managing Zsh configuration",
+                "requires": [
+                    "zsh"
+                ],
+                "type": "custom",
+                "install_command": "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\"",
+                "check_command": "[ -d \"${HOME}/.oh-my-zsh\" ]"
+            },
+            "starship": {
+                "name": "Starship",
+                "description": "Minimal, blazing-fast, and infinitely customizable prompt",
+                "brew_package": "starship",
+                "check_command": "starship --version",
+                "post_install": [
+                    "echo 'eval \"$(starship init zsh)\"' >> ~/.zshrc"
+                ]
+            },
+            "tmux": {
+                "name": "tmux",
+                "description": "Terminal multiplexer for multiple sessions",
+                "brew_package": "tmux",
+                "check_command": "tmux -V"
+            },
+            "alacritty": {
+                "name": "Alacritty",
+                "description": "GPU-accelerated terminal emulator",
+                "brew_package": "alacritty",
+                "cask": true,
+                "check_command": "alacritty --version"
+            },
+            "kitty": {
+                "name": "Kitty",
+                "description": "Fast, feature-rich, GPU based terminal emulator",
+                "brew_package": "kitty",
+                "check_command": "kitty --version"
+            },
+            "ghostty": {
+                "name": "Ghostty",
+                "description": "Fast, cross-platform terminal emulator with GPU acceleration",
+                "type": "custom",
+                "install_command": "curl -sSL https://ghostty.dev/install.sh | bash",
+                "check_command": "ghostty --version"
+            },
+            "fish": {
+                "name": "Fish Shell",
+                "description": "Smart and user-friendly command line shell",
+                "brew_package": "fish",
+                "check_command": "fish --version",
+                "post_install": [
+                    "echo '/usr/local/bin/fish' | sudo tee -a /etc/shells",
+                    "chsh -s /usr/local/bin/fish"
+                ]
+            },
+            "fisher": {
+                "name": "Fisher",
+                "description": "Plugin manager for Fish shell",
+                "requires": [
+                    "fish"
+                ],
+                "type": "custom",
+                "install_command": "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher",
+                "check_command": "fisher --version"
+            }
+        }
+    },
+    "editors": {
+        "name": "Code Editors",
+        "tools": {
+            "vscode": {
+                "name": "Visual Studio Code",
+                "description": "Popular code editor with extensive plugin support",
+                "brew_package": "visual-studio-code",
+                "check_command": "code --version",
+                "cask": true
+            },
+            "sublime": {
+                "name": "Sublime Text",
+                "description": "Sophisticated text editor for code and prose",
+                "brew_package": "sublime-text",
+                "check_command": "subl --version",
+                "cask": true
+            },
+            "neovim": {
+                "name": "Neovim",
+                "description": "Hyperextensible Vim-based text editor",
+                "brew_package": "neovim",
+                "check_command": "nvim --version"
+            },
+            "lazyvim": {
+                "name": "LazyVim",
+                "description": "Modern Neovim configuration",
+                "requires": [
+                    "neovim"
+                ],
+                "type": "custom",
+                "check_command": "[ -d \"${HOME}/.config/nvim\" ]",
+                "pre_install": [
+                    "[ -d \"${HOME}/.config/nvim\" ] && mv ~/.config/nvim ~/.config/nvim.bak || true",
+                    "[ -d \"${HOME}/.local/share/nvim\" ] && mv ~/.local/share/nvim ~/.local/share/nvim.bak || true"
+                ],
+                "install_command": "git clone https://github.com/LazyVim/starter ~/.config/nvim"
+            },
+            "jetbrains-toolbox": {
+                "name": "JetBrains Toolbox",
+                "description": "Manager for JetBrains IDEs",
+                "brew_package": "jetbrains-toolbox",
+                "cask": true,
+                "check_command": "test -d '/Applications/JetBrains Toolbox.app'"
+            },
+            "emacs": {
+                "name": "Emacs",
+                "description": "Extensible text editor",
+                "brew_package": "emacs",
+                "check_command": "emacs --version"
+            }
+        }
+    },
+    "dev_tools": {
+        "name": "Development Tools",
+        "tools": {
+            "git": {
+                "name": "Git",
+                "description": "Version control system with enhanced configuration",
+                "brew_package": "git",
+                "check_command": "git --version",
+                "post_install": [
+                    "git config --global init.defaultBranch main",
+                    "git config --global pull.rebase false",
+                    "git config --global core.editor 'code --wait'"
+                ]
+            },
+            "gh": {
+                "name": "GitHub CLI",
+                "description": "GitHub's official command line tool with authentication",
+                "brew_package": "gh",
+                "check_command": "gh --version",
+                "post_install": [
+                    "echo 'Run \"gh auth login\" to authenticate with GitHub'"
+                ]
+            },
+            "docker": {
+                "name": "Docker Desktop",
+                "description": "Container platform with GUI management",
+                "brew_package": "docker",
+                "cask": true,
+                "check_command": "docker --version"
+            },
+            "docker-compose": {
+                "name": "Docker Compose",
+                "description": "Multi-container Docker applications",
+                "brew_package": "docker-compose",
+                "check_command": "docker-compose --version"
+            },
+            "kubernetes-cli": {
+                "name": "Kubernetes CLI",
+                "description": "Command line tool for Kubernetes",
+                "brew_package": "kubernetes-cli",
+                "check_command": "kubectl version --client"
+            },
+            "helm": {
+                "name": "Helm",
+                "description": "Kubernetes package manager",
+                "brew_package": "helm",
+                "check_command": "helm version"
+            },
+            "postman": {
+                "name": "Postman",
+                "description": "API development environment",
+                "brew_package": "postman",
+                "cask": true,
+                "check_command": "test -d '/Applications/Postman.app'"
+            },
+            "ngrok": {
+                "name": "ngrok",
+                "description": "Secure tunnels to localhost",
+                "brew_package": "ngrok",
+                "check_command": "ngrok --version"
+            },
+            "gitkraken": {
+                "name": "GitKraken",
+                "description": "Git GUI client",
+                "brew_package": "gitkraken",
+                "cask": true,
+                "check_command": "test -d '/Applications/GitKraken.app'"
+            }
+        }
+    },
+    "databases": {
+        "name": "Databases",
+        "tools": {
+            "postgresql": {
+                "name": "PostgreSQL",
+                "description": "Advanced open source database",
+                "brew_package": "postgresql@14",
+                "check_command": "postgres --version",
+                "post_install": [
+                    "brew services start postgresql@14"
+                ]
+            },
+            "mongodb-compass": {
+                "name": "MongoDB Compass",
+                "description": "GUI for MongoDB",
+                "brew_package": "mongodb-compass",
+                "cask": true,
+                "check_command": "test -d '/Applications/MongoDB Compass.app'"
+            },
+            "dbeaver-community": {
+                "name": "DBeaver",
+                "description": "Universal database tool",
+                "brew_package": "dbeaver-community",
+                "cask": true,
+                "check_command": "test -d '/Applications/DBeaver.app'"
+            },
+            "redis": {
+                "name": "Redis",
+                "description": "In-memory data structure store",
+                "brew_package": "redis",
+                "check_command": "redis-cli --version",
+                "post_install": [
+                    "brew services start redis"
+                ]
+            },
+            "mysql": {
+                "name": "MySQL",
+                "description": "Popular open source database",
+                "brew_package": "mysql",
+                "check_command": "mysql --version",
+                "post_install": [
+                    "brew services start mysql"
+                ]
+            }
+        }
+    },
+    "productivity": {
+        "name": "Productivity Tools",
+        "tools": {
+            "rectangle": {
+                "name": "Rectangle",
+                "description": "Window management app with keyboard shortcuts",
+                "brew_package": "rectangle",
+                "cask": true,
+                "check_command": "test -d '/Applications/Rectangle.app'"
+            },
+            "magnet": {
+                "name": "Magnet",
+                "description": "Window management with drag and drop",
+                "brew_package": "magnet",
+                "cask": true,
+                "check_command": "test -d '/Applications/Magnet.app'"
+            },
+            "moom": {
+                "name": "Moom",
+                "description": "Advanced window management and organization",
+                "brew_package": "moom",
+                "cask": true,
+                "check_command": "test -d '/Applications/Moom.app'"
+            },
+            "spectacle": {
+                "name": "Spectacle",
+                "description": "Free window management with keyboard shortcuts",
+                "brew_package": "spectacle",
+                "cask": true,
+                "check_command": "test -d '/Applications/Spectacle.app'"
+            },
+            "alfred": {
+                "name": "Alfred",
+                "description": "Spotlight replacement with advanced features and workflows",
+                "brew_package": "alfred",
+                "cask": true,
+                "check_command": "test -d '/Applications/Alfred 5.app'"
+            },
+            "raycast": {
+                "name": "Raycast",
+                "description": "Modern productivity app with extensions",
+                "brew_package": "raycast",
+                "cask": true,
+                "check_command": "test -d '/Applications/Raycast.app'"
+            },
+            "obsidian": {
+                "name": "Obsidian",
+                "description": "Knowledge base and note-taking app with graph view",
+                "brew_package": "obsidian",
+                "cask": true,
+                "check_command": "test -d '/Applications/Obsidian.app'"
+            },
+            "notion": {
+                "name": "Notion",
+                "description": "All-in-one workspace for notes, docs, and collaboration",
+                "brew_package": "notion",
+                "cask": true,
+                "check_command": "test -d '/Applications/Notion.app'"
+            },
+            "bartender": {
+                "name": "Bartender",
+                "description": "Menu bar organization and customization tool",
+                "brew_package": "bartender",
+                "cask": true,
+                "check_command": "test -d '/Applications/Bartender 4.app'"
+            },
+            "bettertouchtool": {
+                "name": "BetterTouchTool",
+                "description": "Advanced tool for customizing input devices and gestures",
+                "brew_package": "bettertouchtool",
+                "cask": true,
+                "check_command": "test -d '/Applications/BetterTouchTool.app'"
+            },
+            "hazel": {
+                "name": "Hazel",
+                "description": "Automated file organization and management",
+                "brew_package": "hazel",
+                "cask": true,
+                "check_command": "test -d '/Applications/Hazel.app'"
+            },
+            "keyboard-maestro": {
+                "name": "Keyboard Maestro",
+                "description": "Powerful automation and macro creation tool",
+                "brew_package": "keyboard-maestro",
+                "cask": true,
+                "check_command": "test -d '/Applications/Keyboard Maestro.app'"
+            },
+            "text-expander": {
+                "name": "TextExpander",
+                "description": "Text expansion and snippet management",
+                "brew_package": "text-expander",
+                "cask": true,
+                "check_command": "test -d '/Applications/TextExpander.app'"
+            },
+            "1password": {
+                "name": "1Password",
+                "description": "Password manager and secure vault",
+                "brew_package": "1password",
+                "cask": true,
+                "check_command": "test -d '/Applications/1Password.app'"
+            },
+            "bitwarden": {
+                "name": "Bitwarden",
+                "description": "Open-source password manager",
+                "brew_package": "bitwarden",
+                "cask": true,
+                "check_command": "test -d '/Applications/Bitwarden.app'"
+            }
+        }
+    },
+    "window_management": {
+        "name": "Window Management & macOS Utilities",
+        "tools": {
+            "yabai": {
+                "name": "yabai",
+                "description": "Tiling window manager for macOS with scripting support",
+                "brew_package": "yabai",
+                "check_command": "yabai --version",
+                "post_install": [
+                    "sudo yabai --install-sa",
+                    "brew services start yabai"
+                ]
+            },
+            "skhd": {
+                "name": "skhd",
+                "description": "Simple hotkey daemon for macOS",
+                "brew_package": "skhd",
+                "check_command": "skhd --version",
+                "post_install": [
+                    "brew services start skhd"
+                ]
+            },
+            "spacebar": {
+                "name": "spacebar",
+                "description": "Minimal status bar for macOS",
+                "brew_package": "spacebar",
+                "check_command": "spacebar --version",
+                "post_install": [
+                    "brew services start spacebar"
+                ]
+            },
+            "amethyst": {
+                "name": "Amethyst",
+                "description": "Automatic tiling window manager for macOS",
+                "brew_package": "amethyst",
+                "cask": true,
+                "check_command": "test -d '/Applications/Amethyst.app'"
+            },
+            "swish": {
+                "name": "Swish",
+                "description": "Gesture-based window management for macOS",
+                "brew_package": "swish",
+                "cask": true,
+                "check_command": "test -d '/Applications/Swish.app'"
+            },
+            "contexts": {
+                "name": "Contexts",
+                "description": "Fast app switching and window management",
+                "brew_package": "contexts",
+                "cask": true,
+                "check_command": "test -d '/Applications/Contexts.app'"
+            },
+            "alt-tab": {
+                "name": "AltTab",
+                "description": "Windows-style alt-tab for macOS",
+                "brew_package": "alt-tab",
+                "cask": true,
+                "check_command": "test -d '/Applications/AltTab.app'"
+            },
+            "hyperdock": {
+                "name": "HyperDock",
+                "description": "Enhanced dock with window previews and shortcuts",
+                "brew_package": "hyperdock",
+                "cask": true,
+                "check_command": "test -d '/Applications/HyperDock.app'"
+            },
+            "hidden": {
+                "name": "Hidden",
+                "description": "Hide menu bar icons and manage dock visibility",
+                "brew_package": "hidden",
+                "cask": true,
+                "check_command": "test -d '/Applications/Hidden.app'"
+            },
+            "dozer": {
+                "name": "Dozer",
+                "description": "Hide menu bar icons to declutter your desktop",
+                "brew_package": "dozer",
+                "cask": true,
+                "check_command": "test -d '/Applications/Dozer.app'"
+            },
+            "vanilla": {
+                "name": "Vanilla",
+                "description": "Hide menu bar icons for a cleaner look",
+                "brew_package": "vanilla",
+                "cask": true,
+                "check_command": "test -d '/Applications/Vanilla.app'"
+            }
+        }
+    },
+    "macos_utilities": {
+        "name": "macOS System Utilities",
+        "tools": {
+            "appcleaner": {
+                "name": "AppCleaner",
+                "description": "Uninstall apps completely and remove all traces",
+                "brew_package": "appcleaner",
+                "cask": true,
+                "check_command": "test -d '/Applications/AppCleaner.app'"
+            },
+            "cleanmymac": {
+                "name": "CleanMyMac X",
+                "description": "System optimization and cleanup utility",
+                "brew_package": "cleanmymac-x",
+                "cask": true,
+                "check_command": "test -d '/Applications/CleanMyMac X.app'"
+            },
+            "onyx": {
+                "name": "OnyX",
+                "description": "Free system maintenance and optimization tool",
+                "brew_package": "onyx",
+                "cask": true,
+                "check_command": "test -d '/Applications/OnyX.app'"
+            },
+            "monitorcontrol": {
+                "name": "MonitorControl",
+                "description": "Control external monitor brightness and volume",
+                "brew_package": "monitorcontrol",
+                "cask": true,
+                "check_command": "test -d '/Applications/MonitorControl.app'"
+            },
+            "stats": {
+                "name": "Stats",
+                "description": "System monitoring in the menu bar",
+                "brew_package": "stats",
+                "cask": true,
+                "check_command": "test -d '/Applications/Stats.app'"
+            },
+            "istat-menus": {
+                "name": "iStat Menus",
+                "description": "Advanced system monitoring and statistics",
+                "brew_package": "istat-menus",
+                "cask": true,
+                "check_command": "test -d '/Applications/iStat Menus.app'"
+            },
+            "the-unarchiver": {
+                "name": "The Unarchiver",
+                "description": "Better archive extraction than built-in tools",
+                "brew_package": "the-unarchiver",
+                "cask": true,
+                "check_command": "test -d '/Applications/The Unarchiver.app'"
+            },
+            "keka": {
+                "name": "Keka",
+                "description": "File archiver with support for many formats",
+                "brew_package": "keka",
+                "cask": true,
+                "check_command": "test -d '/Applications/Keka.app'"
+            },
+            "cheatsheet": {
+                "name": "CheatSheet",
+                "description": "Hold Command to see all keyboard shortcuts",
+                "brew_package": "cheatsheet",
+                "cask": true,
+                "check_command": "test -d '/Applications/CheatSheet.app'"
+            },
+            "scroll-reverser": {
+                "name": "Scroll Reverser",
+                "description": "Reverse scroll direction for external mice",
+                "brew_package": "scroll-reverser",
+                "cask": true,
+                "check_command": "test -d '/Applications/Scroll Reverser.app'"
+            },
+            "karabiner-elements": {
+                "name": "Karabiner-Elements",
+                "description": "Advanced keyboard customization and remapping",
+                "brew_package": "karabiner-elements",
+                "cask": true,
+                "check_command": "test -d '/Applications/Karabiner-Elements.app'"
+            },
+            "seil": {
+                "name": "Seil",
+                "description": "Remap keys on external keyboards",
+                "brew_package": "seil",
+                "cask": true,
+                "check_command": "test -d '/Applications/Seil.app'"
+            }
+        }
+    },
+    "browsers": {
+        "name": "Web Browsers",
+        "tools": {
+            "google-chrome": {
+                "name": "Google Chrome",
+                "description": "Popular web browser with extensive extension support",
+                "brew_package": "google-chrome",
+                "cask": true,
+                "check_command": "test -d '/Applications/Google Chrome.app'"
+            },
+            "firefox": {
+                "name": "Firefox",
+                "description": "Open-source web browser with privacy features",
+                "brew_package": "firefox",
+                "cask": true,
+                "check_command": "test -d '/Applications/Firefox.app'"
+            },
+            "brave-browser": {
+                "name": "Brave Browser",
+                "description": "Privacy-focused web browser with built-in ad blocking",
+                "brew_package": "brave-browser",
+                "cask": true,
+                "check_command": "test -d '/Applications/Brave Browser.app'"
+            },
+            "arc": {
+                "name": "Arc",
+                "description": "Chromium-based browser with unique workspace features",
+                "brew_package": "arc",
+                "cask": true,
+                "check_command": "test -d '/Applications/Arc.app'"
+            },
+            "dia": {
+                "name": "Dia Browser",
+                "description": "Privacy-focused browser from the Browser Company",
+                "brew_package": "dia",
+                "cask": true,
+                "check_command": "test -d '/Applications/Dia.app'"
+            },
+            "zen-browser": {
+                "name": "Zen Browser",
+                "description": "Minimalist browser focused on distraction-free browsing",
+                "brew_package": "zen-browser",
+                "cask": true,
+                "check_command": "test -d '/Applications/Zen Browser.app'"
+            },
+            "safari-technology-preview": {
+                "name": "Safari Technology Preview",
+                "description": "Preview version of Safari with latest web technologies",
+                "brew_package": "safari-technology-preview",
+                "cask": true,
+                "check_command": "test -d '/Applications/Safari Technology Preview.app'"
+            },
+            "opera": {
+                "name": "Opera",
+                "description": "Feature-rich browser with built-in VPN",
+                "brew_package": "opera",
+                "cask": true,
+                "check_command": "test -d '/Applications/Opera.app'"
+            },
+            "microsoft-edge": {
+                "name": "Microsoft Edge",
+                "description": "Microsoft's Chromium-based browser",
+                "brew_package": "microsoft-edge",
+                "cask": true,
+                "check_command": "test -d '/Applications/Microsoft Edge.app'"
+            }
+        }
+    },
+    "communication": {
+        "name": "Communication",
+        "tools": {
+            "slack": {
+                "name": "Slack",
+                "description": "Team communication platform",
+                "brew_package": "slack",
+                "cask": true,
+                "check_command": "test -d '/Applications/Slack.app'"
+            },
+            "discord": {
+                "name": "Discord",
+                "description": "Voice and text chat platform",
+                "brew_package": "discord",
+                "cask": true,
+                "check_command": "test -d '/Applications/Discord.app'"
+            },
+            "zoom": {
+                "name": "Zoom",
+                "description": "Video conferencing tool",
+                "brew_package": "zoom",
+                "cask": true,
+                "check_command": "test -d '/Applications/zoom.us.app'"
+            },
+            "telegram": {
+                "name": "Telegram",
+                "description": "Secure messaging app with cloud sync",
+                "brew_package": "telegram",
+                "cask": true,
+                "check_command": "test -d '/Applications/Telegram.app'"
+            },
+            "signal": {
+                "name": "Signal",
+                "description": "Private messaging with end-to-end encryption",
+                "brew_package": "signal",
+                "cask": true,
+                "check_command": "test -d '/Applications/Signal.app'"
+            },
+            "teams": {
+                "name": "Microsoft Teams",
+                "description": "Team collaboration and video conferencing",
+                "brew_package": "microsoft-teams",
+                "cask": true,
+                "check_command": "test -d '/Applications/Microsoft Teams.app'"
+            },
+            "whatsapp": {
+                "name": "WhatsApp",
+                "description": "Cross-platform messaging and voice calling",
+                "brew_package": "whatsapp",
+                "cask": true,
+                "check_command": "test -d '/Applications/WhatsApp.app'"
+            },
+            "element": {
+                "name": "Element",
+                "description": "Secure messaging and collaboration platform",
+                "brew_package": "element",
+                "cask": true,
+                "check_command": "test -d '/Applications/Element.app'"
+            },
+            "skype": {
+                "name": "Skype",
+                "description": "Voice and video calling platform",
+                "brew_package": "skype",
+                "cask": true,
+                "check_command": "test -d '/Applications/Skype.app'"
+            }
+        }
+    },
+    "cloud": {
+        "name": "Cloud Tools",
+        "tools": {
+            "aws-cli": {
+                "name": "AWS CLI",
+                "description": "Command line interface for AWS",
+                "brew_package": "awscli",
+                "check_command": "aws --version"
+            },
+            "google-cloud-sdk": {
+                "name": "Google Cloud SDK",
+                "description": "Tools for Google Cloud Platform",
+                "brew_package": "google-cloud-sdk",
+                "cask": true,
+                "check_command": "gcloud --version"
+            },
+            "azure-cli": {
+                "name": "Azure CLI",
+                "description": "Command line interface for Azure",
+                "brew_package": "azure-cli",
+                "check_command": "az --version"
+            },
+            "terraform": {
+                "name": "Terraform",
+                "description": "Infrastructure as code tool",
+                "brew_package": "terraform",
+                "check_command": "terraform --version"
+            }
+        }
+    },
+    "json_tools": {
+        "name": "JSON Tools",
+        "tools": {
+            "jq": {
+                "name": "jq",
+                "description": "Lightweight command-line JSON processor",
+                "brew_package": "jq",
+                "check_command": "jq --version"
+            },
+            "fx": {
+                "name": "fx",
+                "description": "Terminal JSON viewer",
+                "brew_package": "fx",
+                "check_command": "fx --version"
+            },
+            "jsonui": {
+                "name": "JSON-UI",
+                "description": "Interactive JSON explorer for terminal",
+                "brew_package": "jsonui",
+                "check_command": "jsonui --version"
+            }
+        }
+    },
+    "media": {
+        "name": "Media Tools",
+        "tools": {
+            "vlc": {
+                "name": "VLC",
+                "description": "Media player with comprehensive codec support",
+                "brew_package": "vlc",
+                "cask": true,
+                "check_command": "test -d '/Applications/VLC.app'"
+            },
+            "spotify": {
+                "name": "Spotify",
+                "description": "Music streaming platform",
+                "brew_package": "spotify",
+                "cask": true,
+                "check_command": "test -d '/Applications/Spotify.app'"
+            },
+            "handbrake": {
+                "name": "HandBrake",
+                "description": "Video transcoder",
+                "brew_package": "handbrake",
+                "cask": true,
+                "check_command": "test -d '/Applications/HandBrake.app'"
+            }
+        }
+    },
+    "macos_tools": {
+        "name": "macOS Specific Tools",
+        "tools": {
+            "homebrew": {
+                "name": "Homebrew",
+                "description": "Package manager for macOS (already included in base script)",
+                "brew_package": "homebrew",
+                "check_command": "brew --version",
+                "post_install": [
+                    "echo 'export PATH=\"/opt/homebrew/bin:/opt/homebrew/sbin:$PATH\"' >> ~/.zshrc",
+                    "echo 'export PATH=\"/usr/local/bin:/usr/local/sbin:$PATH\"' >> ~/.zshrc"
+                ]
+            },
+            "mas": {
+                "name": "Mac App Store CLI",
+                "description": "Command line interface for Mac App Store",
+                "brew_package": "mas",
+                "check_command": "mas version"
+            },
+            "xcode-select": {
+                "name": "Xcode Command Line Tools",
+                "description": "Essential build tools for macOS development",
+                "type": "custom",
+                "install_command": "xcode-select --install",
+                "check_command": "xcode-select -p"
+            },
+            "coconutbattery": {
+                "name": "coconutBattery",
+                "description": "Battery health monitoring and system information",
+                "brew_package": "coconutbattery",
+                "cask": true,
+                "check_command": "test -d '/Applications/coconutBattery.app'"
+            },
+            "istat-menus": {
+                "name": "iStat Menus",
+                "description": "Advanced system monitoring in menu bar",
+                "brew_package": "istat-menus",
+                "cask": true,
+                "check_command": "test -d '/Applications/iStat Menus.app'"
+            },
+            "cleanmymac": {
+                "name": "CleanMyMac X",
+                "description": "System optimization and cleanup tool",
+                "brew_package": "cleanmymac",
+                "cask": true,
+                "check_command": "test -d '/Applications/CleanMyMac X.app'"
+            },
+            "appcleaner": {
+                "name": "AppCleaner",
+                "description": "Free app uninstaller and cleanup tool",
+                "brew_package": "appcleaner",
+                "cask": true,
+                "check_command": "test -d '/Applications/AppCleaner.app'"
+            },
+            "the-unarchiver": {
+                "name": "The Unarchiver",
+                "description": "Free archive extractor with wide format support",
+                "brew_package": "the-unarchiver",
+                "cask": true,
+                "check_command": "test -d '/Applications/The Unarchiver.app'"
+            },
+            "hiddenbar": {
+                "name": "Hidden Bar",
+                "description": "Hide menu bar items to save space",
+                "brew_package": "hiddenbar",
+                "cask": true,
+                "check_command": "test -d '/Applications/Hidden Bar.app'"
+            },
+            "dozer": {
+                "name": "Dozer",
+                "description": "Hide menu bar items (alternative to Hidden Bar)",
+                "brew_package": "dozer",
+                "cask": true,
+                "check_command": "test -d '/Applications/Dozer.app'"
+            }
+        }
+    },
+    "utilities": {
+        "name": "System Utilities",
+        "tools": {
+            "stats": {
+                "name": "Stats",
+                "description": "System monitor for menu bar",
+                "brew_package": "stats",
+                "cask": true,
+                "check_command": "test -d '/Applications/Stats.app'"
+            },
+            "keka": {
+                "name": "Keka",
+                "description": "File archiver with extensive format support",
+                "brew_package": "keka",
+                "cask": true,
+                "check_command": "test -d '/Applications/Keka.app'"
+            },
+            "cyberduck": {
+                "name": "Cyberduck",
+                "description": "FTP, SFTP, and cloud storage browser",
+                "brew_package": "cyberduck",
+                "cask": true,
+                "check_command": "test -d '/Applications/Cyberduck.app'"
+            },
+            "cleanshot": {
+                "name": "CleanShot X",
+                "description": "Advanced screenshot and screen recording tool",
+                "brew_package": "cleanshot",
+                "cask": true,
+                "check_command": "test -d '/Applications/CleanShot X.app'"
+            },
+            "monosnap": {
+                "name": "Monosnap",
+                "description": "Screenshot and screen recording tool",
+                "brew_package": "monosnap",
+                "cask": true,
+                "check_command": "test -d '/Applications/Monosnap.app'"
+            },
+            "shottr": {
+                "name": "Shottr",
+                "description": "Modern screenshot tool with OCR and annotations",
+                "brew_package": "shottr",
+                "cask": true,
+                "check_command": "test -d '/Applications/Shottr.app'"
+            },
+            "transmission": {
+                "name": "Transmission",
+                "description": "Lightweight BitTorrent client",
+                "brew_package": "transmission",
+                "cask": true,
+                "check_command": "test -d '/Applications/Transmission.app'"
+            },
+            "folx": {
+                "name": "Folx",
+                "description": "Download manager with torrent support",
+                "brew_package": "folx",
+                "cask": true,
+                "check_command": "test -d '/Applications/Folx.app'"
+            },
+            "freesmug-ngrams": {
+                "name": "FreeSMUG NGram Viewer",
+                "description": "Google NGram data visualization tool",
+                "brew_package": "freesmug-ngrams",
+                "cask": true,
+                "check_command": "test -d '/Applications/FreeSMUG NGram Viewer.app'"
+            }
+        }
+    },
+    "writing": {
+        "name": "Writing Tools",
+        "tools": {
+            "typora": {
+                "name": "Typora",
+                "description": "Markdown editor with live preview",
+                "brew_package": "typora",
+                "cask": true,
+                "check_command": "test -d '/Applications/Typora.app'"
+            },
+            "notable": {
+                "name": "Notable",
+                "description": "Markdown-based note-taking app",
+                "brew_package": "notable",
+                "cask": true,
+                "check_command": "test -d '/Applications/Notable.app'"
+            },
+            "mark-text": {
+                "name": "Mark Text",
+                "description": "Simple and elegant markdown editor",
+                "brew_package": "mark-text",
+                "cask": true,
+                "check_command": "test -d '/Applications/Mark Text.app'"
+            },
+            "notion": {
+                "name": "Notion",
+                "description": "All-in-one workspace",
+                "brew_package": "notion",
+                "cask": true,
+                "check_command": "test -d '/Applications/Notion.app'"
+            }
+        }
+    },
+    "gaming": {
+        "name": "Gaming",
+        "tools": {
+            "steam": {
+                "name": "Steam",
+                "description": "Gaming platform",
+                "brew_package": "steam",
+                "cask": true,
+                "check_command": "test -d '/Applications/Steam.app'"
+            },
+            "discord": {
+                "name": "Discord",
+                "description": "Gaming chat platform",
+                "brew_package": "discord",
+                "cask": true,
+                "check_command": "test -d '/Applications/Discord.app'"
+            },
+            "epic-games": {
+                "name": "Epic Games",
+                "description": "Epic Games launcher",
+                "brew_package": "epic-games",
+                "cask": true,
+                "check_command": "test -d '/Applications/Epic Games Launcher.app'"
+            },
+            "gog-galaxy": {
+                "name": "GOG Galaxy",
+                "description": "Gaming platform from GOG",
+                "brew_package": "gog-galaxy",
+                "cask": true,
+                "check_command": "test -d '/Applications/GOG Galaxy.app'"
+            }
+        }
+    },
+    "ai_tools": {
+        "name": "AI & ML Tools",
+        "tools": {
+            "chatgpt": {
+                "name": "ChatGPT",
+                "description": "OpenAI ChatGPT desktop client",
+                "brew_package": "chatgpt",
+                "cask": true,
+                "check_command": "test -d '/Applications/ChatGPT.app'"
+            },
+            "copilot": {
+                "name": "GitHub Copilot CLI",
+                "description": "AI pair programmer CLI",
+                "requires": [
+                    "gh"
+                ],
+                "type": "custom",
+                "install_command": "gh extension install github/gh-copilot",
+                "check_command": "gh copilot --version"
+            },
+            "ollama": {
+                "name": "Ollama",
+                "description": "Run LLMs locally",
+                "brew_package": "ollama",
+                "check_command": "ollama --version"
+            }
+        }
+    },
+    "design": {
+        "name": "Design Tools",
+        "tools": {
+            "figma": {
+                "name": "Figma",
+                "description": "Collaborative design tool",
+                "brew_package": "figma",
+                "cask": true,
+                "check_command": "test -d '/Applications/Figma.app'"
+            },
+            "sketch": {
+                "name": "Sketch",
+                "description": "Digital design for macOS",
+                "brew_package": "sketch",
+                "cask": true,
+                "check_command": "test -d '/Applications/Sketch.app'"
+            },
+            "blender": {
+                "name": "Blender",
+                "description": "3D creation suite",
+                "brew_package": "blender",
+                "cask": true,
+                "check_command": "test -d '/Applications/Blender.app'"
+            }
+        }
+    },
+    "security": {
+        "name": "Security Tools",
+        "tools": {
+            "1password": {
+                "name": "1Password",
+                "description": "Password manager",
+                "brew_package": "1password",
+                "cask": true,
+                "check_command": "test -d '/Applications/1Password.app'"
+            },
+            "bitwarden": {
+                "name": "Bitwarden",
+                "description": "Open source password manager",
+                "brew_package": "bitwarden",
+                "cask": true,
+                "check_command": "test -d '/Applications/Bitwarden.app'"
+            },
+            "protonvpn": {
+                "name": "ProtonVPN",
+                "description": "Secure VPN service",
+                "brew_package": "protonvpn",
+                "cask": true,
+                "check_command": "test -d '/Applications/ProtonVPN.app'"
+            }
+        }
+    },
+    "extras": {
+        "name": "Extra Tools",
+        "tools": {
+            "calibre": {
+                "name": "Calibre",
+                "description": "E-book manager",
+                "brew_package": "calibre",
+                "cask": true,
+                "check_command": "test -d '/Applications/calibre.app'"
+            },
+            "transmission": {
+                "name": "Transmission",
+                "description": "BitTorrent client",
+                "brew_package": "transmission",
+                "cask": true,
+                "check_command": "test -d '/Applications/Transmission.app'"
+            },
+            "syncthing": {
+                "name": "Syncthing",
+                "description": "Continuous file synchronization",
+                "brew_package": "syncthing",
+                "check_command": "syncthing --version"
+            },
+            "flux": {
+                "name": "f.lux",
+                "description": "Screen color temperature adjuster",
+                "brew_package": "flux",
+                "cask": true,
+                "check_command": "test -d '/Applications/Flux.app'"
+            },
+            "kap": {
+                "name": "Kap",
+                "description": "Screen recorder with GIF support",
+                "brew_package": "kap",
+                "cask": true,
+                "check_command": "test -d '/Applications/Kap.app'"
+            }
+        }
+    },
+    "creative": {
+        "name": "Creative Suite",
+        "tools": {
+            "adobe-creative-cloud": {
+                "name": "Adobe Creative Cloud",
+                "description": "Adobe's creative suite manager",
+                "brew_package": "adobe-creative-cloud",
+                "cask": true,
+                "check_command": "test -d '/Applications/Adobe Creative Cloud.app'"
+            },
+            "affinity-designer": {
+                "name": "Affinity Designer",
+                "description": "Professional vector graphics editor",
+                "brew_package": "affinity-designer",
+                "cask": true,
+                "check_command": "test -d '/Applications/Affinity Designer.app'"
+            },
+            "affinity-photo": {
+                "name": "Affinity Photo",
+                "description": "Professional photo editing software",
+                "brew_package": "affinity-photo",
+                "cask": true,
+                "check_command": "test -d '/Applications/Affinity Photo.app'"
+            },
+            "davinci-resolve": {
+                "name": "DaVinci Resolve",
+                "description": "Professional video editing software",
+                "brew_package": "davinci-resolve",
+                "cask": true,
+                "check_command": "test -d '/Applications/DaVinci Resolve.app'"
+            },
+            "obs": {
+                "name": "OBS Studio",
+                "description": "Streaming and recording software",
+                "brew_package": "obs",
+                "cask": true,
+                "check_command": "test -d '/Applications/OBS.app'"
+            }
+        }
+    },
+    "research": {
+        "name": "Research & Science",
+        "tools": {
+            "zotero": {
+                "name": "Zotero",
+                "description": "Reference management software",
+                "brew_package": "zotero",
+                "cask": true,
+                "check_command": "test -d '/Applications/Zotero.app'"
+            },
+            "mendeley": {
+                "name": "Mendeley",
+                "description": "Research paper management",
+                "brew_package": "mendeley",
+                "cask": true,
+                "check_command": "test -d '/Applications/Mendeley Desktop.app'"
+            },
+            "rstudio": {
+                "name": "RStudio",
+                "description": "IDE for R programming",
+                "brew_package": "rstudio",
+                "cask": true,
+                "check_command": "test -d '/Applications/RStudio.app'"
+            },
+            "julia": {
+                "name": "Julia",
+                "description": "High-performance programming language for technical computing",
+                "brew_package": "julia",
+                "check_command": "julia --version"
+            }
+        }
+    },
+    "science_data": {
+        "name": "Science & Data Science",
+        "tools": {
+            "jupyter": {
+                "name": "Jupyter",
+                "description": "Interactive computing notebooks",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install jupyter",
+                "check_command": "jupyter --version"
+            },
+            "anaconda": {
+                "name": "Anaconda",
+                "description": "Python data science platform",
+                "brew_package": "anaconda",
+                "cask": true,
+                "check_command": "test -d '/Applications/Anaconda-Navigator.app'"
+            },
+            "miniconda": {
+                "name": "Miniconda",
+                "description": "Minimal conda installer",
+                "brew_package": "miniconda",
+                "check_command": "conda --version"
+            },
+            "matlab": {
+                "name": "MATLAB",
+                "description": "Numerical computing environment",
+                "brew_package": "matlab",
+                "cask": true,
+                "check_command": "test -d '/Applications/MATLAB.app'"
+            },
+            "octave": {
+                "name": "GNU Octave",
+                "description": "Open-source alternative to MATLAB",
+                "brew_package": "octave",
+                "check_command": "octave --version"
+            },
+            "mathematica": {
+                "name": "Mathematica",
+                "description": "Technical computing system",
+                "brew_package": "wolfram-mathematica",
+                "cask": true,
+                "check_command": "test -d '/Applications/Mathematica.app'"
+            },
+            "tableau": {
+                "name": "Tableau Public",
+                "description": "Data visualization software",
+                "brew_package": "tableau-public",
+                "cask": true,
+                "check_command": "test -d '/Applications/Tableau Public.app'"
+            },
+            "rstudio": {
+                "name": "RStudio",
+                "description": "IDE for R programming",
+                "brew_package": "rstudio",
+                "cask": true,
+                "check_command": "test -d '/Applications/RStudio.app'"
+            },
+            "julia": {
+                "name": "Julia",
+                "description": "High-performance programming language for technical computing",
+                "brew_package": "julia",
+                "check_command": "julia --version"
+            }
+        }
+    },
+    "virtualization": {
+        "name": "Virtualization",
+        "tools": {
+            "virtualbox": {
+                "name": "VirtualBox",
+                "description": "Virtualization software",
+                "brew_package": "virtualbox",
+                "cask": true,
+                "check_command": "test -d '/Applications/VirtualBox.app'"
+            },
+            "vagrant": {
+                "name": "Vagrant",
+                "description": "Development environment management",
+                "brew_package": "vagrant",
+                "check_command": "vagrant --version"
+            },
+            "parallels": {
+                "name": "Parallels Desktop",
+                "description": "Desktop virtualization software",
+                "brew_package": "parallels",
+                "cask": true,
+                "check_command": "test -d '/Applications/Parallels Desktop.app'"
+            }
+        }
+    },
+    "office": {
+        "name": "Office Tools",
+        "tools": {
+            "microsoft-office": {
+                "name": "Microsoft Office",
+                "description": "Microsoft Office suite",
+                "brew_package": "microsoft-office",
+                "cask": true,
+                "check_command": "test -d '/Applications/Microsoft Word.app'"
             },
             "libreoffice": {
-              "name": "LibreOffice",
-              "description": "Open source office suite",
-              "brew_package": "libreoffice",
-              "cask": true,
-              "check_command": "test -d '/Applications/LibreOffice.app'"
+                "name": "LibreOffice",
+                "description": "Open source office suite",
+                "brew_package": "libreoffice",
+                "cask": true,
+                "check_command": "test -d '/Applications/LibreOffice.app'"
             },
             "microsoft-teams": {
-              "name": "Microsoft Teams",
-              "description": "Team collaboration software",
-              "brew_package": "microsoft-teams",
-              "cask": true,
-              "check_command": "test -d '/Applications/Microsoft Teams.app'"
+                "name": "Microsoft Teams",
+                "description": "Team collaboration software",
+                "brew_package": "microsoft-teams",
+                "cask": true,
+                "check_command": "test -d '/Applications/Microsoft Teams.app'"
             }
-          }
         }
-      }
+    }
+}
