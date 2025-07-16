@@ -178,25 +178,48 @@
     "tools": {
       "git": {
         "name": "Git",
-        "description": "Version control system",
+        "description": "Version control system with enhanced configuration",
         "brew_package": "git",
         "check_command": "git --version",
         "post_install": [
-          "git config --global init.defaultBranch main"
+          "git config --global init.defaultBranch main",
+          "git config --global pull.rebase false",
+          "git config --global core.editor 'code --wait'"
         ]
       },
       "gh": {
         "name": "GitHub CLI",
-        "description": "GitHub's official command line tool",
+        "description": "GitHub's official command line tool with authentication",
         "brew_package": "gh",
-        "check_command": "gh --version"
+        "check_command": "gh --version",
+        "post_install": [
+          "echo 'Run \"gh auth login\" to authenticate with GitHub'"
+        ]
       },
       "docker": {
-        "name": "Docker",
-        "description": "Container platform",
+        "name": "Docker Desktop",
+        "description": "Container platform with GUI management",
         "brew_package": "docker",
         "cask": true,
         "check_command": "docker --version"
+      },
+      "docker-compose": {
+        "name": "Docker Compose",
+        "description": "Multi-container Docker applications",
+        "brew_package": "docker-compose",
+        "check_command": "docker-compose --version"
+      },
+      "kubernetes-cli": {
+        "name": "Kubernetes CLI",
+        "description": "Command line tool for Kubernetes",
+        "brew_package": "kubernetes-cli",
+        "check_command": "kubectl version --client"
+      },
+      "helm": {
+        "name": "Helm",
+        "description": "Kubernetes package manager",
+        "brew_package": "helm",
+        "check_command": "helm version"
       },
       "postman": {
         "name": "Postman",
@@ -271,45 +294,108 @@
     "tools": {
       "rectangle": {
         "name": "Rectangle",
-        "description": "Window management app",
+        "description": "Window management app with keyboard shortcuts",
         "brew_package": "rectangle",
         "cask": true,
         "check_command": "test -d '/Applications/Rectangle.app'"
       },
+      "magnet": {
+        "name": "Magnet",
+        "description": "Window management with drag and drop",
+        "brew_package": "magnet",
+        "cask": true,
+        "check_command": "test -d '/Applications/Magnet.app'"
+      },
+      "moom": {
+        "name": "Moom",
+        "description": "Advanced window management and organization",
+        "brew_package": "moom",
+        "cask": true,
+        "check_command": "test -d '/Applications/Moom.app'"
+      },
+      "spectacle": {
+        "name": "Spectacle",
+        "description": "Free window management with keyboard shortcuts",
+        "brew_package": "spectacle",
+        "cask": true,
+        "check_command": "test -d '/Applications/Spectacle.app'"
+      },
       "alfred": {
         "name": "Alfred",
-        "description": "Spotlight replacement with advanced features",
+        "description": "Spotlight replacement with advanced features and workflows",
         "brew_package": "alfred",
         "cask": true,
         "check_command": "test -d '/Applications/Alfred 5.app'"
       },
       "raycast": {
         "name": "Raycast",
-        "description": "Modern productivity app",
+        "description": "Modern productivity app with extensions",
         "brew_package": "raycast",
         "cask": true,
         "check_command": "test -d '/Applications/Raycast.app'"
       },
       "obsidian": {
         "name": "Obsidian",
-        "description": "Knowledge base and note-taking app",
+        "description": "Knowledge base and note-taking app with graph view",
         "brew_package": "obsidian",
         "cask": true,
         "check_command": "test -d '/Applications/Obsidian.app'"
       },
+      "notion": {
+        "name": "Notion",
+        "description": "All-in-one workspace for notes, docs, and collaboration",
+        "brew_package": "notion",
+        "cask": true,
+        "check_command": "test -d '/Applications/Notion.app'"
+      },
       "bartender": {
         "name": "Bartender",
-        "description": "Menu bar organization tool",
+        "description": "Menu bar organization and customization tool",
         "brew_package": "bartender",
         "cask": true,
         "check_command": "test -d '/Applications/Bartender 4.app'"
       },
       "bettertouchtool": {
         "name": "BetterTouchTool",
-        "description": "Tool for customizing input devices",
+        "description": "Advanced tool for customizing input devices and gestures",
         "brew_package": "bettertouchtool",
         "cask": true,
         "check_command": "test -d '/Applications/BetterTouchTool.app'"
+      },
+      "hazel": {
+        "name": "Hazel",
+        "description": "Automated file organization and management",
+        "brew_package": "hazel",
+        "cask": true,
+        "check_command": "test -d '/Applications/Hazel.app'"
+      },
+      "keyboard-maestro": {
+        "name": "Keyboard Maestro",
+        "description": "Powerful automation and macro creation tool",
+        "brew_package": "keyboard-maestro",
+        "cask": true,
+        "check_command": "test -d '/Applications/Keyboard Maestro.app'"
+      },
+      "text-expander": {
+        "name": "TextExpander",
+        "description": "Text expansion and snippet management",
+        "brew_package": "text-expander",
+        "cask": true,
+        "check_command": "test -d '/Applications/TextExpander.app'"
+      },
+      "1password": {
+        "name": "1Password",
+        "description": "Password manager and secure vault",
+        "brew_package": "1password",
+        "cask": true,
+        "check_command": "test -d '/Applications/1Password.app'"
+      },
+      "bitwarden": {
+        "name": "Bitwarden",
+        "description": "Open-source password manager",
+        "brew_package": "bitwarden",
+        "cask": true,
+        "check_command": "test -d '/Applications/Bitwarden.app'"
       }
     }
   },
@@ -397,31 +483,52 @@
     "tools": {
       "google-chrome": {
         "name": "Google Chrome",
-        "description": "Popular web browser",
+        "description": "Popular web browser with extensive extension support",
         "brew_package": "google-chrome",
         "cask": true,
         "check_command": "test -d '/Applications/Google Chrome.app'"
       },
       "firefox": {
         "name": "Firefox",
-        "description": "Open-source web browser",
+        "description": "Open-source web browser with privacy features",
         "brew_package": "firefox",
         "cask": true,
         "check_command": "test -d '/Applications/Firefox.app'"
       },
       "brave-browser": {
         "name": "Brave Browser",
-        "description": "Privacy-focused web browser",
+        "description": "Privacy-focused web browser with built-in ad blocking",
         "brew_package": "brave-browser",
         "cask": true,
         "check_command": "test -d '/Applications/Brave Browser.app'"
       },
       "arc": {
         "name": "Arc",
-        "description": "Chromium-based browser with unique features",
+        "description": "Chromium-based browser with unique workspace features",
         "brew_package": "arc",
         "cask": true,
         "check_command": "test -d '/Applications/Arc.app'"
+      },
+      "safari-technology-preview": {
+        "name": "Safari Technology Preview",
+        "description": "Preview version of Safari with latest web technologies",
+        "brew_package": "safari-technology-preview",
+        "cask": true,
+        "check_command": "test -d '/Applications/Safari Technology Preview.app'"
+      },
+      "opera": {
+        "name": "Opera",
+        "description": "Feature-rich browser with built-in VPN",
+        "brew_package": "opera",
+        "cask": true,
+        "check_command": "test -d '/Applications/Opera.app'"
+      },
+      "microsoft-edge": {
+        "name": "Microsoft Edge",
+        "description": "Microsoft's Chromium-based browser",
+        "brew_package": "microsoft-edge",
+        "cask": true,
+        "check_command": "test -d '/Applications/Microsoft Edge.app'"
       }
     }
   },
@@ -448,6 +555,83 @@
         "brew_package": "handbrake",
         "cask": true,
         "check_command": "test -d '/Applications/HandBrake.app'"
+      }
+    }
+  },
+  "macos_tools": {
+    "name": "macOS Specific Tools",
+    "tools": {
+      "homebrew": {
+        "name": "Homebrew",
+        "description": "Package manager for macOS (already included in base script)",
+        "brew_package": "homebrew",
+        "check_command": "brew --version",
+        "post_install": [
+          "echo 'export PATH=\"/opt/homebrew/bin:/opt/homebrew/sbin:$PATH\"' >> ~/.zshrc",
+          "echo 'export PATH=\"/usr/local/bin:/usr/local/sbin:$PATH\"' >> ~/.zshrc"
+        ]
+      },
+      "mas": {
+        "name": "Mac App Store CLI",
+        "description": "Command line interface for Mac App Store",
+        "brew_package": "mas",
+        "check_command": "mas version"
+      },
+      "xcode-select": {
+        "name": "Xcode Command Line Tools",
+        "description": "Essential build tools for macOS development",
+        "type": "custom",
+        "install_command": "xcode-select --install",
+        "check_command": "xcode-select -p"
+      },
+      "coconutbattery": {
+        "name": "coconutBattery",
+        "description": "Battery health monitoring and system information",
+        "brew_package": "coconutbattery",
+        "cask": true,
+        "check_command": "test -d '/Applications/coconutBattery.app'"
+      },
+      "istat-menus": {
+        "name": "iStat Menus",
+        "description": "Advanced system monitoring in menu bar",
+        "brew_package": "istat-menus",
+        "cask": true,
+        "check_command": "test -d '/Applications/iStat Menus.app'"
+      },
+      "cleanmymac": {
+        "name": "CleanMyMac X",
+        "description": "System optimization and cleanup tool",
+        "brew_package": "cleanmymac",
+        "cask": true,
+        "check_command": "test -d '/Applications/CleanMyMac X.app'"
+      },
+      "appcleaner": {
+        "name": "AppCleaner",
+        "description": "Free app uninstaller and cleanup tool",
+        "brew_package": "appcleaner",
+        "cask": true,
+        "check_command": "test -d '/Applications/AppCleaner.app'"
+      },
+      "the-unarchiver": {
+        "name": "The Unarchiver",
+        "description": "Free archive extractor with wide format support",
+        "brew_package": "the-unarchiver",
+        "cask": true,
+        "check_command": "test -d '/Applications/The Unarchiver.app'"
+      },
+      "hiddenbar": {
+        "name": "Hidden Bar",
+        "description": "Hide menu bar items to save space",
+        "brew_package": "hiddenbar",
+        "cask": true,
+        "check_command": "test -d '/Applications/Hidden Bar.app'"
+      },
+      "dozer": {
+        "name": "Dozer",
+        "description": "Hide menu bar items (alternative to Hidden Bar)",
+        "brew_package": "dozer",
+        "cask": true,
+        "check_command": "test -d '/Applications/Dozer.app'"
       }
     }
   },
@@ -481,6 +665,41 @@
         "brew_package": "cleanshot",
         "cask": true,
         "check_command": "test -d '/Applications/CleanShot X.app'"
+      },
+      "monosnap": {
+        "name": "Monosnap",
+        "description": "Screenshot and screen recording tool",
+        "brew_package": "monosnap",
+        "cask": true,
+        "check_command": "test -d '/Applications/Monosnap.app'"
+      },
+      "shottr": {
+        "name": "Shottr",
+        "description": "Modern screenshot tool with OCR and annotations",
+        "brew_package": "shottr",
+        "cask": true,
+        "check_command": "test -d '/Applications/Shottr.app'"
+      },
+      "transmission": {
+        "name": "Transmission",
+        "description": "Lightweight BitTorrent client",
+        "brew_package": "transmission",
+        "cask": true,
+        "check_command": "test -d '/Applications/Transmission.app'"
+      },
+      "folx": {
+        "name": "Folx",
+        "description": "Download manager with torrent support",
+        "brew_package": "folx",
+        "cask": true,
+        "check_command": "test -d '/Applications/Folx.app'"
+      },
+      "freesmug-ngrams": {
+        "name": "FreeSMUG NGram Viewer",
+        "description": "Google NGram data visualization tool",
+        "brew_package": "freesmug-ngrams",
+        "cask": true,
+        "check_command": "test -d '/Applications/FreeSMUG NGram Viewer.app'"
       }
     }
   },

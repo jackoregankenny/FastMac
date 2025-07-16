@@ -1,316 +1,332 @@
-{% extends "base.html" %} {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <!-- Minimal Header -->
-    <header class="py-8">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                    macOS Setup Builder
-                </h1>
-                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    Select your tools, get an installer
-                </p>
-            </div>
-            <button
-                id="help-button"
-                class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-            >
-                <span class="flex items-center">
-                    <svg
-                        class="w-5 h-5 mr-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                    </svg>
-                    Help
-                </span>
-            </button>
-        </div>
-    </header>
+{% extends "base.html" %}
 
-    <!-- Simple Search -->
-    <div
-        class="sticky top-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur z-10 py-3"
-    >
-        <input
-            type="search"
-            id="tool-search"
-            placeholder="Find tools..."
-            class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-800 border-0 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 dark:text-gray-300"
-        />
+{% block content %}
+<div class="min-h-screen">
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 dark:from-primary-800 dark:via-primary-900 dark:to-primary-950">
+        <div class="absolute inset-0 bg-black/10"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="text-center">
+                <div class="flex justify-center mb-6">
+                    <div class="text-6xl animate-bounce-gentle">🚀</div>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">
+                    FastMac
+                </h1>
+                <p class="text-xl md:text-2xl text-primary-100 mb-8 max-w-3xl mx-auto">
+                    Build your perfect macOS development environment with one click
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <div class="flex items-center space-x-2 text-primary-100">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Select your tools</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-primary-100">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Generate script</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-primary-100">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Run & enjoy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Main Content -->
-    <main class="py-6 pb-24">
-        <form id="setup-form">
-            {% for category_id, category in categories.items() %}
-            <div class="mb-8">
-                <h2
-                    class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3"
-                >
-                    {{ category.name }}
-                </h2>
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2"
-                >
-                    {% for tool_id, tool in category.tools.items() %}
-                    <label
-                        class="tool-item flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer group"
-                    >
-                        <input
-                            type="checkbox"
-                            id="{{ tool_id }}"
-                            name="{{ tool_id }}"
-                            class="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
-                        />
-                        <span class="ml-3 flex-1">
-                            <span
-                                class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 tool-name"
-                                >{{ tool.name }}</span
-                            >
-                            {% if tool.get('requires') %}
-                            <span class="ml-2 text-xs text-gray-500"
-                                >requires: {{ tool.requires|join(', ') }}</span
-                            >
-                            {% endif %}
-                        </span>
-                        {% if tool.get('cask', False) %}
-                        <span
-                            class="ml-3 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200"
-                        >
-                            GUI
-                        </span>
-                        {% endif %}
-                    </label>
-                    {% endfor %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Search and Filters -->
+        <div class="sticky top-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+                <div class="relative flex-1 max-w-lg">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input
+                        type="search"
+                        id="tool-search"
+                        placeholder="Search tools..."
+                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200"
+                    />
                 </div>
-            </div>
-            {% endfor %}
-
-            <!-- Fixed Bottom Button -->
-            <div
-                class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4"
-            >
-                <div
-                    class="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center"
-                >
-                    <span
-                        id="selected-count"
-                        class="text-sm text-gray-500 dark:text-gray-400"
-                        >No tools selected</span
-                    >
+                
+                <div class="flex items-center space-x-4">
                     <button
-                        type="submit"
-                        class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled
+                        id="select-all-btn"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                     >
-                        Generate Script
+                        Select All
+                    </button>
+                    <button
+                        id="clear-all-btn"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                    >
+                        Clear All
+                    </button>
+                    <button
+                        id="help-button"
+                        class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200"
+                        title="Help"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
                     </button>
                 </div>
             </div>
-        </form>
-    </main>
+        </div>
 
-    <!-- Help Modal -->
-    <dialog id="help-modal" class="fixed inset-0 z-50 bg-black/50">
-        <div class="min-h-screen px-4 flex items-center justify-center">
-            <div
-                class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg relative"
+        <!-- Tools Grid -->
+        <div class="py-8">
+            <form id="setup-form">
+                {% for category_id, category in categories.items() %}
+                <div class="mb-12 animate-fade-in" data-category="{{ category_id }}">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
+                            <span class="mr-3">{{ category.name }}</span>
+                            <span id="count-{{ category_id }}" class="text-sm font-normal text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full">0 selected</span>
+                        </h2>
+                        <button
+                            type="button"
+                            class="category-toggle px-3 py-1 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200"
+                            data-category="{{ category_id }}"
+                        >
+                            Collapse
+                        </button>
+                    </div>
+                    
+                    <div class="category-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                            {% for tool_id, tool in category.tools.items() %}
+                            <label
+                                class="tool-item group relative bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-lg transition-all duration-200 cursor-pointer overflow-hidden"
+                                data-tool-name="{{ tool.name.lower() }}"
+                                data-tool-description="{{ tool.description.lower() }}"
+                            >
+                                <input
+                                    type="checkbox"
+                                    id="{{ tool_id }}"
+                                    name="{{ tool_id }}"
+                                    class="sr-only"
+                                />
+                                
+                                <div class="p-4">
+                                    <div class="flex items-start justify-between mb-3">
+                                        <div class="flex-1">
+                                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
+                                                {{ tool.name }}
+                                            </h3>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                                                {{ tool.description }}
+                                            </p>
+                                        </div>
+                                        
+                                        <!-- Checkbox indicator -->
+                                        <div class="ml-3 flex-shrink-0">
+                                            <div class="w-5 h-5 border-2 border-gray-300 dark:border-gray-600 rounded transition-all duration-200 group-hover:border-primary-400 dark:group-hover:border-primary-500">
+                                                <svg class="w-full h-full text-white bg-primary-600 rounded hidden" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Tags -->
+                                    <div class="flex flex-wrap gap-1">
+                                        {% if tool.get('requires') %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Depends
+                                        </span>
+                                        {% endif %}
+                                        {% if tool.get('cask', False) %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200">
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            GUI
+                                        </span>
+                                        {% endif %}
+                                        {% if tool.get('type') == 'custom' %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Custom
+                                        </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Hover effect overlay -->
+                                <div class="absolute inset-0 bg-primary-50 dark:bg-primary-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"></div>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Fixed Bottom Action Bar -->
+                <div class="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-t border-gray-200 dark:border-gray-700 z-50">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                        <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <span id="selected-count" class="text-sm text-gray-600 dark:text-gray-400">
+                                    No tools selected
+                                </span>
+                                <span id="estimated-time" class="text-sm text-gray-500 dark:text-gray-500 hidden">
+                                    Estimated time: <span id="time-value">0 min</span>
+                                </span>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <button
+                                    type="button"
+                                    id="preview-btn"
+                                    class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled
+                                >
+                                    Preview Script
+                                </button>
+                                <button
+                                    type="submit"
+                                    id="generate-btn"
+                                    class="px-6 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-2"
+                                    disabled
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <span>Generate Script</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Help Modal -->
+<dialog id="help-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
+    <div class="min-h-screen px-4 flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 w-full max-w-2xl relative shadow-2xl animate-slide-up">
+            <button
+                id="close-help"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors duration-200"
             >
-                <h3
-                    class="text-lg font-medium text-gray-900 dark:text-white mb-4"
-                >
-                    About macOS Setup Builder
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="text-4xl mb-4">🚀</div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    Welcome to FastMac
                 </h3>
-                <button
-                    id="close-help"
-                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-500"
-                >
-                    <svg
-                        class="h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                </button>
-                <div class="prose dark:prose-invert max-w-none">
-                    <p>
-                        A simple tool to help you set up your macOS development
-                        environment. Choose the tools you need and get a single
-                        script to install everything.
-                    </p>
-                    <div class="mt-4 space-y-2">
-                        <h4
-                            class="text-sm font-medium text-gray-900 dark:text-white"
-                        >
-                            Features:
+                <p class="text-gray-600 dark:text-gray-400">
+                    Your macOS development environment setup companion
+                </p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            How it works
                         </h4>
-                        <ul
-                            class="list-disc pl-5 text-sm text-gray-600 dark:text-gray-300"
-                        >
-                            <li>Automatic Homebrew installation</li>
-                            <li>Smart dependency management</li>
-                            <li>Support for GUI and CLI tools</li>
-                            <li>Custom configurations</li>
+                        <ol class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                            <li>1. Select the tools you need</li>
+                            <li>2. Generate your custom script</li>
+                            <li>3. Run the script in Terminal</li>
+                            <li>4. Enjoy your setup!</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Features
+                        </h4>
+                        <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                            <li>• Automatic Homebrew setup</li>
+                            <li>• Smart dependency resolution</li>
+                            <li>• Support for GUI & CLI tools</li>
+                            <li>• Custom configurations</li>
                         </ul>
                     </div>
-                    <div
-                        class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
-                    >
-                        <p class="text-sm text-blue-800 dark:text-blue-200">
-                            🔒 All installation happens locally on your machine.
-                            No data is collected or stored.
-                        </p>
+                </div>
+                
+                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div>
+                            <p class="text-sm font-medium text-blue-900 dark:text-blue-100">
+                                Privacy & Security
+                            </p>
+                            <p class="text-sm text-blue-800 dark:text-blue-200 mt-1">
+                                All installation happens locally on your machine. No data is collected, stored, or transmitted.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </dialog>
+    </div>
+</dialog>
 
-    <!-- Help Modal -->
-    <dialog id="help-modal" class="modal">
-        <div class="modal-backdrop"></div>
-        <div class="modal-container">
-            <div
-                class="modal-content bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg relative shadow-xl"
-            >
+<!-- Preview Modal -->
+<dialog id="preview-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
+    <div class="min-h-screen px-4 flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-4xl max-h-[90vh] relative shadow-2xl animate-slide-up">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                    Script Preview
+                </h3>
                 <button
-                    id="close-help"
-                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-500"
+                    id="close-preview"
+                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors duration-200"
                 >
-                    <svg
-                        class="h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clip-rule="evenodd"
-                        />
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
-
-                <div class="mt-2">
-                    <h3
-                        class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-                    >
-                        About macOS Setup Builder
-                    </h3>
-
-                    <div class="space-y-4 text-sm">
-                        <div class="space-y-2">
-                            <p class="text-gray-600 dark:text-gray-300">
-                                This tool helps you set up your macOS
-                                development environment by:
-                            </p>
-                            <ul
-                                class="list-disc pl-5 text-gray-600 dark:text-gray-300 space-y-1"
-                            >
-                                <li>
-                                    Installing Homebrew (macOS package manager)
-                                </li>
-                                <li>
-                                    Installing your selected development tools
-                                </li>
-                                <li>Configuring basic settings</li>
-                            </ul>
-                        </div>
-
-                        <div
-                            class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4"
-                        >
-                            <p
-                                class="text-blue-900 dark:text-blue-100 font-medium"
-                            >
-                                How to use:
-                            </p>
-                            <ol
-                                class="mt-2 list-decimal pl-5 text-blue-800 dark:text-blue-200 space-y-1"
-                            >
-                                <li>Select the tools you want to install</li>
-                                <li>
-                                    Click "Generate Script" to download the
-                                    installer
-                                </li>
-                                <li>Run the installer in Terminal</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </div>
-    </dialog>
-
-    <!-- Instructions Modal -->
-    <dialog id="instructions-modal" class="modal">
-        <div class="modal-backdrop"></div>
-        <div class="modal-container">
-            <div
-                class="modal-content bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg relative shadow-xl"
-            >
+            
+            <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                <pre id="script-preview" class="bg-gray-900 text-green-400 rounded-lg p-4 text-sm overflow-x-auto"></pre>
+            </div>
+            
+            <div class="flex justify-end p-6 border-t border-gray-200 dark:border-gray-700">
                 <button
-                    id="close-modal"
-                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-500"
+                    id="download-preview"
+                    class="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors duration-200"
                 >
-                    <svg
-                        class="h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
+                    Download Script
                 </button>
-
-                <div class="mt-2">
-                    <h3
-                        class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-                    >
-                        Run Your Installer
-                    </h3>
-
-                    <div class="space-y-4 text-sm">
-                        <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-                            <p class="text-gray-700 dark:text-gray-300 mb-2">
-                                1. Open Terminal and run:
-                            </p>
-                            <pre
-                                class="bg-gray-900 text-gray-100 p-3 rounded"
-                            ><code>cd Downloads
-chmod +x install.sh
-./install.sh</code></pre>
-                        </div>
-
-                        <div
-                            class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-blue-900 dark:text-blue-100"
-                        >
-                            <p class="font-medium mb-1">What happens next:</p>
-                            <ul class="space-y-1 text-sm">
-                                <li>• Installs or updates Homebrew</li>
-                                <li>• Installs selected tools</li>
-                                <li>• Shows progress</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-    </dialog>
-</div>
+    </div>
+</dialog>
 {% endblock %}

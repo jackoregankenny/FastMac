@@ -98,10 +98,27 @@ setup_brew_path() {
         # Apple Silicon Mac
         eval "$(/opt/homebrew/bin/brew shellenv)"
         export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+        export HOMEBREW_PREFIX="/opt/homebrew"
     elif [[ -f /usr/local/bin/brew ]]; then
         # Intel Mac
         eval "$(/usr/local/bin/brew shellenv)"
         export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+        export HOMEBREW_PREFIX="/usr/local"
+    fi
+    
+    # Add to shell profile for persistence
+    if [[ -f ~/.zshrc ]]; then
+        if ! grep -q "HOMEBREW_PREFIX" ~/.zshrc; then
+            echo 'export HOMEBREW_PREFIX="$(brew --prefix)"' >> ~/.zshrc
+            echo 'export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"' >> ~/.zshrc
+        fi
+    fi
+    
+    if [[ -f ~/.bash_profile ]]; then
+        if ! grep -q "HOMEBREW_PREFIX" ~/.bash_profile; then
+            echo 'export HOMEBREW_PREFIX="$(brew --prefix)"' >> ~/.bash_profile
+            echo 'export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"' >> ~/.bash_profile
+        fi
     fi
 }
 
