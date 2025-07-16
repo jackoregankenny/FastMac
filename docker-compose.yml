@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  fastmac:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - FLASK_DEBUG=false
+      - PORT=5000
+    volumes:
+      - ./tools.json:/app/tools.json:ro
+    restart: unless-stopped 
