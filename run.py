@@ -2,35 +2,7 @@ from flask import Flask, render_template, request, jsonify, send_from_directory
 import json
 import os
 
-app = Flask(__name__)
-
-# Add explicit static file routes for production
-@app.route('/static/css/<path:filename>')
-def serve_css(filename):
-    """Serve CSS files."""
-    try:
-        return send_from_directory('static/css', filename)
-    except Exception as e:
-        print(f"Error serving CSS file {filename}: {e}")
-        return f"CSS file {filename} not found", 404
-
-@app.route('/static/js/<path:filename>')
-def serve_js(filename):
-    """Serve JavaScript files."""
-    try:
-        return send_from_directory('static/js', filename)
-    except Exception as e:
-        print(f"Error serving JS file {filename}: {e}")
-        return f"JS file {filename} not found", 404
-
-@app.route('/static/tools.json')
-def serve_tools():
-    """Serve the tools.json file."""
-    try:
-        return send_from_directory('.', 'tools.json')
-    except Exception as e:
-        print(f"Error serving tools.json: {e}")
-        return "tools.json not found", 404
+app = Flask(__name__, static_folder='static', static_url_path='/static')
 
 def load_tools():
     """Load tools configuration from tools.json."""
@@ -292,6 +264,16 @@ def index():
         traceback.print_exc()
         return f"Error loading page: {str(e)}", 500
 
+@app.route('/test')
+def test():
+    """Test route to verify the app is working."""
+    return jsonify({
+        'status': 'ok',
+        'message': 'FastMac is running',
+        'static_folder': app.static_folder,
+        'static_url_path': app.static_url_path
+    })
+
 @app.route('/debug/static')
 def debug_static():
     """Debug endpoint to check static file availability."""
@@ -302,7 +284,33 @@ def debug_static():
         'js/main.js': os.path.exists('static/js/main.js'),
         'tools.json': os.path.exists('tools.json')
     }
-    return jsonify(static_files)
+    
+    # Also check file sizes
+    file_sizes = {}
+    for file_path, exists in static_files.items():
+        if exists:
+            try:
+                file_sizes[file_path] = os.path.getsize(file_path.replace('static/', 'static/') if file_path != 'tools.json' else file_path)
+            except:
+                file_sizes[file_path] = 'error'
+        else:
+            file_sizes[file_path] = 'not_found'
+    
+    return jsonify({
+        'files_exist': static_files,
+        'file_sizes': file_sizes,
+        'current_dir': os.getcwd(),
+        'static_folder': app.static_folder
+    })
+
+@app.route('/static/tools.json')
+def serve_tools():
+    """Serve the tools.json file."""
+    try:
+        return send_from_directory('.', 'tools.json')
+    except Exception as e:
+        print(f"Error serving tools.json: {e}")
+        return "tools.json not found", 404
 
 @app.route('/generate', methods=['POST'])
 def generate():
