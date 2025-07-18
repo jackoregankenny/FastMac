@@ -4,6 +4,34 @@ import os
 
 app = Flask(__name__)
 
+# Add explicit static file routes for production
+@app.route('/static/css/<path:filename>')
+def serve_css(filename):
+    """Serve CSS files."""
+    try:
+        return send_from_directory('static/css', filename)
+    except Exception as e:
+        print(f"Error serving CSS file {filename}: {e}")
+        return f"CSS file {filename} not found", 404
+
+@app.route('/static/js/<path:filename>')
+def serve_js(filename):
+    """Serve JavaScript files."""
+    try:
+        return send_from_directory('static/js', filename)
+    except Exception as e:
+        print(f"Error serving JS file {filename}: {e}")
+        return f"JS file {filename} not found", 404
+
+@app.route('/static/tools.json')
+def serve_tools():
+    """Serve the tools.json file."""
+    try:
+        return send_from_directory('.', 'tools.json')
+    except Exception as e:
+        print(f"Error serving tools.json: {e}")
+        return "tools.json not found", 404
+
 def load_tools():
     """Load tools configuration from tools.json."""
     try:
@@ -254,12 +282,27 @@ info "Happy coding! 🚀"
 @app.route('/')
 def index():
     """Render the main page."""
-    return render_template('index.html', categories=load_tools())
+    try:
+        categories = load_tools()
+        print(f"Loaded {len(categories)} categories for template")
+        return render_template('index.html', categories=categories)
+    except Exception as e:
+        print(f"Error rendering index page: {e}")
+        import traceback
+        traceback.print_exc()
+        return f"Error loading page: {str(e)}", 500
 
-@app.route('/static/tools.json')
-def serve_tools():
-    """Serve the tools.json file."""
-    return send_from_directory('.', 'tools.json')
+@app.route('/debug/static')
+def debug_static():
+    """Debug endpoint to check static file availability."""
+    import os
+    static_files = {
+        'css/styles.css': os.path.exists('static/css/styles.css'),
+        'css/tailwind.css': os.path.exists('static/css/tailwind.css'),
+        'js/main.js': os.path.exists('static/js/main.js'),
+        'tools.json': os.path.exists('tools.json')
+    }
+    return jsonify(static_files)
 
 @app.route('/generate', methods=['POST'])
 def generate():
