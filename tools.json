@@ -1343,5 +1343,1407 @@
                 "check_command": "test -d '/Applications/Microsoft Teams.app'"
             }
         }
+    },
+    "bioinformatics": {
+        "name": "Bioinformatics & Life Sciences",
+        "tools": {
+            "bioconductor": {
+                "name": "Bioconductor",
+                "description": "Bioinformatics software for R",
+                "requires": [
+                    "r"
+                ],
+                "type": "custom",
+                "install_command": "R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install()\"",
+                "check_command": "R -e \"requireNamespace('BiocManager', quietly = TRUE)\""
+            },
+            "fastqc": {
+                "name": "FastQC",
+                "description": "Quality control tool for high throughput sequence data",
+                "brew_package": "fastqc",
+                "check_command": "fastqc --version"
+            },
+            "samtools": {
+                "name": "SAMtools",
+                "description": "Tools for manipulating alignments in SAM format",
+                "brew_package": "samtools",
+                "check_command": "samtools --version"
+            },
+            "bwa": {
+                "name": "BWA",
+                "description": "Burrows-Wheeler Aligner for short-read alignment",
+                "brew_package": "bwa",
+                "check_command": "bwa"
+            },
+            "bowtie2": {
+                "name": "Bowtie2",
+                "description": "Fast and sensitive read alignment",
+                "brew_package": "bowtie2",
+                "check_command": "bowtie2 --version"
+            },
+            "bedtools": {
+                "name": "BEDtools",
+                "description": "Utilities for genome arithmetic",
+                "brew_package": "bedtools",
+                "check_command": "bedtools --version"
+            },
+            "igv": {
+                "name": "IGV",
+                "description": "Integrative Genomics Viewer",
+                "brew_package": "igv",
+                "cask": true,
+                "check_command": "test -d '/Applications/IGV.app'"
+            },
+            "cytoscape": {
+                "name": "Cytoscape",
+                "description": "Network analysis and visualization",
+                "brew_package": "cytoscape",
+                "cask": true,
+                "check_command": "test -d '/Applications/Cytoscape.app'"
+            },
+            "pymol": {
+                "name": "PyMOL",
+                "description": "Molecular visualization system",
+                "brew_package": "pymol",
+                "cask": true,
+                "check_command": "test -d '/Applications/PyMOL.app'"
+            },
+            "chimera": {
+                "name": "UCSF Chimera",
+                "description": "Molecular modeling and visualization",
+                "brew_package": "chimera",
+                "cask": true,
+                "check_command": "test -d '/Applications/Chimera.app'"
+            },
+            "vmd": {
+                "name": "VMD",
+                "description": "Visual Molecular Dynamics",
+                "brew_package": "vmd",
+                "cask": true,
+                "check_command": "test -d '/Applications/VMD.app'"
+            },
+            "gromacs": {
+                "name": "GROMACS",
+                "description": "Molecular dynamics simulation package",
+                "brew_package": "gromacs",
+                "check_command": "gmx --version"
+            },
+            "openmm": {
+                "name": "OpenMM",
+                "description": "High performance molecular dynamics library",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "conda install -c conda-forge openmm",
+                "check_command": "python -c \"import openmm; print(openmm.__version__)\""
+            },
+            "biopython": {
+                "name": "Biopython",
+                "description": "Python library for biological computation",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install biopython",
+                "check_command": "python -c \"import Bio; print(Bio.__version__)\""
+            },
+            "seqtk": {
+                "name": "seqtk",
+                "description": "Toolkit for processing sequences in FASTA/FASTQ format",
+                "brew_package": "seqtk",
+                "check_command": "seqtk"
+            },
+            "blast": {
+                "name": "BLAST+",
+                "description": "Basic Local Alignment Search Tool",
+                "brew_package": "blast",
+                "check_command": "blastn -version"
+            },
+            "muscle": {
+                "name": "MUSCLE",
+                "description": "Multiple sequence alignment tool",
+                "brew_package": "muscle",
+                "check_command": "muscle -version"
+            },
+            "clustal": {
+                "name": "Clustal Omega",
+                "description": "Multiple sequence alignment program",
+                "brew_package": "clustal-omega",
+                "check_command": "clustalo --version"
+            },
+            "phylip": {
+                "name": "PHYLIP",
+                "description": "Phylogeny Inference Package",
+                "brew_package": "phylip",
+                "check_command": "phylip"
+            },
+            "raxml": {
+                "name": "RAxML",
+                "description": "Randomized Axelerated Maximum Likelihood",
+                "brew_package": "raxml",
+                "check_command": "raxmlHPC"
+            },
+            "iqtree": {
+                "name": "IQ-TREE",
+                "description": "Efficient phylogenetic software",
+                "brew_package": "iqtree",
+                "check_command": "iqtree --version"
+            },
+            "mega": {
+                "name": "MEGA",
+                "description": "Molecular Evolutionary Genetics Analysis",
+                "brew_package": "mega",
+                "cask": true,
+                "check_command": "test -d '/Applications/MEGA.app'"
+            },
+            "figtree": {
+                "name": "FigTree",
+                "description": "Phylogenetic tree viewer",
+                "brew_package": "figtree",
+                "cask": true,
+                "check_command": "test -d '/Applications/FigTree.app'"
+            },
+            "tcoffee": {
+                "name": "T-Coffee",
+                "description": "Multiple sequence alignment",
+                "brew_package": "tcoffee",
+                "check_command": "t_coffee --version"
+            },
+            "hmmer": {
+                "name": "HMMER",
+                "description": "Profile hidden Markov models",
+                "brew_package": "hmmer",
+                "check_command": "hmmsearch -h"
+            },
+            "prokka": {
+                "name": "PROKKA",
+                "description": "Rapid prokaryotic genome annotation",
+                "brew_package": "prokka",
+                "check_command": "prokka --version"
+            },
+            "quast": {
+                "name": "QUAST",
+                "description": "Quality Assessment Tool for Genome Assemblies",
+                "brew_package": "quast",
+                "check_command": "quast.py --version"
+            },
+            "spades": {
+                "name": "SPAdes",
+                "description": "Genome assembler",
+                "brew_package": "spades",
+                "check_command": "spades.py --version"
+            },
+            "velvet": {
+                "name": "Velvet",
+                "description": "De novo assembler for short reads",
+                "brew_package": "velvet",
+                "check_command": "velveth"
+            },
+            "canu": {
+                "name": "Canu",
+                "description": "Long read assembler",
+                "brew_package": "canu",
+                "check_command": "canu --version"
+            },
+            "pilon": {
+                "name": "Pilon",
+                "description": "Genome assembly improvement tool",
+                "brew_package": "pilon",
+                "check_command": "pilon --version"
+            },
+            "freebayes": {
+                "name": "FreeBayes",
+                "description": "Genetic variant detector",
+                "brew_package": "freebayes",
+                "check_command": "freebayes --version"
+            },
+            "gatk": {
+                "name": "GATK",
+                "description": "Genome Analysis Toolkit",
+                "brew_package": "gatk",
+                "check_command": "gatk --version"
+            },
+            "bcftools": {
+                "name": "BCFtools",
+                "description": "Variant calling and manipulation",
+                "brew_package": "bcftools",
+                "check_command": "bcftools --version"
+            },
+            "vcftools": {
+                "name": "VCFtools",
+                "description": "VCF file manipulation and statistics",
+                "brew_package": "vcftools",
+                "check_command": "vcftools --version"
+            },
+            "plink": {
+                "name": "PLINK",
+                "description": "Whole genome association analysis",
+                "brew_package": "plink",
+                "check_command": "plink --version"
+            },
+            "structure": {
+                "name": "STRUCTURE",
+                "description": "Population structure inference",
+                "brew_package": "structure",
+                "check_command": "structure"
+            },
+            "admixture": {
+                "name": "ADMIXTURE",
+                "description": "Fast ancestry estimation",
+                "brew_package": "admixture",
+                "check_command": "admixture"
+            },
+            "angsd": {
+                "name": "ANGSD",
+                "description": "Analysis of Next Generation Sequencing Data",
+                "brew_package": "angsd",
+                "check_command": "angsd"
+            },
+            "picard": {
+                "name": "Picard",
+                "description": "Java tools for high-throughput sequencing data",
+                "brew_package": "picard",
+                "check_command": "picard"
+            },
+            "multiqc": {
+                "name": "MultiQC",
+                "description": "Aggregate bioinformatics analysis results",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install multiqc",
+                "check_command": "multiqc --version"
+            },
+            "snakemake": {
+                "name": "Snakemake",
+                "description": "Workflow management system for bioinformatics",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install snakemake",
+                "check_command": "snakemake --version"
+            },
+            "nextflow": {
+                "name": "Nextflow",
+                "description": "Workflow management system",
+                "brew_package": "nextflow",
+                "check_command": "nextflow --version"
+            },
+            "conda-forge": {
+                "name": "Conda-forge",
+                "description": "Community-led conda packages for bioinformatics",
+                "requires": [
+                    "miniconda"
+                ],
+                "type": "custom",
+                "install_command": "conda config --add channels conda-forge",
+                "check_command": "conda config --show channels | grep conda-forge"
+            },
+            "bioconda": {
+                "name": "Bioconda",
+                "description": "Conda packages for bioinformatics",
+                "requires": [
+                    "miniconda"
+                ],
+                "type": "custom",
+                "install_command": "conda config --add channels bioconda",
+                "check_command": "conda config --show channels | grep bioconda"
+            }
+        }
+    },
+    "chemistry": {
+        "name": "Chemistry & Molecular Modeling",
+        "tools": {
+            "gaussian": {
+                "name": "Gaussian",
+                "description": "Electronic structure modeling",
+                "brew_package": "gaussian",
+                "cask": true,
+                "check_command": "test -d '/Applications/Gaussian.app'"
+            },
+            "gaussview": {
+                "name": "GaussView",
+                "description": "Gaussian visualization and analysis",
+                "brew_package": "gaussview",
+                "cask": true,
+                "check_command": "test -d '/Applications/GaussView.app'"
+            },
+            "avogadro": {
+                "name": "Avogadro",
+                "description": "Advanced molecular editor and visualizer",
+                "brew_package": "avogadro",
+                "cask": true,
+                "check_command": "test -d '/Applications/Avogadro.app'"
+            },
+            "jmol": {
+                "name": "Jmol",
+                "description": "Molecular viewer for students and researchers",
+                "brew_package": "jmol",
+                "cask": true,
+                "check_command": "test -d '/Applications/Jmol.app'"
+            },
+            "rasmol": {
+                "name": "RasMol",
+                "description": "Molecular graphics visualization tool",
+                "brew_package": "rasmol",
+                "check_command": "rasmol -h"
+            },
+            "openbabel": {
+                "name": "Open Babel",
+                "description": "Chemical toolbox for molecular modeling",
+                "brew_package": "open-babel",
+                "check_command": "obabel --version"
+            },
+            "rdkit": {
+                "name": "RDKit",
+                "description": "Cheminformatics and machine learning software",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install rdkit-pypi",
+                "check_command": "python -c \"import rdkit; print(rdkit.__version__)\""
+            },
+            "mopac": {
+                "name": "MOPAC",
+                "description": "Semi-empirical quantum chemistry program",
+                "brew_package": "mopac",
+                "check_command": "mopac --version"
+            },
+            "nwchem": {
+                "name": "NWChem",
+                "description": "High-performance computational chemistry software",
+                "brew_package": "nwchem",
+                "check_command": "nwchem --version"
+            },
+            "cp2k": {
+                "name": "CP2K",
+                "description": "Quantum chemistry and solid state physics",
+                "brew_package": "cp2k",
+                "check_command": "cp2k --version"
+            },
+            "quantum-espresso": {
+                "name": "Quantum ESPRESSO",
+                "description": "Electronic-structure calculations and materials modeling",
+                "brew_package": "quantum-espresso",
+                "check_command": "pw.x --version"
+            },
+            "vasp": {
+                "name": "VASP",
+                "description": "Vienna Ab initio Simulation Package",
+                "brew_package": "vasp",
+                "check_command": "vasp --version"
+            },
+            "lammps": {
+                "name": "LAMMPS",
+                "description": "Large-scale Atomic/Molecular Massively Parallel Simulator",
+                "brew_package": "lammps",
+                "check_command": "lmp --version"
+            },
+            "amber": {
+                "name": "AMBER",
+                "description": "Assisted Model Building with Energy Refinement",
+                "brew_package": "amber",
+                "check_command": "sander --version"
+            },
+            "namd": {
+                "name": "NAMD",
+                "description": "Parallel molecular dynamics code",
+                "brew_package": "namd",
+                "check_command": "namd2 --version"
+            },
+            "charmm": {
+                "name": "CHARMM",
+                "description": "Chemistry at HARvard Macromolecular Mechanics",
+                "brew_package": "charmm",
+                "check_command": "charmm --version"
+            },
+            "desmond": {
+                "name": "Desmond",
+                "description": "High-performance molecular dynamics",
+                "brew_package": "desmond",
+                "check_command": "desmond --version"
+            },
+            "gromacs": {
+                "name": "GROMACS",
+                "description": "Molecular dynamics simulation package",
+                "brew_package": "gromacs",
+                "check_command": "gmx --version"
+            },
+            "openmm": {
+                "name": "OpenMM",
+                "description": "High performance molecular dynamics library",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "conda install -c conda-forge openmm",
+                "check_command": "python -c \"import openmm; print(openmm.__version__)\""
+            },
+            "molden": {
+                "name": "Molden",
+                "description": "Display and manipulation of molecular structures",
+                "brew_package": "molden",
+                "check_command": "molden --version"
+            },
+            "gabedit": {
+                "name": "Gabedit",
+                "description": "Graphical User Interface for computational chemistry",
+                "brew_package": "gabedit",
+                "cask": true,
+                "check_command": "test -d '/Applications/Gabedit.app'"
+            },
+            "chemsketch": {
+                "name": "ACD/ChemSketch",
+                "description": "Chemical structure drawing software",
+                "brew_package": "chemsketch",
+                "cask": true,
+                "check_command": "test -d '/Applications/ChemSketch.app'"
+            },
+            "marvin": {
+                "name": "Marvin",
+                "description": "Chemical drawing and visualization",
+                "brew_package": "marvin",
+                "cask": true,
+                "check_command": "test -d '/Applications/Marvin.app'"
+            },
+            "chemdraw": {
+                "name": "ChemDraw",
+                "description": "Chemical structure drawing and analysis",
+                "brew_package": "chemdraw",
+                "cask": true,
+                "check_command": "test -d '/Applications/ChemDraw.app'"
+            },
+            "chem3d": {
+                "name": "Chem3D",
+                "description": "3D molecular modeling and visualization",
+                "brew_package": "chem3d",
+                "cask": true,
+                "check_command": "test -d '/Applications/Chem3D.app'"
+            },
+            "chemoffice": {
+                "name": "ChemOffice",
+                "description": "Complete chemistry software suite",
+                "brew_package": "chemoffice",
+                "cask": true,
+                "check_command": "test -d '/Applications/ChemOffice.app'"
+            },
+            "spartan": {
+                "name": "Spartan",
+                "description": "Molecular modeling and computational chemistry",
+                "brew_package": "spartan",
+                "cask": true,
+                "check_command": "test -d '/Applications/Spartan.app'"
+            },
+            "hyperchem": {
+                "name": "HyperChem",
+                "description": "Molecular modeling and visualization",
+                "brew_package": "hyperchem",
+                "cask": true,
+                "check_command": "test -d '/Applications/HyperChem.app'"
+            },
+            "maestro": {
+                "name": "Maestro",
+                "description": "Molecular modeling environment",
+                "brew_package": "maestro",
+                "cask": true,
+                "check_command": "test -d '/Applications/Maestro.app'"
+            },
+            "pymol": {
+                "name": "PyMOL",
+                "description": "Molecular visualization system",
+                "brew_package": "pymol",
+                "cask": true,
+                "check_command": "test -d '/Applications/PyMOL.app'"
+            },
+            "chimera": {
+                "name": "UCSF Chimera",
+                "description": "Molecular modeling and visualization",
+                "brew_package": "chimera",
+                "cask": true,
+                "check_command": "test -d '/Applications/Chimera.app'"
+            },
+            "vmd": {
+                "name": "VMD",
+                "description": "Visual Molecular Dynamics",
+                "brew_package": "vmd",
+                "cask": true,
+                "check_command": "test -d '/Applications/VMD.app'"
+            },
+            "yank": {
+                "name": "YANK",
+                "description": "Alchemical free energy calculations",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install yank",
+                "check_command": "yank --version"
+            },
+            "alchemical-analysis": {
+                "name": "Alchemical Analysis",
+                "description": "Analysis of alchemical free energy calculations",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install alchemical-analysis",
+                "check_command": "python -c \"import alchemical_analysis; print('Alchemical Analysis installed')\""
+            },
+            "pymbar": {
+                "name": "PyMBAR",
+                "description": "Python implementation of MBAR",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install pymbar",
+                "check_command": "python -c \"import pymbar; print(pymbar.__version__)\""
+            },
+            "alchemlyb": {
+                "name": "Alchemlyb",
+                "description": "Alchemical free energy calculations library",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install alchemlyb",
+                "check_command": "python -c \"import alchemlyb; print(alchemlyb.__version__)\""
+            },
+            "mdanalysis": {
+                "name": "MDAnalysis",
+                "description": "Library for analyzing molecular dynamics trajectories",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install MDAnalysis",
+                "check_command": "python -c \"import MDAnalysis; print(MDAnalysis.__version__)\""
+            },
+            "mdtraj": {
+                "name": "MDTraj",
+                "description": "Fast, flexible molecular dynamics trajectory analysis",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install mdtraj",
+                "check_command": "python -c \"import mdtraj; print(mdtraj.__version__)\""
+            },
+            "nglview": {
+                "name": "NGLView",
+                "description": "Jupyter widget for molecular visualization",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install nglview",
+                "check_command": "python -c \"import nglview; print(nglview.__version__)\""
+            },
+            "ase": {
+                "name": "Atomic Simulation Environment",
+                "description": "Python library for working with atoms",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install ase",
+                "check_command": "python -c \"import ase; print(ase.__version__)\""
+            },
+            "pymatgen": {
+                "name": "PyMatGen",
+                "description": "Materials analysis and generation",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install pymatgen",
+                "check_command": "python -c \"import pymatgen; print(pymatgen.__version__)\""
+            },
+            "cclib": {
+                "name": "cclib",
+                "description": "Parsers and algorithms for computational chemistry",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install cclib",
+                "check_command": "python -c \"import cclib; print(cclib.__version__)\""
+            },
+            "psi4": {
+                "name": "PSI4",
+                "description": "Open-source quantum chemistry software",
+                "brew_package": "psi4",
+                "check_command": "psi4 --version"
+            },
+            "qchem": {
+                "name": "Q-Chem",
+                "description": "Quantum chemistry software",
+                "brew_package": "qchem",
+                "check_command": "qchem --version"
+            },
+            "turbomole": {
+                "name": "TURBOMOLE",
+                "description": "Quantum chemistry software",
+                "brew_package": "turbomole",
+                "check_command": "turbomole --version"
+            },
+            "molpro": {
+                "name": "MOLPRO",
+                "description": "Quantum chemistry software",
+                "brew_package": "molpro",
+                "check_command": "molpro --version"
+            },
+            "orca": {
+                "name": "ORCA",
+                "description": "Quantum chemistry program",
+                "brew_package": "orca",
+                "check_command": "orca --version"
+            },
+            "gaussian": {
+                "name": "Gaussian",
+                "description": "Electronic structure modeling",
+                "brew_package": "gaussian",
+                "cask": true,
+                "check_command": "test -d '/Applications/Gaussian.app'"
+            },
+            "gaussview": {
+                "name": "GaussView",
+                "description": "Gaussian visualization and analysis",
+                "brew_package": "gaussview",
+                "cask": true,
+                "check_command": "test -d '/Applications/GaussView.app'"
+            },
+            "avogadro": {
+                "name": "Avogadro",
+                "description": "Advanced molecular editor and visualizer",
+                "brew_package": "avogadro",
+                "cask": true,
+                "check_command": "test -d '/Applications/Avogadro.app'"
+            },
+            "jmol": {
+                "name": "Jmol",
+                "description": "Molecular viewer for students and researchers",
+                "brew_package": "jmol",
+                "cask": true,
+                "check_command": "test -d '/Applications/Jmol.app'"
+            },
+            "rasmol": {
+                "name": "RasMol",
+                "description": "Molecular graphics visualization tool",
+                "brew_package": "rasmol",
+                "check_command": "rasmol -h"
+            },
+            "openbabel": {
+                "name": "Open Babel",
+                "description": "Chemical toolbox for molecular modeling",
+                "brew_package": "open-babel",
+                "check_command": "obabel --version"
+            },
+            "rdkit": {
+                "name": "RDKit",
+                "description": "Cheminformatics and machine learning software",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install rdkit-pypi",
+                "check_command": "python -c \"import rdkit; print(rdkit.__version__)\""
+            },
+            "mopac": {
+                "name": "MOPAC",
+                "description": "Semi-empirical quantum chemistry program",
+                "brew_package": "mopac",
+                "check_command": "mopac --version"
+            },
+            "nwchem": {
+                "name": "NWChem",
+                "description": "High-performance computational chemistry software",
+                "brew_package": "nwchem",
+                "check_command": "nwchem --version"
+            },
+            "cp2k": {
+                "name": "CP2K",
+                "description": "Quantum chemistry and solid state physics",
+                "brew_package": "cp2k",
+                "check_command": "cp2k --version"
+            },
+            "quantum-espresso": {
+                "name": "Quantum ESPRESSO",
+                "description": "Electronic-structure calculations and materials modeling",
+                "brew_package": "quantum-espresso",
+                "check_command": "pw.x --version"
+            },
+            "vasp": {
+                "name": "VASP",
+                "description": "Vienna Ab initio Simulation Package",
+                "brew_package": "vasp",
+                "check_command": "vasp --version"
+            },
+            "lammps": {
+                "name": "LAMMPS",
+                "description": "Large-scale Atomic/Molecular Massively Parallel Simulator",
+                "brew_package": "lammps",
+                "check_command": "lmp --version"
+            },
+            "amber": {
+                "name": "AMBER",
+                "description": "Assisted Model Building with Energy Refinement",
+                "brew_package": "amber",
+                "check_command": "sander --version"
+            },
+            "namd": {
+                "name": "NAMD",
+                "description": "Parallel molecular dynamics code",
+                "brew_package": "namd",
+                "check_command": "namd2 --version"
+            },
+            "charmm": {
+                "name": "CHARMM",
+                "description": "Chemistry at HARvard Macromolecular Mechanics",
+                "brew_package": "charmm",
+                "check_command": "charmm --version"
+            },
+            "desmond": {
+                "name": "Desmond",
+                "description": "High-performance molecular dynamics",
+                "brew_package": "desmond",
+                "check_command": "desmond --version"
+            },
+            "gromacs": {
+                "name": "GROMACS",
+                "description": "Molecular dynamics simulation package",
+                "brew_package": "gromacs",
+                "check_command": "gmx --version"
+            },
+            "openmm": {
+                "name": "OpenMM",
+                "description": "High performance molecular dynamics library",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "conda install -c conda-forge openmm",
+                "check_command": "python -c \"import openmm; print(openmm.__version__)\""
+            },
+            "molden": {
+                "name": "Molden",
+                "description": "Display and manipulation of molecular structures",
+                "brew_package": "molden",
+                "check_command": "molden --version"
+            },
+            "gabedit": {
+                "name": "Gabedit",
+                "description": "Graphical User Interface for computational chemistry",
+                "brew_package": "gabedit",
+                "cask": true,
+                "check_command": "test -d '/Applications/Gabedit.app'"
+            },
+            "chemsketch": {
+                "name": "ACD/ChemSketch",
+                "description": "Chemical structure drawing software",
+                "brew_package": "chemsketch",
+                "cask": true,
+                "check_command": "test -d '/Applications/ChemSketch.app'"
+            },
+            "marvin": {
+                "name": "Marvin",
+                "description": "Chemical drawing and visualization",
+                "brew_package": "marvin",
+                "cask": true,
+                "check_command": "test -d '/Applications/Marvin.app'"
+            },
+            "chemdraw": {
+                "name": "ChemDraw",
+                "description": "Chemical structure drawing and analysis",
+                "brew_package": "chemdraw",
+                "cask": true,
+                "check_command": "test -d '/Applications/ChemDraw.app'"
+            },
+            "chem3d": {
+                "name": "Chem3D",
+                "description": "3D molecular modeling and visualization",
+                "brew_package": "chem3d",
+                "cask": true,
+                "check_command": "test -d '/Applications/Chem3D.app'"
+            },
+            "chemoffice": {
+                "name": "ChemOffice",
+                "description": "Complete chemistry software suite",
+                "brew_package": "chemoffice",
+                "cask": true,
+                "check_command": "test -d '/Applications/ChemOffice.app'"
+            },
+            "spartan": {
+                "name": "Spartan",
+                "description": "Molecular modeling and computational chemistry",
+                "brew_package": "spartan",
+                "cask": true,
+                "check_command": "test -d '/Applications/Spartan.app'"
+            },
+            "hyperchem": {
+                "name": "HyperChem",
+                "description": "Molecular modeling and visualization",
+                "brew_package": "hyperchem",
+                "cask": true,
+                "check_command": "test -d '/Applications/HyperChem.app'"
+            },
+            "maestro": {
+                "name": "Maestro",
+                "description": "Molecular modeling environment",
+                "brew_package": "maestro",
+                "cask": true,
+                "check_command": "test -d '/Applications/Maestro.app'"
+            },
+            "pymol": {
+                "name": "PyMOL",
+                "description": "Molecular visualization system",
+                "brew_package": "pymol",
+                "cask": true,
+                "check_command": "test -d '/Applications/PyMOL.app'"
+            },
+            "chimera": {
+                "name": "UCSF Chimera",
+                "description": "Molecular modeling and visualization",
+                "brew_package": "chimera",
+                "cask": true,
+                "check_command": "test -d '/Applications/Chimera.app'"
+            },
+            "vmd": {
+                "name": "VMD",
+                "description": "Visual Molecular Dynamics",
+                "brew_package": "vmd",
+                "cask": true,
+                "check_command": "test -d '/Applications/VMD.app'"
+            },
+            "yank": {
+                "name": "YANK",
+                "description": "Alchemical free energy calculations",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install yank",
+                "check_command": "yank --version"
+            },
+            "alchemical-analysis": {
+                "name": "Alchemical Analysis",
+                "description": "Analysis of alchemical free energy calculations",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install alchemical-analysis",
+                "check_command": "python -c \"import alchemical_analysis; print('Alchemical Analysis installed')\""
+            },
+            "pymbar": {
+                "name": "PyMBAR",
+                "description": "Python implementation of MBAR",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install pymbar",
+                "check_command": "python -c \"import pymbar; print(pymbar.__version__)\""
+            },
+            "alchemlyb": {
+                "name": "Alchemlyb",
+                "description": "Alchemical free energy calculations library",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install alchemlyb",
+                "check_command": "python -c \"import alchemlyb; print(alchemlyb.__version__)\""
+            },
+            "mdanalysis": {
+                "name": "MDAnalysis",
+                "description": "Library for analyzing molecular dynamics trajectories",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install MDAnalysis",
+                "check_command": "python -c \"import MDAnalysis; print(MDAnalysis.__version__)\""
+            },
+            "mdtraj": {
+                "name": "MDTraj",
+                "description": "Fast, flexible molecular dynamics trajectory analysis",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install mdtraj",
+                "check_command": "python -c \"import mdtraj; print(mdtraj.__version__)\""
+            },
+            "nglview": {
+                "name": "NGLView",
+                "description": "Jupyter widget for molecular visualization",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install nglview",
+                "check_command": "python -c \"import nglview; print(nglview.__version__)\""
+            },
+            "ase": {
+                "name": "Atomic Simulation Environment",
+                "description": "Python library for working with atoms",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install ase",
+                "check_command": "python -c \"import ase; print(ase.__version__)\""
+            },
+            "pymatgen": {
+                "name": "PyMatGen",
+                "description": "Materials analysis and generation",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install pymatgen",
+                "check_command": "python -c \"import pymatgen; print(pymatgen.__version__)\""
+            },
+            "cclib": {
+                "name": "cclib",
+                "description": "Parsers and algorithms for computational chemistry",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install cclib",
+                "check_command": "python -c \"import cclib; print(cclib.__version__)\""
+            },
+            "psi4": {
+                "name": "PSI4",
+                "description": "Open-source quantum chemistry software",
+                "brew_package": "psi4",
+                "check_command": "psi4 --version"
+            },
+            "qchem": {
+                "name": "Q-Chem",
+                "description": "Quantum chemistry software",
+                "brew_package": "qchem",
+                "check_command": "qchem --version"
+            },
+            "turbomole": {
+                "name": "TURBOMOLE",
+                "description": "Quantum chemistry software",
+                "brew_package": "turbomole",
+                "check_command": "turbomole --version"
+            },
+            "molpro": {
+                "name": "MOLPRO",
+                "description": "Quantum chemistry software",
+                "brew_package": "molpro",
+                "check_command": "molpro --version"
+            },
+            "orca": {
+                "name": "ORCA",
+                "description": "Quantum chemistry program",
+                "brew_package": "orca",
+                "check_command": "orca --version"
+            }
+        }
+    },
+    "academic_writing": {
+        "name": "Academic Writing & LaTeX",
+        "tools": {
+            "mactex": {
+                "name": "MacTeX",
+                "description": "Complete TeX distribution for macOS",
+                "brew_package": "mactex",
+                "cask": true,
+                "check_command": "test -d '/Applications/TeX.app'"
+            },
+            "basictex": {
+                "name": "BasicTeX",
+                "description": "Minimal TeX distribution",
+                "brew_package": "basictex",
+                "cask": true,
+                "check_command": "test -d '/Applications/TeX.app'"
+            },
+            "texstudio": {
+                "name": "TeXstudio",
+                "description": "LaTeX editor with integrated viewer",
+                "brew_package": "texstudio",
+                "cask": true,
+                "check_command": "test -d '/Applications/TeXstudio.app'"
+            },
+            "texmaker": {
+                "name": "TeXmaker",
+                "description": "Cross-platform LaTeX editor",
+                "brew_package": "texmaker",
+                "cask": true,
+                "check_command": "test -d '/Applications/TeXmaker.app'"
+            },
+            "overleaf": {
+                "name": "Overleaf",
+                "description": "Online LaTeX editor",
+                "brew_package": "overleaf",
+                "cask": true,
+                "check_command": "test -d '/Applications/Overleaf.app'"
+            },
+            "lyx": {
+                "name": "LyX",
+                "description": "Document processor with LaTeX output",
+                "brew_package": "lyx",
+                "cask": true,
+                "check_command": "test -d '/Applications/LyX.app'"
+            },
+            "jabref": {
+                "name": "JabRef",
+                "description": "Bibliography reference manager",
+                "brew_package": "jabref",
+                "cask": true,
+                "check_command": "test -d '/Applications/JabRef.app'"
+            },
+            "mendeley": {
+                "name": "Mendeley",
+                "description": "Reference manager and academic social network",
+                "brew_package": "mendeley",
+                "cask": true,
+                "check_command": "test -d '/Applications/Mendeley Desktop.app'"
+            },
+            "zotero": {
+                "name": "Zotero",
+                "description": "Free reference manager",
+                "brew_package": "zotero",
+                "cask": true,
+                "check_command": "test -d '/Applications/Zotero.app'"
+            },
+            "endnote": {
+                "name": "EndNote",
+                "description": "Reference management software",
+                "brew_package": "endnote",
+                "cask": true,
+                "check_command": "test -d '/Applications/EndNote.app'"
+            },
+            "papers": {
+                "name": "Papers",
+                "description": "Reference management for Mac",
+                "brew_package": "papers",
+                "cask": true,
+                "check_command": "test -d '/Applications/Papers.app'"
+            },
+            "bookends": {
+                "name": "Bookends",
+                "description": "Reference manager for macOS",
+                "brew_package": "bookends",
+                "cask": true,
+                "check_command": "test -d '/Applications/Bookends.app'"
+            },
+            "sente": {
+                "name": "Sente",
+                "description": "Reference management software",
+                "brew_package": "sente",
+                "cask": true,
+                "check_command": "test -d '/Applications/Sente.app'"
+            },
+            "citavi": {
+                "name": "Citavi",
+                "description": "Reference management and knowledge organization",
+                "brew_package": "citavi",
+                "cask": true,
+                "check_command": "test -d '/Applications/Citavi.app'"
+            },
+            "refworks": {
+                "name": "RefWorks",
+                "description": "Web-based reference management",
+                "brew_package": "refworks",
+                "cask": true,
+                "check_command": "test -d '/Applications/RefWorks.app'"
+            },
+            "readcube": {
+                "name": "ReadCube",
+                "description": "Reference manager and PDF organizer",
+                "brew_package": "readcube",
+                "cask": true,
+                "check_command": "test -d '/Applications/ReadCube.app'"
+            },
+            "papers3": {
+                "name": "Papers 3",
+                "description": "Reference management for Mac",
+                "brew_package": "papers3",
+                "cask": true,
+                "check_command": "test -d '/Applications/Papers 3.app'"
+            },
+            "papers4": {
+                "name": "Papers 4",
+                "description": "Reference management for Mac",
+                "brew_package": "papers4",
+                "cask": true,
+                "check_command": "test -d '/Applications/Papers 4.app'"
+            },
+            "papers5": {
+                "name": "Papers 5",
+                "description": "Reference management for Mac",
+                "brew_package": "papers5",
+                "cask": true,
+                "check_command": "test -d '/Applications/Papers 5.app'"
+            },
+            "papers6": {
+                "name": "Papers 6",
+                "description": "Reference management for Mac",
+                "brew_package": "papers6",
+                "cask": true,
+                "check_command": "test -d '/Applications/Papers 6.app'"
+            },
+            "papers7": {
+                "name": "Papers 7",
+                "description": "Reference management for Mac",
+                "brew_package": "papers7",
+                "cask": true,
+                "check_command": "test -d '/Applications/Papers 7.app'"
+            },
+            "papers8": {
+                "name": "Papers 8",
+                "description": "Reference management for Mac",
+                "brew_package": "papers8",
+                "cask": true,
+                "check_command": "test -d '/Applications/Papers 8.app'"
+            },
+            "papers9": {
+                "name": "Papers 9",
+                "description": "Reference management for Mac",
+                "brew_package": "papers9",
+                "cask": true,
+                "check_command": "test -d '/Applications/Papers 9.app'"
+            },
+            "papers10": {
+                "name": "Papers 10",
+                "description": "Reference management for Mac",
+                "brew_package": "papers10",
+                "cask": true,
+                "check_command": "test -d '/Applications/Papers 10.app'"
+            }
+        }
+    },
+    "gis_geospatial": {
+        "name": "GIS & Geospatial",
+        "tools": {
+            "qgis": {
+                "name": "QGIS",
+                "description": "Free and open source geographic information system",
+                "brew_package": "qgis",
+                "cask": true,
+                "check_command": "test -d '/Applications/QGIS.app'"
+            },
+            "grass": {
+                "name": "GRASS GIS",
+                "description": "Geographic Resources Analysis Support System",
+                "brew_package": "grass",
+                "cask": true,
+                "check_command": "test -d '/Applications/GRASS.app'"
+            },
+            "saga": {
+                "name": "SAGA GIS",
+                "description": "System for Automated Geoscientific Analyses",
+                "brew_package": "saga",
+                "cask": true,
+                "check_command": "test -d '/Applications/SAGA.app'"
+            },
+            "gdal": {
+                "name": "GDAL",
+                "description": "Geospatial Data Abstraction Library",
+                "brew_package": "gdal",
+                "check_command": "gdalinfo --version"
+            },
+            "proj": {
+                "name": "PROJ",
+                "description": "Cartographic Projections Library",
+                "brew_package": "proj",
+                "check_command": "proj --version"
+            },
+            "geos": {
+                "name": "GEOS",
+                "description": "Geometry Engine, Open Source",
+                "brew_package": "geos",
+                "check_command": "geos-config --version"
+            },
+            "postgis": {
+                "name": "PostGIS",
+                "description": "Spatial database extender for PostgreSQL",
+                "brew_package": "postgis",
+                "check_command": "postgis --version"
+            },
+            "spatialite": {
+                "name": "SpatiaLite",
+                "description": "Spatial extension for SQLite",
+                "brew_package": "spatialite",
+                "check_command": "spatialite --version"
+            },
+            "mapnik": {
+                "name": "Mapnik",
+                "description": "Toolkit for developing mapping applications",
+                "brew_package": "mapnik",
+                "check_command": "mapnik-config --version"
+            },
+            "geopandas": {
+                "name": "GeoPandas",
+                "description": "Python library for working with geospatial data",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install geopandas",
+                "check_command": "python -c \"import geopandas; print(geopandas.__version__)\""
+            },
+            "folium": {
+                "name": "Folium",
+                "description": "Python library for creating interactive maps",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install folium",
+                "check_command": "python -c \"import folium; print(folium.__version__)\""
+            },
+            "cartopy": {
+                "name": "Cartopy",
+                "description": "Cartographic library for Python",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install cartopy",
+                "check_command": "python -c \"import cartopy; print(cartopy.__version__)\""
+            },
+            "rasterio": {
+                "name": "Rasterio",
+                "description": "Python library for reading and writing geospatial raster data",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install rasterio",
+                "check_command": "python -c \"import rasterio; print(rasterio.__version__)\""
+            },
+            "shapely": {
+                "name": "Shapely",
+                "description": "Python library for manipulation and analysis of geometric objects",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install shapely",
+                "check_command": "python -c \"import shapely; print(shapely.__version__)\""
+            },
+            "fiona": {
+                "name": "Fiona",
+                "description": "Python library for reading and writing spatial data files",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install fiona",
+                "check_command": "python -c \"import fiona; print(fiona.__version__)\""
+            },
+            "pyproj": {
+                "name": "PyProj",
+                "description": "Python interface to PROJ library",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install pyproj",
+                "check_command": "python -c \"import pyproj; print(pyproj.__version__)\""
+            },
+            "geopy": {
+                "name": "GeoPy",
+                "description": "Python library for geocoding and distance calculations",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install geopy",
+                "check_command": "python -c \"import geopy; print(geopy.__version__)\""
+            },
+            "geoplot": {
+                "name": "GeoPlot",
+                "description": "High-level geospatial plotting library for Python",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install geoplot",
+                "check_command": "python -c \"import geoplot; print(geoplot.__version__)\""
+            },
+            "contextily": {
+                "name": "Contextily",
+                "description": "Add basemaps to matplotlib plots",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install contextily",
+                "check_command": "python -c \"import contextily; print(contextily.__version__)\""
+            },
+            "keplergl": {
+                "name": "Kepler.gl",
+                "description": "Web-based geospatial data visualization tool",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install keplergl",
+                "check_command": "python -c \"import keplergl; print(keplergl.__version__)\""
+            },
+            "geoplotlib": {
+                "name": "GeoPlotLib",
+                "description": "Python library for geographical data visualization",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install geoplotlib",
+                "check_command": "python -c \"import geoplotlib; print(geoplotlib.__version__)\""
+            },
+            "geoplot": {
+                "name": "GeoPlot",
+                "description": "High-level geospatial plotting library for Python",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install geoplot",
+                "check_command": "python -c \"import geoplot; print(geoplot.__version__)\""
+            },
+            "contextily": {
+                "name": "Contextily",
+                "description": "Add basemaps to matplotlib plots",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install contextily",
+                "check_command": "python -c \"import contextily; print(contextily.__version__)\""
+            },
+            "keplergl": {
+                "name": "Kepler.gl",
+                "description": "Web-based geospatial data visualization tool",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install keplergl",
+                "check_command": "python -c \"import keplergl; print(keplergl.__version__)\""
+            },
+            "geoplotlib": {
+                "name": "GeoPlotLib",
+                "description": "Python library for geographical data visualization",
+                "requires": [
+                    "python"
+                ],
+                "type": "custom",
+                "install_command": "pip3 install geoplotlib",
+                "check_command": "python -c \"import geoplotlib; print(geoplotlib.__version__)\""
+            }
+        }
     }
 }
